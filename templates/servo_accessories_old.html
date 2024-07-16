@@ -1,0 +1,159 @@
+<!-------------------------------------------------------------------------------------->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Servo Accessories</title>
+        {% include 'head.html' %}
+        <section class="container-fluid">
+            <!---->
+            <div class="row">
+                {% include 'side_bar.html' %}
+            <!------------------------------------------------ Main content --------------------------------->
+            <main class="col-md-9 main-content">
+                <h1 class="mb-4">Servo Accessories</h1>
+                <form>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label></label>Brand</label>
+                            <br>
+                            <label> <input type="checkbox" name="brand_search" value="Mitsubishi"> Mitsubishi</label>
+                            <br>
+                            <label> <input type="checkbox" name="brand_search" value="Omron"> Omron</label>
+                            <br>
+                            <label> <input type="checkbox" name="brand_search" value="GMT"> GMT</label>                            
+                        </div>
+
+                        <div class="col-md-2">
+                            <label></label>Model:</label>
+                            <br>
+                            <input type="text" id="model_search" name="model_search" class="form-control">
+                        </div>
+
+                        
+                        <div class="col-md-2">
+                            <label for="cable_length_search">Cable Length:</label>
+                            <br>
+                            <input type="text" id="cable_length_search" name="cable_length_search" class="form-control">
+                        </div>
+                        <div class="col-md-5">
+                            <label>Accessory Type:</label>
+                            <br>
+                            <label>
+                                <input type="checkbox" name="accessory_type_search" value="power_cable"> Power Cable
+                            </label>
+                            &nbsp;   &nbsp;
+                            <label>
+                                <input type="checkbox" name="accessory_type_search" value="encoder_cable"> Encoder Cable
+                            </label>
+                            &nbsp;   &nbsp;
+                            <label>
+                                <input type="checkbox" name="accessory_type_search" value="communication_cable"> Communication Cable
+                            </label>
+                            <br>
+                            <label>
+                                <input type="checkbox" name="accessory_type_search" value="power_socket"> Power Socket
+                            </label>
+                            &nbsp;   &nbsp;
+                            <label>
+                                <input type="checkbox" name="accessory_type_search" value="control_socket"> Control Socket
+                            </label>
+                        
+                        </div>
+                
+                    </div>
+                </form>
+                
+                <!------------------------------------------------- Table ------------------------------------------------>
+                <table class="table mt-4">
+                    <thead>
+                        <tr>
+                            {% if 'Information (EG)' in current_user.authority %}
+                                <th>ID</th>
+                            {% endif %}                    
+    
+                            <th>Brand</th>
+                            <th>Model</th>
+                            <th>Description</th>
+    
+                            {% if 'Balance Information (EG)' in current_user.authority %}
+                                <th>Origin</th>
+                                <th>Stock</th>
+                            {% endif %}                    
+    
+                            {% if 'Sales Information (EG)' in current_user.authority %}
+                                <th>List Price</th>
+                            {% endif %}                    
+                        </tr>
+                    </thead>    
+                    <tbody id="productTableBody">
+                        {% for product in products %}
+                        <tr>
+                            {% if 'Information (EG)' in current_user.authority %}
+                                <td>{{ product.id }}</td>
+                            {% endif %} 
+                            <td>{{ product.brand }}</td>
+                            
+                            <td><a href="/servo_accessories_details?product_id={{ product.id }}"> {{ product.model }}</a></td>                        
+                            <td>{{ product.description }}</td>
+                            
+                            {% if 'Balance Information (EG)' in current_user.authority %}
+                                <td>{{ product.origin }}</td>
+                                <td>{{ product.quantity_egypt}}</td>
+                                {% endif %}                 
+        
+                                {% if 'Sales Information (EG)' in current_user.authority %}
+                                    <td>{{ product.end_user_sales_price_egypt|round(3) }}</td>
+                            {% endif %}                 
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </main>
+        </section>
+       
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            // Event listener for checkbox, dropdown, text input, and numeric input change
+            $('input[name="brand_search"], #model_search, #cable_length_search, input[name="accessory_type_search"]').change(function () {
+                // Get the selected checkbox values
+                var brandsearch= $('input[name="brand_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var accessorytypesearch = $('input[name="accessory_type_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var cablelengthsearch = $('#cable_length_search').val();
+                var modelsearch = $('#model_search').val();
+
+
+                // Make an asynchronous request to the server (replace with your actual endpoint)
+                $.ajax({
+                    type: 'POST',
+                    url: '/servo_accessories',
+                    data: {
+                        'brand_search': brandsearch,
+                        'model_search': modelsearch,
+                        'cable_length_search': cablelengthsearch,
+                        'accessory_type_search': accessorytypesearch
+                    },
+                    success: function (data) {
+                        console.log('brand search:', brandsearch);
+                        console.log('model search:', modelsearch);
+                        console.log('cable length search:', cablelengthsearch);
+                        console.log('accessory search:', accessorytypesearch);
+                        $('#productTableBody').html($(data).find('#productTableBody').html());
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>    
+</body>
+</html>

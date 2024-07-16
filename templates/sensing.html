@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/92f293de12.js" crossorigin="anonymous"></script>
+        <style>
+            a{
+                text-decoration: none;
+            }
+            i{
+              opacity:0.2;
+              font-size:1rem;
+              padding-left: 2px;
+            }
+            .card-body a{
+              color:#4c5157;
+              font-size: 16px;
+              font-family: Arial, sans-serif;
+            }
+            ul li>a img{
+              vertical-align:middle;
+              width:auto;
+              height:auto;
+              max-width:6.2rem;
+              max-height:6.2rem;
+            }
+            /* Responsive styles */
+        @media (max-width: 768px) {
+            ul {
+                grid-template-columns: 1fr;
+            }
+            li {
+                flex-direction: column;
+            }
+            h4 {
+                text-align: center;
+                padding: 1rem 0 0 0;
+            }
+            li>a img {
+                margin-bottom: 1rem;
+            }
+        }
+        </style>
+</head>
+<body>
+  {% include 'head.html' %}
+    <div class="container">
+    <h3 style="margin-top:20px;max-width: 80rem;font-family:Open Sans , Arial, sans-serif;font-size: 34px;color: #34383c;">Sensing</h3>
+    <div>
+      <ul style="display:grid;grid-template-columns: 1fr 1fr; padding: 0;
+      margin: 0;">
+        <li style="display:flex;padding:0.8rem 0;justify-content:center;align-items:center;"><a href="#" style="border:0.1rem solid #eee;"><img src="https://8z1xg04k.tinifycdn.com/images/servo_drive_1_r_prod.png?resize.method=fit&resize.width=194&resize.height=194" alt=""></a>
+          <h4 style="padding:0 1rem"><a href="servo_drives.html" style="color:#4c5157;font-size:20px;font-weight:normal;">Photoelectric Sensors <span><i class="fa-solid fa-circle-chevron-right"></i></span></a></h4>
+        </li>
+        <li style="display:flex;padding:0.8rem 0;justify-content:center;align-items:center"><a href="#" style="border:0.1rem solid #eee;"><img src="https://8z1xg04k.tinifycdn.com/images/200w_motor_r_prod.png?resize.method=fit&resize.width=194&resize.height=194" alt=""></a>
+          <h4 style="padding:0 1rem"><a href="#" style="color:#4c5157;font-size:20px;font-weight:normal;">Rotary Encoders <span><i class="fa-solid fa-circle-chevron-right"></i></span></a></h4>
+        </li>
+      </ul>
+    </div>
+    <!---->
+    </div>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>

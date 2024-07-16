@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/92f293de12.js" crossorigin="anonymous"></script>
+    <style>
+        .form-check-label {
+            position: relative;
+            margin: 0;
+            padding: 0.5rem 1.5rem;
+            border: 2px solid #eee;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            background-image: linear-gradient(#fff, #f8f8f8);
+            font-weight: normal;
+        }
+
+        #myTable th,
+        #myTable td {
+            width: auto;
+            white-space: normal;
+        }
+
+        @media screen and (max-width: 768px) {
+
+            #myTable th,
+            #myTable td {
+                width: auto;
+                white-space: normal;
+            }
+        }
+
+        table.table th {
+            font-weight: bold;
+            font-size: 13px;
+            color: #4c5157;
+            font-family: Arial, sans-serif;
+        }
+
+        .card-body h5 a {
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        table.table td,
+        .card-body p,
+        h5 {
+            font-size: 14px;
+            color: #4c5157;
+            font-family: Arial, sans-serif;
+        }
+
+        #cardViewWrapper {
+            background-color: rgba(var(--bs-emphasis-color-rgb), 0.05);
+            padding: 20px;
+        }
+
+
+        .card-img-top {
+            width: 50% !important;
+            margin: auto;
+        }
+
+        .table-img-top {
+            margin-left: 25px;
+            width: 50%;
+        }
+
+        #myTable td:nth-child(2) {
+            width: 10%;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 767px) {
+            .form-group label {
+                margin-bottom: 5px;
+            }
+
+            main.container-fluid {
+                padding: 10px;
+            }
+        }
+
+        .plc_container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'head.html' %}
+    <div class="container">
+        <div class="plc_container">
+            <select class="form-select form-select-sm mb-3" id="category" aria-label="Default select example"
+                style="margin-top:20px;font-size:18px;max-width:80rem;font-family:Open Sans, Arial, sans-serif;color:#34383c">
+                <option selected value="plc">Programmable Logic Controllers (PLC)</option>
+                <option value="HMI">Human Machine Interface (HMI)</option>
+                <option value="External">External Input/ Output (DI/ DO)</option>
+                <option value="Inverter">Variable Speed Drives</option>
+                <option value="Power Supply">Power Supply</option>
+                <option value="Relay">Relay</option>
+                <option value="Solid State Relay">Solid State Relay</option>
+                <option value="Photocell">Photocell</option>
+            </select>
+            <a class="btn btn-primary go_table" href="#">Go</a>
+        </div>
+        <!-- <h1 style="margin-top:20px;font-size:34px;max-width:80rem;font-family:Open Sans, Arial, sans-serif;color:#34383c">Programmable Logic Controllers (PLC)</h1> -->
+        <button class="btn btn-secondary mb-3" onclick="showForm()">Filter by</button>
+
+        <form id="filterForm" style="display: none;">
+            <div class="row" id="plc_division" style="display: none;">
+                <fieldset style="margin-top: 20px;">
+                    <Label>Model</Label>
+                    <input type="text" class="form-control form-check-label" id="myInput" name="myInput"
+                        onkeyup="filterTable()">
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <Label>Brand</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"
+                        onclick="toggleCheckbox('Mitsubishi')">
+                        <span>
+                            <input type="checkbox" value="Mitsubishi" class="form-check-input" name="filterStatus"
+                                onchange="filterTable()">
+                            Mitsubishi
+                        </span>
+                        <span style="color:gray">0</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"
+                        onclick="toggleCheckbox('Omron')"><span><input type="checkbox" value="Omron"
+                                class="form-check-input" name="filterStatus" onchange="filterTable()">
+                            Omron</span><span style="color:gray">11</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"
+                        onclick="toggleCheckbox('GMT')"><span><input type="checkbox" value="GMT"
+                                class="form-check-input" name="filterStatus" onchange="filterTable()">
+                            GMT</span><span style="color:gray">0</span></label><br>
+                </fieldset>
+
+                <fieldset style="margin-top: 20px;" class="col-md-2">
+                    <label>DI<input type="number" class="form-control form-check-label" id="di_search"
+                            name="di_search"></label><br>
+                    <label>DO<input type="number" class="form-control form-check-label" id="do_search" name="do_search">
+                    </label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-2">
+                    <label>AI<input type="number" class="form-control form-check-label" id="ai_search"
+                            name="ai_search"></label><br>
+                    <label>AO<input type="number" class="form-control form-check-label" id="ao_search" name="ao_search">
+                    </label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-2">
+                    <Label>Power Supply</Label>
+                    <label style="justify-content: space-between" class="form-check-label"><input type="checkbox"
+                            value="24VDC" class="form-check-input" name="power_search"> 24VDC<span
+                            style="color:gray">5</span></label>
+                    <label style="border-top:0;justify-content: space-between;" for="" class="form-check-label"><input
+                            type="checkbox" value="220VAC" class="form-check-input" name="power_search"> 220VAC<span
+                            style="color:gray">6</span></label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <Label>Communication</Label>
+                    <label style="justify-content: space-between" class="form-check-label"><span><input type="checkbox"
+                                class="form-check-input" value="Ethernet" name="communication_search">
+                            Ethernet</span><span style="color:gray">4</span></label>
+                    <label style="border-top:0;justify-content: space-between;" class="form-check-label"><span><input
+                                type="checkbox" class="form-check-input" value="RS232" name="communication_search">
+                            RS232</span><span style="color:gray">6</span></label>
+                    <label style="border-top:0;justify-content: space-between;" class="form-check-label"><span><input
+                                type="checkbox" class="form-check-input" value="RS422" name="communication_search">
+                            RS422</span><span style="color:gray">1</span></label>
+                    <label style="border-top:0;justify-content: space-between;" class="form-check-label"><span><input
+                                type="checkbox" class="form-check-input" value="RS485" name="communication_search">
+                            RS485</span><span style="color:gray">6</span></label>
+                    <label style="border-top:0;justify-content: space-between;" class="form-check-label"><span><input
+                                type="checkbox" class="form-check-input" value="USB" name="communication_search">
+                            USB</span><span style="color:gray">0</span></label><br>
+                </fieldset>
+            </div>
+
+            <div class="row" id="hmi_division" style="display: none;">
+                <fieldset style="margin-top: 20px;">
+                    <Label>Model</Label>
+                    <input type="text" class="form-control form-check-label" id="myInput" onkeyup="filterTable()">
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <Label>Brand</Label><br>
+                    <label class="form-check-label" onclick="toggleCheckbox('Mitsubishi')"
+                        style="justify-content: space-between"><span><input type="checkbox" onchange="filterTable()"
+                                value="Mitsubishi" name="filterStatus" class="form-check-input"> Mitsubishi</span><span
+                            style="color:gray">2</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('Omron')"
+                        style="border-top:0;justify-content: space-between;"><span><input type="checkbox"
+                                onchange="filterTable()" value="Omron" name="filterStatus" class="form-check-input">
+                            Omron</span><span style="color:gray">3</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('Asem')"
+                        style="border-top:0;justify-content: space-between;"><span><input type="checkbox"
+                                onchange="filterTable()" value="Asem" name="filterStatus" class="form-check-input">
+                            Asem</span><span style="color:gray">0</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('GMT')"
+                        style="border-top:0;justify-content: space-between;"><span><input type="checkbox"
+                                onchange="filterTable()" value="GMT" name="filterStatus" class="form-check-input">
+                            GMT</span><span style="color:gray">0</span></label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <Label>Size</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between"><span><input type="checkbox"
+                                value="7" class="form-check-input"> 7</span><span style="color:gray">3</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="10" class="form-check-input"> 10</span><span
+                            style="color:gray">2</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="12" class="form-check-input"> 12</span><span
+                            style="color:gray">0</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="15" class="form-check-input"> 15</span><span
+                            style="color:gray">0</span></label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <Label>Input Voltage</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"><span><input type="checkbox"
+                                value="24VDC" class="form-check-input">
+                            24VDC</span><span style="color:gray">5</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="220VAC" class="form-check-input"> 220VAC</span><span
+                            style="color:gray">0</span></label>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <Label>Communication</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between"><span><input type="checkbox"
+                                value="Ethernet" class="form-check-input"> Ethernet</span><span
+                            style="color:gray">4</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="RS232" class="form-check-input"> RS232</span><span
+                            style="color:gray">5</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="RS422" class="form-check-input"> RS422</span><span
+                            style="color:gray">0</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="RS485" class="form-check-input"> RS485</span><span
+                            style="color:gray">5</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="USB" class="form-check-input"> USB</span><span
+                            style="color:gray">4</span></label><br>
+                </fieldset>
+            </div>
+
+            <div class="row" id="external_division" style="display: none;">
+                <fieldset style="margin-top: 20px;">
+                    <Label>Model</Label>
+                    <input type="text" class="form-control form-check-label" id="myInput" onkeyup="filterTable()">
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <Label>Brand</Label><br>
+                    <label class="form-check-label" onclick="toggleCheckbox('Mitsubishi')"
+                        style="justify-content:space-between"><span><input type="checkbox" onchange="filterTable()"
+                                value="Mitsubishi" name="filterStatus" class="form-check-input"> Mitsubishi</span><span
+                            style="color:gray">0</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('Omron')"
+                        style="border-top:0;justify-content:space-between"><span><input type="checkbox"
+                                onchange="filterTable()" value="Omron" name="filterStatus" class="form-check-input">
+                            Omron</span><span style="color:gray">10</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('GMT')"
+                        style="border-top:0;justify-content:space-between"><span><input type="checkbox"
+                                onchange="filterTable()" value="GMT" name="filterStatus" class="form-check-input">
+                            GMT</span><span style="color:gray">0</span></label><br>
+                </fieldset>
+
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <label>DI<input type="number" class="form-control form-check-label"></label><br>
+                    <label>DO<input type="number" class="form-control form-check-label"> </label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <label>AI<input type="number" class="form-control form-check-label"></label><br>
+                    <label>AO<input type="number" class="form-control form-check-label"> </label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <Label>Special Functions</Label>
+                    <label style="justify-content: space-between;" class="form-check-label"
+                        onclick="toggleCheckbox('PT 100 Input')"><span><input type="checkbox" class="form-check-input"
+                                value="PT 100 Input"> PT 100 Input</span><span style="color:gray">1</span></label>
+                    <label for="" style="border-top:0;justify-content: space-between;"
+                        onclick="toggleCheckbox('TC Input')" class="form-check-label"><span><input type="checkbox"
+                                class="form-check-input" value="TC Input"> TC Input</span><span
+                            style="color:gray">0</span></label>
+                    <label for="" style="border-top:0;justify-content: space-between;"
+                        onclick="toggleCheckbox('Ethernet')" class="form-check-label"><span><input type="checkbox"
+                                class="form-check-input" value="Ethernet"> Ethernet</span><span
+                            style="color:gray">4</span></label>
+                    <label for="" style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('RS232')"
+                        class="form-check-label"><span><input type="checkbox" class="form-check-input" value="RS232">
+                            RS232</span><span style="color:gray">0</span></label>
+                    <label for="" style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('RS422')"
+                        class="form-check-label"><span><input type="checkbox" class="form-check-input" value="RS422">
+                            RS422</span><span style="color:gray">0</span></label>
+                    <label for="" style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('RS485')"
+                        class="form-check-label"><span><input type="checkbox" class="form-check-input" value="RS485">
+                            RS485</span><span style="color:gray">0</span></label>
+                    <label for="" style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('USB')"
+                        class="form-check-label"><span><input type="checkbox" class="form-check-input" value="USB">
+                            USB</span><span style="color:gray">0</span></label><br>
+                </fieldset>
+            </div>
+
+            <div class="row" id="inverter_division" style="display: none;">
+                <fieldset style="margin-top: 20px;">
+                    <Label>Model</Label>
+                    <input type="text" class="form-control form-check-label" id="myInput" onkeyup="filterTable()">
+                </fieldset>
+                <fieldset style="margin-top: 20px;">
+                    <Label>Current</Label>
+                    <input type="text" class="form-control form-check-label">
+                </fieldset>
+                <fieldset style="margin-top: 20px;">
+                    <Label>Output Power</Label>
+                    <input type="text" class="form-control form-check-label">
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-4">
+                    <Label>Brand</Label><br>
+                    <label class="form-check-label" onclick="toggleCheckbox('Mitsubishi')"
+                        style="justify-content:space-between"><span><input type="checkbox" onchange="filterTable()"
+                                name="filterStatus" value="Mitsubishi" class="form-check-input"> Mitsubishi</span><span
+                            style="color:gray">0</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('Omron')"
+                        style="border-top:0;justify-content:space-between"><span><input type="checkbox"
+                                onchange="filterTable()" name="filterStatus" value="Omron" class="form-check-input">
+                            Omron</span><span style="color:gray">9</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('Asem')"
+                        style="border-top:0;justify-content:space-between"><span><input type="checkbox"
+                                onchange="filterTable()" name="filterStatus" value="Vector" class="form-check-input">
+                            Vector</span><span style="color:gray">0</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('Asem')"
+                        style="border-top:0;justify-content:space-between"><span><input type="checkbox"
+                                onchange="filterTable()" name="filterStatus" value="Cumark" class="form-check-input">
+                            Cumark</span><span style="color:gray">0</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('GMT')"
+                        style="border-top:0;justify-content:space-between"><span><input type="checkbox"
+                                onchange="filterTable()" name="filterStatus" value="GMT" class="form-check-input">
+                            GMT</span><span style="color:gray">0</span></label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-4">
+                    <Label>Input Voltage</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"><span><input type="checkbox"
+                                value="220VAC" class="form-check-input"> 220VAC</span><span
+                            style="color:gray">6</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="380VAC" class="form-check-input"> 380VAC</span><span
+                            style="color:gray">3</span></label>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-4">
+                    <Label>Communication Port</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"><span><input type="checkbox"
+                                value="Ethernet" class="form-check-input"> Ethernet</span><span
+                            style="color:gray">0</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="RS232" class="form-check-input"> RS232</span><span
+                            style="color:gray">0</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="RS422" class="form-check-input"> RS422</span><span
+                            style="color:gray">0</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="RS485" class="form-check-input"> RS485</span><span
+                            style="color:gray">3</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="USB" class="form-check-input"> USB</span><span
+                            style="color:gray">0</span></label><br>
+                </fieldset>
+            </div>
+
+            <div class="row" id="power_supply_division" style="display: none;">
+                <fieldset style="margin-top: 20px;">
+                    <Label>Model</Label>
+                    <input type="text" class="form-control form-check-label" id="myInput" onkeyup="filterTable()">
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <Label>Brand</Label><br>
+                    <label class="form-check-label" onclick="toggleCheckbox('Omron')"
+                        style="justify-content:space-between"><span><input type="checkbox" onchange="filterTable()"
+                                name="filterStatus" value="Omron" class="form-check-input"> Omron</span><span
+                            style="color:gray">6</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('Asem')"
+                        style="border-top:0;justify-content:space-between"><span><input type="checkbox" value="Asem"
+                                onchange="filterTable()" name="filterStatus" class="form-check-input"> Asem</span><span
+                            style="color:gray">0</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('GMT')"
+                        style="border-top:0;justify-content:space-between"><span><input type="checkbox" value="GMT"
+                                onchange="filterTable()" name="filterStatus" class="form-check-input"> GMT</span><span
+                            style="color:gray">1</span></label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <Label>Input Voltage</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"><span><input type="checkbox"
+                                value="220VAC" class="form-check-input"> 220VAC</span><span
+                            style="color:gray">5</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="380VAC" class="form-check-input"> 380VAC</span><span
+                            style="color:gray">2</span></label>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <Label>Output Voltage</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"><span><input type="checkbox"
+                                value="12VDC" class="form-check-input"> 12VDC</span><span
+                            style="color:gray">0</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="24VDC" class="form-check-input"> 24VDC</span><span
+                            style="color:gray">6</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="48VDC" class="form-check-input"> 48VDC</span><span
+                            style="color:gray">1</span></label><br>
+                </fieldset>
+
+                <fieldset style="margin-top: 20px;" class="col-md-3">
+                    <Label>Output Current</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"><span><input type="checkbox"
+                                value="2.5A" class="form-check-input"> 2.5A</span><span
+                            style="color:gray">2</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="5A" class="form-check-input"> 5A</span><span
+                            style="color:gray">1</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="10A" class="form-check-input"> 10A</span><span
+                            style="color:gray">2</span></label>
+                    <label class="form-check-label" style="border-top:0;justify-content: space-between;"><span><input
+                                type="checkbox" value="20A" class="form-check-input"> 20A</span><span
+                            style="color:gray">2</span></label><br>
+                </fieldset>
+            </div>
+
+            <div class="row" id="relay_division" style="display: none;">
+                <fieldset style="margin-top: 20px;">
+                    <Label>Model</Label>
+                    <input type="text" class="form-control form-check-label" id="myInput" onkeyup="filterTable()">
+                </fieldset>
+                <fieldset style="margin-top: 20px;">
+                    <Label>Pins</Label>
+                    <input type="text" class="form-control form-check-label">
+                </fieldset>
+                <fieldset style="margin-top: 20px;">
+                    <Label>Current</Label>
+                    <input type="text" class="form-control form-check-label">
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-6">
+                    <Label>Brand</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"
+                        onclick="toggleCheckbox('Omron')"><span style="margin-right:9rem"><input type="checkbox"
+                                value="Omron" class="form-check-input"> Omron</span><span
+                            style="color:gray">20</span></label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-6">
+                    <Label>Coil Voltage</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"
+                        onclick="toggleCheckbox('24VDC')"><span><input type="checkbox" value="24VDC"
+                                class="form-check-input">
+                            24VDC</span><span style="color:gray">13</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('220VAC')"
+                        style="border-top:0;justify-content: space-between;"><span><input type="checkbox" value="220VAC"
+                                class="form-check-input">
+                            220VAC</span><span style="color:gray">5</span></label><br>
+                </fieldset>
+            </div>
+
+            <div class="row" id="solid" style="display: none;">
+                <fieldset style="margin-top: 20px;">
+                    <Label>Model</Label>
+                    <input type="text" class="form-control form-check-label" id="myInput" onkeyup="filterTable()">
+                </fieldset>
+                <fieldset style="margin-top: 20px;">
+                    <Label>Current</Label>
+                    <input type="text" class="form-control form-check-label">
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-4">
+                    <Label>Brand</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"
+                        onclick="toggleCheckbox('Omron')"><span><input type="checkbox" value="Omron"
+                                class="form-check-input">
+                            Omron</span><span style="color:gray">4</span></label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-4">
+                    <Label>Coil Voltage</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"
+                        onclick="toggleCheckbox('24VDC')"><span><input type="checkbox" value="24VDC"
+                                class="form-check-input">
+                            24VDC</span><span style="color:gray">4</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('220VAC')"
+                        style="border-top:0;justify-content: space-between;"><span><input type="checkbox" value="220VAC"
+                                class="form-check-input">
+                            220VAC</span><span style="color:gray">0</span></label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-4">
+                    <Label>Heat Sink</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"
+                        onclick="toggleCheckbox('With')"><span><input type="checkbox" value="With"
+                                class="form-check-input">
+                            With</span><span style="color:gray">1</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('Without')"
+                        style="border-top:0;justify-content: space-between;"><span><input type="checkbox"
+                                value="Without" class="form-check-input">
+                            Without</span><span style="color:gray">3</span></label><br>
+                </fieldset>
+            </div>
+
+            <div class="row" id="Photocell" style="display: none;">
+                <fieldset style="margin-top: 20px;">
+                    <Label>Model</Label>
+                    <input type="text" class="form-control form-check-label" id="myInput" onkeyup="filterTable()">
+                </fieldset>
+                <fieldset style="margin-top: 20px;">
+                    <Label>Sensing Distance</Label>
+                    <input type="text" class="form-control form-check-label">
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-2">
+                    <Label>Brand</Label><br>
+                    <label class="form-check-label" style="justify-content: space-between;"
+                        onclick="toggleCheckbox('Mitsubishi')"><span><input type="checkbox" value="Mitsubishi"
+                                name="filterStatus" onchange="filterTable()" class="form-check-input">
+                            Mitsubishi</span><span style="color:gray">0</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('Omron')"
+                        style="border-top:0;justify-content: space-between;"><span><input type="checkbox" value="Omron"
+                                name="filterStatus" onchange="filterTable()" class="form-check-input">
+                            Omron</span><span style="color:gray">23</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('Asem')"
+                        style="border-top:0;justify-content: space-between;"><span><input type="checkbox" value="Asem"
+                                name="filterStatus" onchange="filterTable()" class="form-check-input">
+                            Asem</span><span style="color:gray">0</span></label>
+                    <label class="form-check-label" onclick="toggleCheckbox('GMT')"
+                        style="border-top:0;justify-content: space-between;"><span><input type="checkbox" value="GMT"
+                                name="filterStatus" onchange="filterTable()" class="form-check-input">
+                            GMT</span><span style="color:gray">0</span></label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-2">
+                    <Label>Type</Label>
+                    <label class="form-check-label" style="justify-content: space-between;"
+                        onclick="toggleCheckbox('Diffuse')"><input type="checkbox" value="Diffuse"
+                            class="form-check-input"> Diffuse<span style="color:gray">13</span></label>
+                    <label style="border-top:0;justify-content: space-between;" class="form-check-label"
+                        onclick="toggleCheckbox('Retro Reflective')"><input type="checkbox" value="Retro Reflective"
+                            class="form-check-input"> Retro Reflective<span style="color:gray">5</span></label>
+                    <label style="border-top:0;justify-content: space-between;" class="form-check-label"
+                        onclick="toggleCheckbox('Through Beam')"><input type="checkbox" value="Through Beam"
+                            class="form-check-input"> Through Beam<span style="color:gray">5</span></label><br>
+                    <br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-2">
+                    <Label>Input Voltage</Label>
+                    <label class="form-check-label" style="justify-content: space-between;"
+                        onclick="toggleCheckbox('24VDC')"><span><input type="checkbox" class="form-check-input"
+                                value="24VDC"> 24VDC</span><span style="color:gray">3</span></label>
+                    <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('110VAC/DC')"
+                        class="form-check-label"><span><input type="checkbox" class="form-check-input"
+                                value="110VAC/DC"> 110VAC/DC</span><span style="color:gray">0</span></label>
+                    <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('220VAC/DC')"
+                        class="form-check-label"><span><input type="checkbox" class="form-check-input"
+                                value="220VAC/DC"> 220VAC/DC</span><span style="color:gray">1</span></label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-2">
+                    <Label>Output Type</Label>
+                    <label class="form-check-label" style="justify-content: space-between;"
+                        onclick="toggleCheckbox('PNP')"><span><input type="checkbox" class="form-check-input"
+                                value="PNP"> PNP</span><span style="color:gray">10</span></label>
+                    <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('NPN')"
+                        class="form-check-label"><span><input type="checkbox" class="form-check-input" value="NPN">
+                            NPN</span><span style="color:gray">12</span></label>
+                    <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('Relay Output')"
+                        class="form-check-label"><span><input type="checkbox" class="form-check-input"
+                                value="Relay Output"> Relay Output</span><span style="color:gray">1</span></label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-2">
+                    <Label>Shape</Label>
+                    <label class="form-check-label" style="justify-content: space-between;"
+                        onclick="toggleCheckbox('Cylindrical')"><span><input type="checkbox" class="form-check-input"
+                                value="Cylindrical"> Cylindrical</span><span style="color:gray">12</span></label>
+                    <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('Rectangular')"
+                        class="form-check-label"><span><input type="checkbox" class="form-check-input"
+                                value="Rectangular"> Rectangular</span><span style="color:gray">5</span></label>
+                    <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('U-Shape')"
+                        class="form-check-label"><span><input type="checkbox" class="form-check-input" value="U-Shape">
+                            U-Shape</span><span style="color:gray">6</span></label><br>
+                </fieldset>
+                <fieldset style="margin-top: 20px;" class="col-md-2">
+                    <Label>Connection</Label>
+                    <label class="form-check-label" style="justify-content: space-between;"
+                        onclick="toggleCheckbox('Cable')"><span><input type="checkbox" class="form-check-input"
+                                value="Cable"> Cable</span><span style="color:gray">14</span></label>
+                    <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('Socket')"
+                        class="form-check-label"><span><input type="checkbox" class="form-check-input" value="Socket">
+                            Socket</span><span style="color:gray">9</span></label><br>
+                </fieldset>
+            </div>
+        </form>
+
+
+        <br>
+
+
+        <div id="listView">
+            <table id="myTable" class="table table-striped">
+                <thead>
+                    <tr class="header">
+                        {% if 'Information (EG)' in current_user.authority %}
+                        <th scope="col">ID</th>
+                        {% endif %}
+                        <th scope="col">Brand</th>
+                        <!-- <th scope="col">Image</th> -->
+                        <th scope="col">Model</th>
+                        <th scope="col">Description</th>
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                        <th scope="col">Origin</th>
+                        <th scope="col">Stock</th>
+                        {% endif %}
+
+                        {% if 'Sales Information (EG)' in current_user.authority %}
+                        <th scope="col">List Price</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody id="hmiTable">
+                    {% for product in products %}
+                    <tr class="header">
+                        {% if 'Information (EG)' in current_user.authority %}
+                        <td>{{ product.id }}</td>
+                        {% endif %}
+                        <td>{{ product.brand }}</td>
+                        </td>
+                        <td><a href="#">{{ product.model }}</a></td>
+                        <td>{{ product.description }}</td>
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                        <td>{{ product.origin }}</td>
+                        <td>{{ product.quantity_egypt}}</td>
+                        {% endif %}
+
+                        {% if 'Sales Information (EG)' in current_user.authority %}
+                        <td>{{ product.end_user_sales_price_egypt|round(3) }}</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            {% include 'details_financial.html' %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $('#category').change(function () {
+            var selectedCategory = $(this).val();
+            // var plcTableRows = document.getElementById('plcTable').getElementsByClassName('header');
+            var hmiTableRows = document.getElementById('hmiTable').getElementsByClassName('header');
+
+            // for (var i = 0; i < plcTableRows.length; i++) {
+            //     var row = plcTableRows[i];
+            //     if (selectedCategory === 'plc') {
+            //         row.style.display = ''; // إظهار الصف إذا كانت القيمة هي "All" أو "plc"
+            //     } else {
+            //         row.style.display = 'none'; // إخفاء الصف إذا لم تكن القيمة "All" أو "plc"
+            //     }
+            // }
+
+            for (var j = 0; j < hmiTableRows.length; j++) {
+                var row = hmiTableRows[j];
+                if (selectedCategory === 'HMI') {
+                    row.style.display = ''; // إظهار الصف إذا كانت القيمة هي "All" أو "HMI"
+                } else {
+                    row.style.display = 'none'; // إخفاء الصف إذا لم تكن القيمة "All" أو "HMI"
+                }
+            }
+            $('#hmi_division, #plc_division, #external_division, #inverter_division, #solid, #power_supply_division, #servo_drive_division, #servo_motor_division, #relay_division, #servo_accessories_division, #Photocell').hide();
+
+            if (selectedCategory === 'HMI') {
+                $('#hmi_division').show();
+            } else if (selectedCategory === 'External') {
+                $('#external_division').show();
+            } else if (selectedCategory === 'plc') {
+                $('#plc_division').show();
+            } else if (selectedCategory === 'Inverter') {
+                $('#inverter_division').show();
+            } else if (selectedCategory === 'Power Supply') {
+                $('#power_supply_division').show();
+            } else if (selectedCategory === 'Servo Drive') {
+                $('#servo_drive_division').show();
+            } else if (selectedCategory === 'Servo Motor') {
+                $('#servo_motor_division').show();
+            } else if (selectedCategory === 'Relay') {
+                $('#relay_division').show();
+            } else if (selectedCategory === 'Solid State Relay') {
+                $('#solid').show();
+            } else if (selectedCategory === 'Servo Accessory') {
+                $('#servo_accessories_division').show();
+            } else if (selectedCategory === 'Photocell') {
+                $('#Photocell').show();
+            }
+        });
+
+        // $('tr:not(.header)').hide();
+        // $('tr.header').nextUntil('tr.header').slideToggle(100);
+        $(document).ready(function () {
+            // Hide all rows with colspan initially
+            $('tr[colspan="7"]').hide();
+            $('tr.header').nextUntil('tr.header').slideToggle(100);
+            $('tr.header').click(function () {
+                // $(this).find('span').text(function(_, value){return value=='<'?'>':'<'}); 
+                $(this).nextUntil('tr.header').slideToggle(100, function () {
+                });
+            });
+        });
+
+        function showForm() {
+            $('#filterForm').toggle();
+        }
+
+        $(document).ready(function () {
+            $('img').on('error', function () {
+                $(this).attr('src', 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg');
+            });
+        })
+
+        
+        document.addEventListener('DOMContentLoaded',function(){
+        let select = document.querySelector(".form-select")
+        let goBtn = document.querySelector(".go_table")
+        let selectOptions = document.querySelectorAll(".form-select option")
+        let val = "HMI"
+        selectOptions.forEach((ele) => {
+            if(ele.value == val){
+                ele.setAttribute("selected", true)
+                $('#hmi_division').show();
+            }
+        })
+        goBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            let selectedValue = select.value;
+
+       
+                if (selectedValue === "plc") {
+                    goBtn.href= "plc_table.html"
+                    console.log("plc")
+                } else if (selectedValue === "HMI") {
+                    goBtn.href= "hmi_table.html"
+                } else if (selectedValue === "External") {
+                    console.log("External")
+                } else if (selectedValue === "Inverter") {
+                    goBtn.href= "Inverter_table.html"
+                    console.log("Inverter")
+                } else if (selectedValue === "Power Supply") {
+                    goBtn.href = "power_supply_table.html"
+                    console.log("Power Supply")
+                } else if (selectedValue === "Relay") {
+                    goBtn.href= "relay_table.html"
+                    console.log("Relay")
+                } else if (selectedValue === "Solid State Relay") {
+
+                    console.log("Solid State Relay")
+                } else if (selectedValue === "Photocell") {
+                    goBtn.href="photocell_table.html"
+                    console.log("Photocell")
+                }
+                window.location.href= goBtn.href;
+            
+            })
+        })
+
+
+
+        function toggleCheckbox(value) {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"][value="' + value + '"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = !checkbox.checked;
+            });
+            filterTable();
+        }
+        function filterTable() {
+            var inputModel = document.getElementById("myInput").value.toUpperCase();
+            var checkboxesBrand = document.querySelectorAll('input[name="filterStatus"][value="Mitsubishi"], input[name="filterStatus"][value="Omron"], input[name="filterStatus"][value="GMT"]');
+
+            var table = document.getElementById("myTable");
+            var tr = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < tr.length; i++) {
+                var tdModel = tr[i].getElementsByTagName("td")[2];
+                var tdBrand = tr[i].getElementsByTagName("td")[1];
+                if (tdModel && tdBrand) {
+                    var modelValue = tdModel.textContent || tdModel.innerText;
+                    var brandValue = tdBrand.textContent || tdBrand.innerText;
+                    var brandChecked = Array.from(checkboxesBrand).filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
+
+                    if ((modelValue.toUpperCase().indexOf(inputModel) > -1 || inputModel === "") &&
+                        (brandChecked.length === 0 || brandChecked.includes(brandValue))) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>

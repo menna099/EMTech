@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>View estimates</title>
+    <script src="https://kit.fontawesome.com/92f293de12.js" crossorigin="anonymous"></script>
+    <style>
+        .icons_estimate {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+
+        @media print {
+
+            .sec-view-estimate,
+            #header {
+                display: none;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .custom-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .custom-col {
+            width: 48%;
+        }
+
+        .table-bordered td,
+        th {
+            text-align: center !important;
+            border: 0.5px solid rgb(167, 162, 162);
+        }
+
+        .table-bordered th,
+        td {
+            text-align: center !important;
+            border: 0.5px solid rgb(167, 162, 162);
+        }
+
+        .invoice-heading {
+            text-align: center;
+            color: #000000 !important;
+            font-weight: bold;
+            width: 300px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btns_container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            position: relative;
+            top: 70px;
+            left: 200px;
+            width: 250px;
+        }
+
+        @media print {
+            .btns_container {
+                display: none;
+            }
+        }
+
+        .btns_container button {
+            color: white !important;
+        }
+
+        .btns_container .download_pdf {
+            background-color: rgb(4, 27, 54) !important;
+        }
+
+        .btns_container .print_pdf {
+            background-color: rgba(0, 0, 0, 0.445) !important;
+        }
+    </style>
+
+<body id="body">
+    {% include 'head.html' %}
+    <section class="container sec-view-estimate mt-3">
+        <!---->
+        <div class="row">
+            <!------------------------------------------------ Main content --------------------------------->
+            <main class="container">
+                <h3 class="mb-4" style="font-family:Open Sans , Arial, sans-serif;">View estimates</h3>
+                <!------------------------------------------------- Table ------------------------------------------------>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Estimate ID</th>
+                                <th>Estimate Name</th>
+                                <th>Description</th>
+                                <th>Total Price</th>
+                                <th>Customer</th>
+                                <th>Contact Person</th>
+                                <th>Action</th>
+    
+                            </tr>
+                        </thead>
+                        <tbody id="estimateTableBody">
+                            {% for estimate in estimates %}
+                            <tr>
+                                <td>{{ estimate.id }}</td>
+    
+    
+                                <td>
+                                    <a href="/estimate_details?estimate_id={{ estimate.id }}">
+                                        {{ estimate.estimate_name }}
+                                    </a>
+                                </td>
+                                <td>{{ estimate.estimate_description }}</td>
+                                <td>{{ estimate.estimate_total_price|round(0) }}</td>
+                                <td>{{estimate.customer_name}}</td>
+                                <td>{{ estimate.contact_name }}</td>
+                                <td class="icons_estimate"><a class="view_estimate" href="#"><i
+                                            class="fa-solid fa-eye"></i></a>
+                                    <a href="/estimate_details?estimate_id={{ estimate.id }}"><i
+                                            class="fa-solid fa-pen-to-square"></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+               
+
+            </main>
+    </section>
+    <div class="empty_div hidden">
+        <div class="btns_container">
+            <button class="download_pdf btn btn_primary"><i class="fa-solid fa-file-export"></i></button>
+            <button class="print_pdf btn btn_primary"><i class="fa-solid fa-print"></i></button>
+        </div>
+        <div class="container">
+            <div class="row justify-content-center mt-3">
+
+                <h2 class="invoice-heading">Invoice</h2>
+                <p style="font-weight: 600;font-size:14px">Omron Electronics Elektromekanik Yazilim Tic.ve San.Ltd.Sti.
+                    <br>
+                    Burhaniye Mah. Tunuslu Mahmut<br>
+                    Pasa Caddesi No:10 34676 <br>
+                    Altunizade / Uskudar / ISTANBUL <br>
+                    TURKEY
+                </p>
+                <span>Tel: +90 (216) 556 51 30</span><br>
+                <span>Email: satis@eu.omron.com</span>
+            </div>
+            <hr>
+            <div class=" custom-row">
+                <div class="custom-col">
+                    <p style="font-weight: bold;">Invoice to: 42305524</p>
+                    <p>
+                        <td></td>
+                    </p>
+
+                </div>
+                <div class="custom-col">
+                    <p style="font-weight: bold;">Ship to: 42305525</p>
+                    <p>Address: </p>
+                </div>
+            </div>
+            <hr>
+            <div class="custom-row">
+                <div class="custom-col">
+                    <form>
+
+                        <label>Contact person :</label> &nbsp;
+
+                        <hr>
+
+                        <div class=" custom-row">
+                            <label>Returns to/Reply to :</label>
+                        </div>
+                        <hr>
+                        <div class=" custom-row">
+                            <label>Mode of transport :</label>
+
+                        </div>
+                        <!-- <hr>
+                        <div class=" custom-row">
+                            <label>Inco terms :</label>
+                        </div>
+                        <br> -->
+                    </form>
+                </div>
+                <div class="custom-col">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="2" class="table-active">Please quote in all correspondence</th>
+                                <td>Page 1 of 1</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Customer number</td>
+                                <td>Invoice number</td>
+                                <td>Invoice date</td>
+                            </tr>
+                            <tr>
+                                <td>42305524</td>
+                                <td>22021530 RI</td>
+                                <td>18-11-22</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- table -->
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="table-active">
+                        <th>Line</th>
+                        <th>Description</th>
+
+                        <th>Quantity</th>
+                        <th>Unit price</th>
+                        <th>Disc.</th>
+                        <th>VAT</th>
+                        <th>Total price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for estimate in estimates %}
+                    <tr>
+                        <td>{{ estimate.id }}</td>
+                        <td>{{ estimate.estimate_description }}</td>
+
+                        <td>20</td>
+                        <td>00,5000</td>
+                        <td></td>
+                        <td>0%</td>
+                        <td>{{ estimate.estimate_total_price|round(0) }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+
+
+                    <tr>
+                        <td>22</td>
+                        <td></td>
+
+                        <td>20</td>
+                        <td>00,5000</td>
+                        <td></td>
+                        <td>0%</td>
+                        <td>10000</td>
+                    </tr>
+
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="4" class="table-active">Sub total</th>
+                        <td colspan="2">EUR</td>
+                        <td>0.000,00</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div>
+                <p style="font-weight: 600;margin-bottom:0px">Message</p>
+                <span>Please contact Omron before returning these products.</span>
+            </div>
+
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr class="table-active">
+                        <th>VAT number</th>
+                        <th>Taxable amount</th>
+                        <th>Taxable amount</th>
+                        <th>VAT</th>
+                        <th>EUR</th>
+                        <th>TL</th>
+                        <th>Total amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>0.000,00 EUR</td>
+                        <td>0.000,00</td>
+                        <td>0,0%</td>
+                        <td>0,00</td>
+                        <td>0,00</td>
+                        <td>0.000,00 EUR</td>
+                    </tr>
+                    <tr>
+                        <th class="table-active">Due date</th>
+                        <!-- <td>18-11-22</td> -->
+                        <th class="table-active">Terms of payment</th>
+                        <td colspan="5">CASH AT DELIVERY</td>
+                        <!-- <th class="">Payment Instrument</th>
+                            <td colspan="2">Manual Payments & Receipts</td> -->
+                    </tr>
+                    <tr>
+                        <td>18-11-22</td>
+                        <th class="table-active">Payment Instrument</th>
+                        <td colspan="5">Manual Payments & Receipts</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+    <script>
+        var viewEstimates = document.querySelectorAll("#estimateTableBody .view_estimate")
+        var emptyDiv = document.querySelector(".empty_div")
+
+        viewEstimates.forEach(function(viewEstimate) {
+            viewEstimate.addEventListener("click", function (e) {
+            e.preventDefault()
+            if (emptyDiv.classList.contains("hidden")) {
+                emptyDiv.classList.remove("hidden")
+            } else {
+                emptyDiv.classList.add("hidden")
+            }
+        })
+        });
+        
+
+        let btnPdf = document.querySelector(".download_pdf");
+        let btnPrint = document.querySelector(".print_pdf");
+        btnPdf.addEventListener("click", function () {
+            var element = document.querySelector(".container");
+            html2pdf().from(element).save("invoice.pdf")
+        })
+        btnPrint.addEventListener("click", function () {
+            window.print()
+        })
+
+
+    </script>
+
+</body>
+
+</html>

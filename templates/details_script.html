@@ -1,0 +1,107 @@
+<script>
+     
+    function toggleCurrency(switchButton) {
+        console.log("Switch button checked:", switchButton);
+        
+        // Retrieve purchase prices for each currency
+        var cost_price_egypt = parseFloat("{{ product.cost_price_egypt }}");
+        var cost_price_uae = parseFloat("{{ product.cost_price_uae }}");
+        var cost_price_turkey = parseFloat("{{ product.cost_price_turkey }}");
+        var distributor_sales_price_egypt = parseFloat("{{ product.distributor_sales_price_egypt }}");
+        var distributor_sales_price_uae = parseFloat("{{ product.distributor_sales_price_uae }}");
+        var distributor_sales_price_turkey = parseFloat("{{ product.distributor_sales_price_turkey }}");
+        var end_user_sales_price_egypt = parseFloat("{{ product.end_user_sales_price_egypt }}");
+        var end_user_sales_price_uae = parseFloat("{{ product.end_user_sales_price_uae }}");
+        var end_user_sales_price_turkey = parseFloat("{{ product.end_user_sales_price_turkey }}");
+
+        // Access exchange rates passed from backend
+        const exchangeRates = {{ exchange_rates | tojson }};
+
+        console.log("Exchange rates:", exchangeRates);
+
+        // Access currencyLabel element
+        var currencyLabel = document.getElementById('currencyLabel');
+
+        if (!currencyLabel) {
+            console.error("Element with id 'currencyLabel' not found.");
+            return;
+        }
+
+        // Determine the current currency based on the switch button state
+        var currentCurrencyElement = document.getElementById("currency");
+        var currentCurrency;
+        if (currentCurrencyElement) {
+            currentCurrency = currentCurrencyElement.textContent.trim();
+            console.log("####currentCurrency:", currentCurrency);
+        } else {
+            console.log("Element with id 'currency' not found.");
+        }
+
+        if (switchButton.checked) {
+            if (currentCurrency === 'USD') {
+                console.log("USDcurrentCurrency:", currentCurrency);
+                currencyLabel.textContent = 'Purchase Currency';
+                currencyLabel.style.color = 'green';
+                currentCurrency = '{{ product.currency }}'.toLowerCase(); // Convert currency to lowercase
+                cost_price_egypt /= exchangeRates['Egypt'][0];
+                cost_price_uae /= exchangeRates['UAE'][0];
+                cost_price_turkey /= exchangeRates['Turkey'][0];
+                distributor_sales_price_egypt /= exchangeRates['Egypt'][0];
+                distributor_sales_price_uae /= exchangeRates['UAE'][0];
+                distributor_sales_price_turkey /= exchangeRates['Turkey'][0];
+                end_user_sales_price_egypt /= exchangeRates['Egypt'][0];
+                end_user_sales_price_uae /= exchangeRates['UAE'][0];
+                end_user_sales_price_turkey /= exchangeRates['Turkey'][0];
+            } else {
+                currentCurrency = '{{ product.currency }}'.toLowerCase(); // Set the default currency based on the product
+                currencyLabel.textContent = 'Purchase Currency';
+                currencyLabel.style.color = 'green';
+                currentCurrency = '{{ product.currency }}'.toLowerCase(); // Convert currency to lowercase
+                cost_price_egypt /= exchangeRates['Egypt'][1];
+                cost_price_uae /= exchangeRates['UAE'][1];
+                cost_price_turkey /= exchangeRates['Turkey'][1];
+                distributor_sales_price_egypt /= exchangeRates['Egypt'][1];
+                distributor_sales_price_uae /= exchangeRates['UAE'][1];
+                distributor_sales_price_turkey /= exchangeRates['Turkey'][1];
+                end_user_sales_price_egypt /= exchangeRates['Egypt'][1];
+                end_user_sales_price_uae /= exchangeRates['UAE'][1];
+                end_user_sales_price_turkey /= exchangeRates['Turkey'][1];
+            }
+        } else {
+            // Purchase currency selected
+            currencyLabel.textContent = 'Local Currency';
+            currencyLabel.style.color = 'orange';
+            currentCurrency = 'egypt'; // Set the default currency code here
+        }
+
+        // Update the UI with the new prices in the Purchase Currency section
+            updatePrice('cost_price_egypt_purchase', cost_price_egypt.toFixed(2));
+            updatePrice('distributor_sales_price_egypt_purchase', distributor_sales_price_egypt.toFixed(2));
+            updatePrice('end_user_sales_price_egypt_purchase', end_user_sales_price_egypt.toFixed(2));
+
+            updatePrice('cost_price_uae_purchase', cost_price_uae.toFixed(2));
+            updatePrice('distributor_sales_price_uae_purchase', distributor_sales_price_uae.toFixed(2));
+            updatePrice('end_user_sales_price_uae_purchase', end_user_sales_price_uae.toFixed(2));
+
+            updatePrice('cost_price_turkey_purchase', cost_price_turkey.toFixed(2));
+            updatePrice('distributor_sales_price_turkey_purchase', distributor_sales_price_turkey.toFixed(2));
+            updatePrice('end_user_sales_price_turkey_purchase', end_user_sales_price_turkey.toFixed(2));
+        }
+
+        function updatePrice(elementId, price) {
+            var element = document.getElementById(elementId);
+            if (element) {
+                element.innerText = price;
+            } else {
+                console.error("Element with id '" + elementId + "' not found.");
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            // Call toggleCurrency function when the DOM is loaded
+            toggleCurrency(document.getElementById('switchButton'));
+        });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

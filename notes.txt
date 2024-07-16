@@ -1,0 +1,129 @@
+columns = [column[0] for column in cur.description]
+data = [dict(zip(columns, row)) for row in cur.fetchall()]
+
+solution_products = [dict(zip([column[0] for column in cur.description], row)) for row in cur.fetchall()]
+--------------------------------------
+columns = [column[0] for column in cur.description]
+row = cur.fetchone()
+data = dict(zip(columns, row)) if row else None
+
+row = cur.fetchone()
+solution_products = [dict(zip([column[0] for column in cur.description], row)) if row else None]
+
+
+solution_products = [dict(zip([column[0] for column in cur.description], cur.fetchone())) if cur.fetchone() else None]
+
+======================= get data route ==============================
+"""
+@app.route('/get_brand_search/<selected_optionc>')
+def get_brand_search(selected_optionc):
+    # Perform logic based on the selected option
+    global brandsearch,filtered_products
+    if selected_optionc == "all":
+        brandsearch=""
+        print("brand search= " + brandsearch)
+    
+    else:
+        brandsearch = selected_optionc
+        print("brand search= " + brandsearch)
+
+    
+
+    return jsonify()
+"""
+#-------------------------------------------------------------
+"""
+@app.route('/get_category_search/<selected_optiond>')
+def get_brand_search(selected_optiond):
+    # Perform logic based on the selected option
+    global categorysearch
+    categorysearch = selected_optiond
+    print("category search = ",categorysearch)
+    return jsonify()
+"""
+#-------------------------------------------------------------
+"""
+@app.route('/get_data_edit/<selected_option>')
+def get_data_edit(selected_option):
+    # Perform logic based on the selected option
+       
+    if selected_option == 'EGP':
+        global currency_editpanel
+
+        currency_editpanel="EGP"
+        print("currency_addproduct= " + currency_editpanel)
+
+    elif selected_option == 'USD':
+
+
+        currency_editpanel="USD"
+        print("currency_addproduct= " + currency_editpanel) 
+
+    elif selected_option == 'EUR': 
+
+        currency_editpanel="EUR"
+        print("currency_addproduct= " + currency_editpanel) 
+    
+    return jsonify()
+"""
+#-------------------------------------------------------------
+"""
+@app.route('/get_data/<selected_option>')
+def get_data(selected_option):
+    # Perform logic based on the selected option
+       
+    if selected_option == 'USD':
+        global moneyi,money,exchange_rate, cost_factor, profit_rate
+        money="USD"
+        print("usd")
+        moneyi=1
+        cur.execute("SELECT exchange_rate, cost_factor, end_user_profit_rate,distributor_profit_rate FROM setting WHERE id =1")
+        result = cur.fetchone()
+        print(result)
+        exchange_rate, cost_factor, profit_rate = result
+        print(exchange_rate,cost_factor,profit_rate)
+        print("ERERERERERERRERE 111111")
+        render_template('settings.html',exchange_rate=exchange_rate,cost_factor=cost_factor,profit_rate=profit_rate)
+    elif selected_option == 'EUR':
+        print("eur")
+        money="EUR"
+        moneyi=2
+        cur.execute("SELECT exchange_rate, cost_factor, end_user_profit_rate,distributor_profit_rate FROM setting WHERE id =2")
+        result = cur.fetchone()
+        print(result)
+        exchange_rate, cost_factor, profit_rate = result
+        print(exchange_rate,cost_factor,profit_rate)
+        render_template('settings.html',exchange_rate=exchange_rate,cost_factor=cost_factor,profit_rate=profit_rate)
+        #return render_template('settings.html',exchange_rate=exchange_rate,cost_factor=cost_factor,profit_rate=profit_rate)    
+    return jsonify()
+
+"""
+================================================================
+sql connection
+conn = mysql.connector.connect(**db_config)
+cur = conn.cursor()
+db_config = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': '1234',
+    'database': 'emtech_products',
+}
+---------------------------------------------
+
+    code: 
+       var viewEstimates = document.querySelectorAll("#estimateTableBody .view_estimate")
+        var emptyDiv = document.querySelector(".empty_div")
+
+        viewEstimates.forEach(function(viewEstimate) {
+            viewEstimate.addEventListener("click", function (e) {
+            e.preventDefault()
+            if (emptyDiv.classList.contains("hidden")) {
+                emptyDiv.classList.remove("hidden")
+            } else {
+                emptyDiv.classList.add("hidden")
+            }
+        })
+        });
+
+        problem : only first estimate has been shown
+        solution: loop on all btns (view estimate) 

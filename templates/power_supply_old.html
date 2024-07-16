@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Power Supply</title>
+    {% include 'head.html' %}
+
+    <section class="container-fluid">
+        <!---->
+        <div class="row">
+            {% include 'side_bar.html' %}
+        <!------------------------------------------------ Main content --------------------------------->
+        <main class="col-md-9 main-content">
+            <h1 class="mb-4">Power Supply</h1>
+            <form>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Brand:</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="Omron"> Omron
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="Asem"> Asem
+                        </label>
+                       
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="GMT"> GMT
+                        </label>
+                        <br>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="model_search">Model</label>
+                        <input type="text" id="model_search" name="model_search" class="form-control">
+                        
+                        <br>
+                    </div>
+                    
+                    
+
+                    <div class="col-md-2">
+                        <label>Input Voltage:</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="input_voltage_search" value="220VAC"> 220VAC
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="input_voltage_search" value="380VAC"> 380VAC
+                        </label>
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label for="out_voltage_search">Output Voltage:</label>
+
+                        <br>
+                        <label>
+                            <input type="checkbox" name="out_voltage_search" value="12VDC"> 12VDC
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="out_voltage_search" value="24VDC"> 24VDC
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="out_voltage_search" value="48VDC"> 48VDC
+                        </label>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="out_current_search">Output Current:</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="out_current_search" value="2.5A"> 2.5A
+                        </label>
+                        <label>
+                            <input type="checkbox" name="out_current_search" value="5A"> 5A
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="out_current_search" value="10A"> 10A
+                        </label>
+                        <label>
+                            <input type="checkbox" name="out_current_search" value="20A"> 20A
+                        </label>
+                    </div>
+                     
+                </div>
+            </form>
+            
+            <!------------------------------------------------- Table ------------------------------------------------>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        {% if 'Information (EG)' in current_user.authority %}
+                            <th>ID</th>
+                        {% endif %}                    
+
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Description</th>
+
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                            <th>Origin</th>
+                            <th>Stock</th>
+                        {% endif %}                    
+
+                        {% if 'Sales Information (EG)' in current_user.authority %}
+                            <th>List Price</th>
+                        {% endif %}                    
+                    </tr>
+                </thead>    
+                <tbody id="productTableBody">
+                    {% for product in products %}
+                    <tr>
+                        {% if 'Information (EG)' in current_user.authority %}
+                            <td>{{ product.id }}</td>
+                        {% endif %} 
+                        <td>{{ product.brand }}</td>
+                        
+                        <td><a href="/power_supply_details?product_id={{ product.id }}"> {{ product.model }}</a></td>                        
+                        <td>{{ product.description }}</td>
+                        
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                            <td>{{ product.origin }}</td>
+                            <td>{{ product.quantity_egypt}}</td>
+                            {% endif %}                 
+    
+                            {% if 'Sales Information (EG)' in current_user.authority %}
+                                <td>{{ product.end_user_sales_price_egypt|round(3) }}</td>
+                        {% endif %}                 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+    </section>
+          
+                
+    <!-- Bootstrap and other scripts if needed -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+
+         
+        $(document).ready(function () {
+            // Event listener for checkbox, dropdown, text input, and numeric input change
+            $('input[name="brand_search"], #model_search, input[name="input_voltage_search"], input[name="out_voltage_search"], input[name="out_current_search"]').change(function () {
+                // Get the selected checkbox values
+                performSearch();
+            });
+
+            $('#model_search').keydown(function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Prevent the default form submission
+                    performSearch();
+                }
+            });
+
+            $('#model_search').on('input', function () {
+                performSearch();
+            });
+
+            
+
+            function performSearch() {
+
+                var brandsearch= $('input[name="brand_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                // Get the text input value
+                var modelsearch = $('#model_search').val();
+
+                var inputvoltagesearch = $('input[name="input_voltage_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                
+                var outvoltagesearch = $('input[name="out_voltage_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var outcurrentsearch = $('input[name="out_current_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+                
+
+                // Make an asynchronous request to the server (replace with your actual endpoint)
+                $.ajax({
+                    type: 'POST',
+                    url: '/power_supply',
+                    data: {
+                        'brand_search': brandsearch,
+                        'model_search': modelsearch,
+                        'input_voltage_search': inputvoltagesearch,
+                        'out_voltage_search': outvoltagesearch,
+                        'out_current_search': outcurrentsearch,
+                    },
+                    success: function (data) {
+                        console.log('brand search:', brandsearch);
+                        console.log('model search:', modelsearch);
+                        console.log('input_voltage_search:', inputvoltagesearch);
+                        console.log('out_voltage_search:', outvoltagesearch);
+                        console.log('out_current_search:', outcurrentsearch);
+                        $('#productTableBody').html($(data).find('#productTableBody').html());
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        });
+    </script>      
+</body>
+</html>

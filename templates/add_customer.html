@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <title>Create New Customer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/92f293de12.js" crossorigin="anonymous"></script>
+    <style>
+      
+        form{
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        a {
+            text-decoration: none;
+        }
+        .fa-asterisk {
+            color: red;
+            font-size: 10px;
+            position: relative;
+            bottom: 5px
+        }
+        .col-form-label{
+            width: 130px;
+        }
+        
+    </style>
+</head>
+
+<body>
+    {% include 'head.html' %}
+    <div class="container mt-3">
+        <form id="customerForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><i class="fa-solid fa-user mx-1"></i> Basics Information</p>
+                    <hr>
+                    <div style="display:flex;gap:30px">
+                        <label for="activeCustomer" class="col-form-label">Active Customer:</label>
+                        <div class="mt-2 ">
+                            <input type="checkbox" class="form-check-input" id="activeCustomer">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="" style="display: flex;gap:10px;">
+                        <label for="customerName" class="col-form-label "><i class="fa-solid fa-asterisk"></i> Customer
+                            Name:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="customerName" required autofocus>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:30px">
+                        <label for="subjectToTIN" class="col-form-label">Is Subject to TIN/VAT:</label>
+                        <div class="mt-2">
+                            <input type="checkbox" class="form-check-input" id="subjectToTIN">
+                        </div>
+                    </div>
+                    <div id="tinField" style="display:none;gap:10px">
+                        <label for="tinID" class="col-form-label">TIN/VAT ID:</label>
+                        <div class="">
+                            <input type="number" class="form-control" id="tinID">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="otherBuyerId" class="col-form-label ">Other Buyer Id:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="otherBuyerId">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="loyaltyPoints" class="col-form-label ">Loyalty Points:</label>
+                        <div class="">
+                            <input type="text" placeholder="optional" class="form-control" id="loyaltyPoints">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="openingBalance" class="col-form-label ">Opening Balance:</label>
+                        <div class="">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="openingBalance" placeholder="optional">
+                                <!-- <div class="input-group-append">
+                                    <span class="input-group-text">EGP</span>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="account" class="col-form-label ">Account:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="account">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <p><i class="fa-solid fa-id-card"></i> Contact Information</p>
+                    <hr>
+                    <div style="display:flex;gap:10px">
+                        <label for="contactPerson" class="col-form-label ">Contact Person:</label>
+                        <div class="">
+                            <input type="text" class="form-control" placeholder="optional" id="contactPerson">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="phoneNumber" class="col-form-label ">Phone Number:</label>
+                        <div class="">
+                            <input type="number" class="form-control" id="phoneNumber">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="faxNumber" class="col-form-label ">Fax Number:</label>
+                        <div class="">
+                            <input type="number" class="form-control" id="faxNumber">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="mobileNumber" class="col-form-label ">Mobile Number:</label>
+                        <div class="">
+                            <input type="number" class="form-control" id="mobileNumber">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="emailAddress" class="col-form-label ">Email Address:</label>
+                        <div class="">
+                            <input type="email" class="form-control" id="emailAddress">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="webAddress" class="col-form-label ">Web Address:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="webAddress">
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 col-6 mx-5 mb-3 mt-3">
+                        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const subjectToTINCheckbox = document.getElementById("subjectToTIN");
+            const tinField = document.getElementById("tinField");
+
+            subjectToTINCheckbox.addEventListener("change", () => {
+                if (subjectToTINCheckbox.checked) {
+                    tinField.style.display = "flex";
+                } else {
+                    tinField.style.display = "none";
+                }
+            });
+
+            const customerForm = document.getElementById("customerForm");
+            const customersKey = "customersList";
+            const urlParams = new URLSearchParams(window.location.search);
+            const customerIndex = urlParams.get("index");
+
+            if (customerIndex !== null) {
+                const customers = JSON.parse(localStorage.getItem(customersKey)) || [];
+                const customer = customers[customerIndex];
+                if (customer) {
+                    document.getElementById("customerName").value = customer.name;
+                    document.getElementById("emailAddress").value = customer.email;
+                    document.getElementById("phoneNumber").value = customer.phone;
+                    document.getElementById("openingBalance").value = customer.balance;
+                    document.getElementById("activeCustomer").checked = customer.active;
+                    document.getElementById("otherBuyerId").value = customer.buyerid;
+                    document.getElementById("loyaltyPoints").value = customer.loyaltypoints;
+                    document.getElementById("account").value = customer.account;
+                    document.getElementById("contactPerson").value = customer.contactPerson;
+                    document.getElementById("faxNumber").value = customer.faxNumber;
+                    document.getElementById("mobileNumber").value = customer.mobileNumber;
+                    document.getElementById("webAddress").value = customer.webAddress;
+                    document.getElementById("subjectToTIN").checked = customer.subjectToTIN;
+                    if (customer.subjectToTIN) {
+                        tinField.style.display = "flex";
+                        document.getElementById("tinID").value = customer.tinID;
+                    }
+                }
+            }
+
+            customerForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                const updatedCustomer = {
+                    name: document.getElementById("customerName").value,
+                    email: document.getElementById("emailAddress").value,
+                    phone: document.getElementById("phoneNumber").value,
+                    balance: document.getElementById("openingBalance").value || "0",
+                    active: document.getElementById("activeCustomer").checked,
+                    buyerid: document.getElementById("otherBuyerId").value || "",
+                    loyaltypoints: document.getElementById("loyaltyPoints").value || "",
+                    account: document.getElementById("account").value || "",
+                    contactPerson: document.getElementById("contactPerson").value || "",
+                    faxNumber: document.getElementById("faxNumber").value,
+                    mobileNumber: document.getElementById("mobileNumber").value,
+                    webAddress: document.getElementById("webAddress").value || "",
+                    subjectToTIN: document.getElementById("subjectToTIN").checked,
+                    tinID: document.getElementById("tinID").value || ""
+                };
+
+                const customers = JSON.parse(localStorage.getItem(customersKey)) || [];
+
+                if (customerIndex !== null) {
+                    customers[customerIndex] = updatedCustomer;
+                } else {
+                    customers.push(updatedCustomer);
+                }
+
+                localStorage.setItem(customersKey, JSON.stringify(customers));
+                customerForm.reset();
+                window.location.href = "view_customers";
+            });
+        });
+    </script>
+    
+</body>
+</html>
+
+
+

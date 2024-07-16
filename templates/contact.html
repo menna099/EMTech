@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/92f293de12.js" crossorigin="anonymous"></script>
+
+        <style>
+            .error-message {
+                color: red;
+                font-size: 0.9rem;
+                display:none;
+            }
+            i{
+                color: rgb(235, 14, 14);
+                font-size: 10px;
+                position: relative;
+                bottom: 5px;
+            }
+          
+        </style>
+</head>
+<body>
+    {% include 'head.html' %}
+    <div class="container mt-4">
+        <div style="text-align:center;">
+            <h2>Contact Us</h2>
+            <p style="color:#4c5157">For any further clarification, do not hesitate to contact us</p>
+        </div> <br>
+        <div class="row">
+            <!--first column-->
+            <div class="col-md-6 mb-3">
+                <div class="card" style="width: 100%;">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <h4>Egypt</h4>
+                            <p> 
+                                Office(9), Building (3), El Batra Mall, 10th of Ramadan, 44635</p>
+                                <p>Email: <br><a href="">sales@emtecheg.com</a></p>
+                        </li>
+                        <li class="list-group-item">
+                            <h4>UAE</h4>
+                            <p> EMTECH Industrial Solutions FZC<br>
+                                Business Center, SPC Free Zone, Sharjah, UAE, 73111</p>
+                                <p>Email: <br><a href="">contact@emtechis.ae</a></p>
+                        </li>
+                        <li class="list-group-item">
+                            <h4>Turkey</h4>
+                            <p> Teknofab Teknoloji <br>
+                                Esenyurt, Istanbul, Türkiye</p>
+                                <p>Email: <br><a href="">sales@teknofab.com.tr</a></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!--second column-->
+            <div class="col-md-6 rounded">
+                <form id="contact-form"  method="POST" >
+                    <div class="mb-3">
+                      <label for="name" class="form-label">Full Name <i class="fa-solid fa-asterisk"></i></label>
+                      <input type="text" class="form-control" id="name" name="name">
+                      <span class="error-message" id="fullName-error">Full Name is required</span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Email address <i class="fa-solid fa-asterisk"></i></label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <span class="error-message" id="email-error">Email is required</span>
+                      </div>
+                      <div class="mb-3">
+                        <label for="" class="form-label">Company Name <i class="fa-solid fa-asterisk"></i></label>
+                        <input type="text" class="form-control" id="companyName">
+                        <span class="error-message" id="companyName-error">Company Name is required</span>
+                      </div>
+                      <div class="mb-3">
+                        <label>Message <i class="fa-solid fa-asterisk"></i></label>
+                      <textarea class="form-control" aria-label="With textarea" name="message"></textarea>
+                      <span class="error-message" id="message-error">Message is required</span>
+                      </div>
+                    <button type="submit" class="btn btn-primary" >Send Message</button>
+                    <div class="form-message"></div>
+                  </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+    <script> 
+const msg = document.querySelector(".form-message"); 
+(function () { 
+  // https://dashboard.emailjs.com/admin/account 
+  emailjs.init("P8dGm3IeIYRGmEEx3"); 
+})(); 
+ 
+window.onload = function () { 
+  document 
+    .getElementById("contact-form") 
+    .addEventListener("submit", function (event) { 
+      event.preventDefault(); 
+      let isValid = true;
+
+    var fullName = document.getElementById('name').value;
+    var email = document.getElementById('exampleInputEmail1').value;
+    var companyName = document.getElementById('companyName').value;
+    var message = document.querySelector('textarea').value;
+
+    if (!fullName) {
+        document.getElementById('fullName-error').style.display = 'block';
+        isValid = false;
+    } else {
+        document.getElementById('fullName-error').style.display = 'none';
+    }
+
+    if (!email) {
+        document.getElementById('email-error').style.display = 'block';
+        isValid = false;
+    } else {
+        document.getElementById('email-error').style.display = 'none';
+    }
+
+    if (!companyName) {
+        document.getElementById('companyName-error').style.display = 'block';
+        isValid = false;
+    } else {
+        document.getElementById('companyName-error').style.display = 'none';
+    }
+
+    if (!message) {
+        document.getElementById('message-error').style.display = 'block';
+        isValid = false;
+    } else {
+        document.getElementById('message-error').style.display = 'none';
+    }
+
+    document.getElementById('name').addEventListener('input', function () {
+        document.getElementById('fullName-error').style.display = 'none';
+    });
+
+    document.getElementById('exampleInputEmail1').addEventListener('input', function () {
+        document.getElementById('email-error').style.display = 'none';
+    });
+    
+    document.getElementById('companyName').addEventListener('input', function () {
+        document.getElementById('companyName-error').style.display = 'none';
+    });
+
+    document.querySelector('textarea').addEventListener('input', function () {
+        document.getElementById('message-error').style.display = 'none';
+    });
+
+      // Replace With Your Email Service ID & Contact Form ID Which You Will Get After Registering With EmailJs 
+      if (isValid) {
+        emailjs.sendForm("service_vfjt0xw", "template_oc2xozk", this).then(
+            function () {
+                document.getElementById("contact-form").reset();
+                msg.innerHTML = "";
+                msg.innerHTML += "<span class='success-msg'>Email Sent</span>";
+                msg.classList.add("show");
+                setTimeout(() => msg.classList.remove("show"), 2000);
+            },
+            function (error) {
+                msg.classList.add("show");
+                msg.innerHTML += "<span class='error-msg'>Not Sent ! Sign Up with EmailJS.</span>";
+            }
+        );
+    }
+    }); 
+}; 
+    </script>
+    
+</body>
+</html>

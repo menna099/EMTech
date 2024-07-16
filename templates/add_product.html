@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        main.container-fluid {
+            padding: 20px;
+        }
+        h2,h4{
+            font-size: 34px;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group label {
+            display: block;
+        }
+
+        .row.mt-4 .btn-primary {
+            margin-top: 20px;
+        }
+
+        @media (max-width: 767px) {
+            .form-group label {
+                margin-bottom: 5px;
+            }
+
+            .checkbox-group label {
+                display: inline-block;
+                margin-right: 10px;
+            }
+        }
+    </style>
+    <title>Add Product</title>
+</head>
+<body>
+    {% include 'head.html' %}
+    <main class="container mt-3">
+        <form method="post" action="/add_product" enctype="multipart/form-data">
+            <div style="border:1px solid;padding:15px;border-radius:10px" >
+                <!-- First block -->
+                <div class="">
+                    <h4>Basic Information</h4>
+                    <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="category" class="">Category:</label>
+                        <select name="category" id="category" class="form-control form-select">
+                            <option value="PLC">Select Category</option>
+                            <option value="plc">PLC</option>
+                            <option value="HMI">HMI</option>
+                            <option value="Inverter">Inverter</option>
+                            <option value="Power Supply">Power Supply</option>
+                            <option value="Relay">Relay</option>
+                            <option value="Photocell">Photocell</option>
+                            <option value="Servo Drive">Servo Drive</option>
+                            <option value="Servo Motor">Servo Motor</option>
+                            <option value="Servo Accessory">Servo Accessory</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="brand">Brand:</label>
+                        <select name="brand" id="brand" class="form-control form-select">
+                            <option value="Select Brand">Select Brand</option>
+                            <option value="Mitsubishi">Mitsubishi</option>
+                            <option value="Omron">Omron</option>
+                            <option value="Asem">Asem</option>
+                            <option value="Cumark">Cumark</option>
+                            <option value="Vector">Vector</option>
+                            <option value="GMT">GMT</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="series">Series:</label>
+                        <select name="series" id="series" class="form-control form-select">
+                            <option value="none">none</option>
+                            <option value="CP2E">CP2E</option>
+                            <option value="CP1E">CP1E</option>
+                            <option value="CP1L">CP1L</option>
+                            <option value="CJ2">CJ2</option>
+                            <option value="CS1D">CS1D</option>
+                            <option value="NB">NB</option>
+                            <option value="MX">MX</option>
+                            <option value="RX">RX</option>
+                            <option value="S8VK-C">S8VK-C</option>
+                            <option value="S8VK-G">S8VK-G</option>
+                            <option value="S8VK-T">S8VK-T</option>
+                            <option value="R88M">R88M</option>
+                            <option value="R88D">R88D</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="model">Model:</label>
+                        <input type="text" name="model" id="model" class="form-control" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label for="description">Description:</label>
+                        <textarea name="description" id="description" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="origin">Origin:</label>
+                        <input type="text" name="origin" id="origin" class="form-control">
+                    </div>
+                </div>
+
+                    <div class="form-group">
+                        <label for="product_image">Product Image: </label> 
+                        <input type="file" name="product_image" accept="image/*">
+                    </div>
+                </div>
+
+                <!-- Second block -->
+                <div class="">
+                    <h4>Financial Information</h4>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                        <label for="purchase_price">Purchase Price:</label>
+                        <input type="number" step="0.01" name="purchase_price" id="purchase_price" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="currency_add">Currency:</label>
+                        <select name="currency_add" id="currency_add" class="form-control form-select">
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="EGP">EGP</option>
+                        </select>
+                    </div>
+                </div>
+
+                    <h5>Egypt</h5>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                        <label for="quantity_egypt">Opening Balance:</label>
+                        <input type="number" name="quantity_egypt" id="quantity_egypt" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="cost_factor_egypt">Cost Factor:</label>
+                        <input type="number" step="0.01" name="cost_factor_egypt" id="cost_factor_egypt" class="form-control" required>
+                    </div>
+                </div>
+
+                    <h5>UAE</h5>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                        <label for="quantity_uae">Opening Balance:</label>
+                        <input type="number" name="quantity_uae" id="quantity_uae" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="cost_factor_uae">Cost Factor:</label>
+                        <input type="number" step="0.01" name="cost_factor_uae" id="cost_factor_uae" class="form-control" required>
+                    </div>
+                </div>
+
+                    <h5>Turkey</h5>
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                        <label for="quantity_turkey">Opening Balance:</label>
+                        <input type="number" name="quantity_turkey" id="quantity_turkey" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="cost_factor_turkey">Cost Factor:</label>
+                        <input type="number" step="0.01" name="cost_factor_turkey" id="cost_factor_turkey" class="form-control" required>
+                    </div>
+                </div>
+                </div>
+
+                <!-- Third block -->
+                <div class="">
+                    <h4>Specifications</h4>
+
+                    <div id="plc_division" style="display: none;">                    
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="digital_input">Digital Input:</label>
+                                <input type="number" name="digital_input" id="digital_input" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="analog_input">Analog Input:</label>
+                                <input type="number" name="analog_input" id="analog_input" class="form-control">
+                            </div>
+                        </div>   
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="digital_output">Digital Output:</label>
+                                <input type="number" name="digital_output" id="digital_output" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="analog_output">Analog Output:</label>
+                                <input type="number" name="analog_output" id="analog_output" class="form-control">
+                            </div>
+                        </div>   
+                        <br>
+                        <div class="form-group">
+                            <label for="communication_port_plc">Communication Port:</label>
+                            <div class="checkbox-group form-group">
+                               <label><input type="checkbox" name="communication_port_plc" value="Ethernet"> Ethernet</label>
+                               <label><input type="checkbox" name="communication_port_plc" value="EtherCat"> EtherCat</label>
+                               <label><input type="checkbox" name="communication_port_plc" value="USB"> USB</label>
+                                <label><input type="checkbox" name="communication_port_plc" value="RS232"> RS232</label>
+                                <label><input type="checkbox" name="communication_port_plc" value="RS422"> RS422</label>
+                                <label><input type="checkbox" name="communication_port_plc" value="RS485"> RS485</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="power_supply_plc">Power Supply:</label>
+                            <select name="power_supply_plc" id="power_supply_plc" class="form-control">
+                                <option value="220VAC">220VAC</option>
+                                <option value="24VDC">24VDC</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="hmi_division" style="display: none;">
+                        <div class="form-group">
+                            <label for="size">Size:</label>
+                            <select name="size" id="size" class="form-control">
+                                <option value="7">7"</option>
+                                <option value="10">10"</option>
+                                <option value="12">12"</option>
+                                <option value="15">15"</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="communication_port">Communication Port:</label>
+                            <div class="checkbox-group form-group">
+                                <label><input type="checkbox" name="communication_port" value="Ethernet"> Ethernet</label>
+                                <label><input type="checkbox" name="communication_port" value="RS232"> RS232</label>
+                                <label><input type="checkbox" name="communication_port" value="RS422"> RS422</label>
+                                <label><input type="checkbox" name="communication_port" value="RS485"> RS485</label>
+                                <label><input type="checkbox" name="communication_port" value="USB"> USB</label>
+                                <label><input type="checkbox" name="communication_port" value="ethercat"> EtherCat</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hmi_power_supply">Input Voltage:</label>
+                            <select name="hmi_power_supply" id="hmi_power_supply" class="form-control">
+                                <option value="220VAC">220VAC</option>
+                                <option value="24VDC">24VDC</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="inverter_division" style="display: none;">
+                        <div class="form-group">
+                            <label for="inverter_power">Power:</label>
+                            <input type="text" name="inverter_power" id="inverter_power" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inverter_input_voltage">Input Voltage:</label>
+                            <select name="inverter_input_voltage" id="inverter_input_voltage" class="form-control">
+                                <option value="220VAC">220VAC</option>
+                                <option value="380VAC">380VAC</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inverter_current">Current:</label>
+                            <input type="text" name="inverter_current" id="inverter_current" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="communication_port_plc">Communication Port:</label>
+                            <div class="checkbox-group form-group">
+                                <label><input type="checkbox" name="inverter_communication_port" value="Ethernet"> Ethernet</label>
+                                <label><input type="checkbox" name="inverter_communication_port" value="RS232"> RS232</label>
+                                <label><input type="checkbox" name="inverter_communication_port" value="RS422"> RS422</label>
+                                <label><input type="checkbox" name="inverter_communication_port" value="RS485"> RS485</label>
+                                <label><input type="checkbox" name="inverter_communication_port" value="USB"> USB</label>
+                            </div>
+                    </div>
+                </div>
+
+                    <div id="power_supply_division" style="display: none;">
+                        <div class="form-group">
+                            <label for="power_supply_input_voltage">Input Voltage:</label>
+                            <select name="power_supply_input_voltage" id="power_supply_input_voltage" class="form-control">
+                                <option value="220VAC">220VAC</option>
+                                <option value="380VAC">380VAC</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="power_supply_output_voltage">Output Voltage:</label>
+                            <select name="power_supply_output_voltage" id="power_supply_output_voltage" class="form-control">
+                                <option value="12VDC">12VDC</option>
+                                <option value="24VDC">24VDC</option>
+                                <option value="48VDC">48VDC</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ps_output_current">Output Current:</label>
+                            <select name="ps_output_current" id="ps_output_current" class="form-control">
+                                <option value="2.5A">2.5A</option>
+                                <option value="5A">5A</option>
+                                <option value="10A">10A</option>
+                                <option value="20A">20A</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="relay_division" style="display: none;">      
+                        <div class="form-group">
+                            <label for="coil_voltage">Coil Voltage:</label>
+                            <select name="coil_voltage" id="coil_voltage" class="form-control">
+                                <option value="24VDC">24VDC</option>
+                                <option value="220VAC">220VAC</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pins">Pins:</label>
+                            <input type="number" name="pins" id="pins" class="form-control">
+                        </div>
+                        
+
+                        <div class="form-group">
+                            <label for="current_relay">Current:</label>
+                            <input type="float" name="current_relay" id="current_relay" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="base">Base:</label>
+                            <input type="text" name="base" id="base" class="form-control">
+                        </div>
+                        
+                    </div>
+
+                    <div id="Photocell" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="photocell_type">Type:</label>
+                                <select name="photocell_type" id="photocell_type" class="form-control">
+                                    <option value="Diffuse">Diffuse</option>
+                                    <option value="Retro Reflective">Retro Reflective</option>
+                                    <option value="Through Beam">Through Beam</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="photocell_shape">Shape:</label>
+                                <select name="photocell_shape" id="photocell_shape" class="form-control">
+                                <option value="Cylindrical">Cylindrical</option>
+                                <option value="Rectangular">Rectangular</option>
+                                <option value="U-Shape">U-Shape</option>
+                            </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="photocell_size">Size:</label>
+                                <input type="text" name="photocell_size" id="photocell_size" placeholder="Example: 18 or 14*6" class="form-control">    
+                            </div>
+                            <div class="col-md-6">
+                                <label for="photocell_distance">Sensing Distance:</label>
+                                <input type="float" name="photocell_distance" id="photocell_distance" placeholder="in millimeters" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="photocell_connection">Photocell Connection:</label>
+                                <select name="photocell_connection" id="photocell_connection" class="form-control">
+                                    <option value="Cable">Cable</option>
+                                    <option value="Socket">Socket</option>
+                                </select>                    
+                             </div>
+                            <div class="col-md-6">
+                                <label for="output_type">Output Type:</label>
+                                <select name="output_type" id="output_type" class="form-control">
+                                    <option value="PNP">PNP</option>
+                                    <option value="NPN">NPN</option>
+                                    <option value="Relay Output">Relay Output</option>
+                                </select>                    
+                             </div>
+                        </div>
+ 
+                        <div class="form-group">
+                            <label for="inputvoltage">Input Voltage:</label>
+                            <select name="inputvoltage" id="inputvoltage" class="form-control">
+                                <option value="24VDC">24VDC</option>
+                                <option value="110VA/DCC">110VAC/DC</option>
+                                <option value="220VAC/DC">220VAC/DC</option>
+                            </select>
+                        </div> 
+                    </div>
+
+                    <div id="servo_motor_division" style="display: none;">
+                        <div class="form-group">
+                            <label for="power_servo_motor">Power:</label>
+                            <input type="float" name="power_servo_motor" id="power_servo_motor" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="brake">Brake:</label>
+                            <select name="brake" id="brake" class="form-control">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="encoder">Encoder:</label>
+                            <select name="encoder" id="encoder" class="form-control">
+                                <option value="Incremental">Incremental</option>
+                                <option value="Absolute">Absolute</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="servo_drive_division" style="display: none;">  
+                        <div class="form-group">
+                            <label for="power_servo_drive">Power:</label>
+                            <input type="float" name="power_servo_drive" id="power_servo_drive" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="inputvoltage">Input Voltage:</label>
+                            <select name="inputvoltage" id="inputvoltage" class="form-control">
+                                <option value="220VAC">220VAC</option>
+                                <option value="380VAC">380VAC</option>
+                            </select>
+                        </div> 
+                        <div class="form-group">
+                            <label for="control_type">Control Type:</label>
+                            <div class="checkbox-group form-group">
+                                <label><input type="checkbox" name="control_type" value="pulse"> Pulse</label>
+                                <label><input type="checkbox" name="control_type" value="analog"> Analog</label>
+                                <label><input type="checkbox" name="control_type" value="modbus"> Modbus</label>
+                                <label><input type="checkbox" name="control_type" value="ethercat"> EtherCAT</label>
+                                <label><input type="checkbox" name="control_type" value="SSCNET"> SSCNET</label>
+                                <label><input type="checkbox" name="control_type" value="cc_link"> CC-Link IE Field</label>
+                                <label><input type="checkbox" name="control_type" value="others"> Others</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="servo_accessories_division" style="display: none;">
+                        <div class="form-group">
+                            <label for="servo_accessory_type">Accessory Type:</label>
+                            <select name="servo_accessory_type" id="servo_accessory_type" class="form-control">
+                                <option value="Power Cable">Power Cable</option>
+                                <option value="Encoder Cable">Encoder Cable</option>
+                                <option value="Power Socket">Power Socket</option>
+                                <option value="Control Socket">Control Socket</option>
+                                <option value="Communication Cable">Communication Cable</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="servo_cable_length">Cable Length:</label>
+                            <input type="float" name="servo_cable_length" id="servo_cable_length" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col ">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div> <!--end the third block-->
+            </div>
+        </form>
+    </main>
+
+<!-- Add your script tag at the end of the body -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#currency_add').change(function () {
+            var selectedOptiona = $(this).val();
+            $.ajax({
+                url: '/get_cad/' + selectedOptiona,
+                type: 'GET',
+                success: function () {
+                    // Update the result div with the data from the server
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    
+        $('#category').change(function () {
+            var selectedCategory = $(this).val();
+            $('#hmi_division, #plc_division, #inverter_division, #power_supply_division, #servo_drive_division, #servo_motor_division, #relay_division, #servo_accessories_division, #Photocell').hide();
+    
+            if (selectedCategory === 'HMI') {
+                $('#hmi_division').show();
+            } else if (selectedCategory === 'plc') {
+                $('#plc_division').show();
+            } else if (selectedCategory === 'Inverter') {
+                $('#inverter_division').show();
+            } else if (selectedCategory === 'Power Supply') {
+                $('#power_supply_division').show();
+            } else if (selectedCategory === 'Servo Drive') {
+                $('#servo_drive_division').show();
+            } else if (selectedCategory === 'Servo Motor') {
+                $('#servo_motor_division').show();
+            } else if (selectedCategory === 'Relay') {
+                $('#relay_division').show();
+            } else if (selectedCategory === 'Servo Accessory') {
+                $('#servo_accessories_division').show();
+            } else if (selectedCategory === 'Photocell') {
+                $('#Photocell').show();
+            }
+        });
+    
+        $('#omron, #mitsubishi').hide();
+    
+        $('#brand').change(function () {
+            var selectedBrand = $(this).val();
+            $('#omron, #mitsubishi').hide();
+    
+            if (selectedBrand === 'Mitsubishi') {
+                $('#mitsubishi').show();
+            } else if (selectedBrand === 'Omron') {
+                $('#omron').show();
+            }
+        });
+    });
+    
+</script>
+</body>
+</html>

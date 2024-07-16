@@ -1,0 +1,234 @@
+<!-------------------------------------------------------------------------------------->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Photocell</title>
+    {% include 'head.html' %}
+    <section class="container-fluid">
+        <!---->
+        <div class="row">
+            {% include 'side_bar.html' %}
+        <!------------------------------------------------ Main content --------------------------------->
+        <main class="col-md-9 main-content">
+            <h1 class="mb-4">Photocell</h1>
+            <form>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label></label>Brand</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="Mitsubishi"> Mitsubishi
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="Omron"> Omron
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="Asem"> Asem
+                        </label>
+                        
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="GMT"> GMT
+                        </label>
+                        <br>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label></label>Model</label>
+                        <input type="text" id="model_search" name="model_search" class="form-control">
+                        <br><label></label>Sensing Distance:</label>
+                        <input type="text" id="sensing_distance_search" name="sensing_distance_search" class="form-control">
+
+                    </div>
+
+                    
+                    <div class="col-md-2">
+                        <label></label>Type</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="type_search" value="Diffuse"> Diffuse
+                        </label>
+                        <label>
+                            <input type="checkbox" name="type_search" value="Retro Reflective"> Retro Reflective
+                        </label>
+                        <label>
+                            <input type="checkbox" name="type_search" value="Through Beam"> Through Beam
+                        </label>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label></label>Input Voltage</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="input_voltage_search" value="24VDC"> 24VDC
+                        </label>
+                        <label>
+                            <input type="checkbox" name="input_voltage_search" value="110VAC/DC"> 110VAC/DC
+                        </label>
+                        <label>
+                            <input type="checkbox" name="input_voltage_search" value="220VAC/DC"> 220VAC/DC
+                        </label><br>
+                        <br>
+
+                        <label></label>Output Type:</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="output_type_search" value="PNP"> PNP
+                        </label>
+                        <label>
+                            <input type="checkbox" name="output_type_search" value="NPN"> NPN
+                        </label>
+                        <label>
+                            <input type="checkbox" name="output_type_search" value="Relay Output"> Relay Output
+                        </label>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label></label>Shape</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="shape_search" value="Cylindrical"> Cylindrical
+                        </label>
+                        <label>
+                            <input type="checkbox" name="shape_search" value="Rectangular"> Rectangular
+                        </label>
+                        <br>                        <br>
+
+                        <label></label>Connection</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="connection_search" value="Cable"> Cable
+                        </label>
+                        <label>
+                            <input type="checkbox" name="connection_search" value="Socket"> Socket
+                        </label>
+                    </div>
+
+                  
+                    
+                    
+                </div>
+            </form>
+            
+            <!------------------------------------------------- Table ------------------------------------------------>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        {% if 'Information (EG)' in current_user.authority %}
+                            <th>ID</th>
+                        {% endif %}                    
+
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Description</th>
+
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                            <th>Origin</th>
+                            <th>Stock</th>
+                        {% endif %}                    
+
+                        {% if 'Sales Information (EG)' in current_user.authority %}
+                            <th>List Price</th>
+                        {% endif %}                    
+                    </tr>
+                </thead>    
+                <tbody id="productTableBody">
+                    {% for product in products %}
+                    <tr>
+                        {% if 'Information (EG)' in current_user.authority %}
+                            <td>{{ product.id }}</td>
+                        {% endif %} 
+                        <td>{{ product.brand }}</td>
+                        
+                        <td><a href="/photocell_details?product_id={{ product.id }}"> {{ product.model }}</a></td>                        
+                        <td>{{ product.description }}</td>
+                        
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                            <td>{{ product.origin }}</td>
+                            <td>{{ product.quantity_egypt}}</td>
+                            {% endif %}                 
+    
+                            {% if 'Sales Information (EG)' in current_user.authority %}
+                                <td>{{ product.end_user_sales_price_egypt|round(3) }}</td>
+                        {% endif %}                 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+    </section>
+                
+  
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            // Event listener for checkbox, dropdown, text input, and numeric input change
+            $('input[name="brand_search"], #model_search, #sensing_distance_search, input[name="input_voltage_search"], input[name="type_search"], input[name="output_type_search"], input[name="shape_search"], input[name="connection_search"]').change(function () {
+                // Get the selected checkbox values
+                var brandsearch= $('input[name="brand_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var inputvoltagesearch = $('input[name="input_voltage_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var typesearch = $('input[name="type_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+                
+                var outputtypesearch = $('input[name="output_type_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+                
+                var shapesearch = $('input[name="shape_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+                
+                var connectionsearch = $('input[name="connection_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+                
+
+                var modelsearch = $('#model_search').val();
+                var sensingdistancesearch = $('#sensing_distance_search').val();
+
+
+                // Make an asynchronous request to the server (replace with your actual endpoint)
+                $.ajax({
+                    type: 'POST',
+                    url: '/photocell',
+                    data: {
+                        'brand_search': brandsearch,
+                        'model_search': modelsearch,
+                        'sensing_distance_search': sensingdistancesearch,
+                        'input_voltage_search': inputvoltagesearch,
+                        'output_type_search': outputtypesearch,
+                        'shape_search': shapesearch,
+                        'connection_search': connectionsearch,
+                        'type_search': typesearch
+                    },
+                    success: function (data) {
+                        console.log('brand search:', brandsearch);
+                        console.log('model search:', modelsearch);
+                        console.log('sensing distance search:', sensingdistancesearch);
+                        console.log('input voltage search:', inputvoltagesearch);
+                        console.log('output type search:', outputtypesearch);
+                        console.log('shape search:', shapesearch);
+                        console.log('connection search:', connectionsearch);
+                        console.log('type search:', typesearch);
+                        $('#productTableBody').html($(data).find('#productTableBody').html());
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>    
+</body>
+</html>

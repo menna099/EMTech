@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit {{ product.model }}</title>
+    {% include 'head.html' %}
+    <main class="container-fluid" style="margin: 50px;">
+       
+    <form method="POST" action="/plc_edit?product_id={{ product.id }}"  enctype="multipart/form-data">
+            <div class="row">
+             
+                <!-- First block -->
+
+                <div class="col-md-3" style="border-right: 1px solid #dfdfdf;">
+                    <h2>Basic Information</h2>
+                    <div class="row">
+                        <div class="col-md-4" >
+                            <label for="category">Category:</label>
+                            <select name="category" id="category" class="form-control">
+                                <option value="PLC" {% if product.category == 'PLC' %}selected{% endif %}>PLC</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4" >
+                            <label for="brand">Brand:</label>
+                            <select name="brand" id="brand" class="form-control">
+                                {% if product.brand == 'Mitsubishi' %}
+
+                                <option value="Mitsubishi" {% if product.brand == 'Mitsubishi' %}selected{% endif %}>Mitsubishi</option>
+                                {% endif %}
+
+                                {% if product.brand == 'Omron' %}
+                                    <option value="Omron" {% if product.brand == 'Omron' %}selected{% endif %}>Omron</option>
+                                {% endif %}
+                                <option value="Others" {% if product.brand == 'Others' %}selected{% endif %}>Others</option>
+
+                            </select>
+                        </div>
+
+                        <div class="col-md-4" >
+                            <label>Series:</label>
+                            {% if product.brand == 'Omron' %}
+
+                            <select name="series" id="omron" class="form-control">
+
+                                <option value="" {% if product.series == '' %}selected{% endif %}>Select</option>
+                                <option value="CP2E" {% if product.series == 'CP2E' %}selected{% endif %}>CP2E</option>
+                                <option value="CP1E" {% if product.series == 'CP1E' %}selected{% endif %}>CP1E</option>
+                                <option value="CJ2" {% if product.series == 'CJ2' %}selected{% endif %}>CJ2</option>
+                                <option value="CS1D" {% if product.series == 'CS1D' %}selected{% endif %}>CS1D</option>
+
+                            </select>   
+                            {% endif %}
+                         
+                            {% if product.brand == 'Mitsubishi' %}
+
+                            <select name="series" id="mitsubishi" class="form-control">
+
+                                <option value="" {% if product.series == '' %}selected{% endif %}>Select</option>
+                                <option value="FX5U" {% if product.series == 'FX5U' %}selected{% endif %}>FX5U</option>
+                                <option value="FX3U" {% if product.series == 'FX3U' %}selected{% endif %}>FX3U</option>
+                                <option value="FX3G" {% if product.series == 'FX3G' %}selected{% endif %}>FX3G</option>
+                                <option value="FX3S" {% if product.series == 'FX3S' %}selected{% endif %}>FX3S</option>
+                                <option value="Q" {% if product.series == 'Q' %}selected{% endif %}>Q</option>
+
+                            </select>
+                            {% endif %}
+
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="model">Model:</label>
+                        <input type="text" name="model" id="model" class="form-control" value="{{ product.model }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea name="description" id="description" class="form-control">{{ product.description }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="model">Origin:</label>
+                        <input type="text" name="origin" id="origin" class="form-control" value="{{ product.origin }}" value="{{ product.origin }}">
+                     </div>
+                    
+                     <div class="form-group">
+                        <label for="product_image">Product Image:</label>
+                        <br>
+                        <input type="radio" name="image_option" value="existing" id="existing_image" checked>
+                        <label for="existing_image">Use Existing Image</label>
+
+                        <br>
+                        <input type="radio" name="image_option" value="upload" id="upload_image">
+                        <label for="upload_image">Upload New Image</label>
+                        <br>
+                        <div id="image_controls">
+                            <!-- This div will contain either the existing image or the upload input based on the user's selection -->
+                            {% if product.product_image %}
+                            {% endif %}
+                            <!-- Input field for uploading new image -->
+                            <input type="file" name="product_image" id="product_image" accept="image/*" style="display: none;" >
+                        </div>
+                    </div>
+                </div>
+                <!-- Second block -->
+                
+                <div class="col-md-4" style="border-right: 1px solid #dfdfdf;">
+                    <h2>Financial Information</h2>
+                    <div class="row">
+                        <div class="col-md-6"> 
+                            <label for="purchase_price">Purchase Price:</label>
+                            <input type="float" step="0.01" name="purchase_price" id="purchase_price" class="form-control" value="{{ product.purchase_price }}" required>
+                          </div>
+                        <div class="col-md-6">
+                            <label for="currency_edit">Currency:</label>
+                            <select name="currency_edit" id="currency_edit" class="form-control" enabled>
+                            <option value="USD" {% if product.currency == 'USD' %}selected{% endif %}>USD</option>
+                            <option value="EUR" {% if product.currency == 'EUR' %}selected{% endif %}>EUR</option>
+                            <option value="EGP" {% if product.currency == 'EGP' %}selected{% endif %}>EGP</option>
+                        </select>
+                        </div>
+                    </div><br>
+                    <h4>Egypt</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="quantity_egypt">Opening Balance:</label>
+                            <input type="number" name="quantity_egypt" id="quantity_egypt" class="form-control"  value="{{ product.quantity_egypt }}" >
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cost_factor_egypt">Cost Factor:</label>
+                            <input type="float" step="0.01" name="cost_factor_egypt" id="cost_factor_egypt" class="form-control"value="{{ product.cost_factor_egypt|round(3) }}" required>
+                        </div>
+                       
+                    </div> 
+                    <br>
+                    <h4>UAE</h4>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="quantity_uae">Opening Balance:</label>
+                            <input type="number" name="quantity_uae" id="quantity_uae" class="form-control"value="{{ product.quantity_uae }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cost_factor_uae">Cost Factor:</label>
+                            <input type="float" step="0.01" name="cost_factor_uae" id="cost_factor_uae" class="form-control" value="{{ product.cost_factor_uae|round(3) }}">
+                        </div>
+                    </div>
+                    <br>
+                    <h4>T端rkiye</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="quantity_turkey">Opening Balance:</label>
+                            <input type="number" name="quantity_turkey" id="quantity_turkey" class="form-control"value="{{ product.quantity_turkey }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cost_factor_turkey">Cost Factor:</label>
+                            <input type="float" step="0.01" name="cost_factor_turkey" id="cost_factor_turkey" class="form-control" value="{{ product.cost_factor_turkey|round(3) }}">
+                        </div>
+                    </div> 
+                    <br>
+                    
+
+                </div>
+                <div class="col-md-4">
+                    <h2>Specifications</h2>
+
+                    <div id="plc_division">                    
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="digital_input">Digital Input:</label>
+                                <input type="number" name="digital_input" id="digital_input" class="form-control" value="{{ product.digitalinput }}">
+                           </div>
+                            <div class="col-md-6">
+                                <label for="analog_input">Analog Input:</label>
+                                <input type="number" name="analog_input" id="analog_input" class="form-control" value="{{ product.analoginput }}">
+                            </div>
+                        </div>   
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="digital_input">Digital Output:</label>
+                                <input type="number" name="digital_output" id="digital_output" class="form-control" value="{{ product.digitaloutput }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="analog_output">Analog Output:</label>
+                                <input type="number" name="analog_output" id="analog_output" class="form-control" value="{{ product.analogoutput }}">
+                            </div>
+                        </div>   
+                          
+                        <br>
+                        <div class="form-group">
+                            <label for="communication_port_plc">Communication Port:</label>
+                            <div class="checkbox-group form-group">
+                               <label><input type="checkbox" name="communication_port_plc" value="Ethernet"> Ethernet</label>
+                               &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" name="communication_port_plc" value="EtherCat"> EtherCat</label>
+                               &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" name="communication_port_plc" value="USB"> USB</label>
+                                <br>
+                                <label><input type="checkbox" name="communication_port_plc" value="RS232"> RS232</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" name="communication_port_plc" value="RS422"> RS422</label>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" name="communication_port_plc" value="RS485"> RS485</label>
+                            </div>
+                        </div>
+                        <br>
+                      
+                        <div class="form-group">
+                            <label for="power_supply_plc">Input Voltage:</label>
+                            <select name="power_supply_plc" id="power_supply_plc" class="form-control" value="{{ product.power_supply_plc }}">
+                                <option value="220VAC" {% if product.inputvoltage == '220VAC' %}selected{% endif %}>220VAC</option>
+                                <option value="24VDC" {% if product.inputvoltage == '24VDC' %}selected{% endif %}>24VDC</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                     <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>    
+</main>
+<script>
+
+         /*   $('#omron_new').hide();
+            $('#mitsubishi_new').hide();
+            $('#Asem').hide();
+            $('#Cumark').hide();
+            $('#GMT').hide();
+            $('#Vector').hide();
+
+        // Attach a change event listener to the brand selection menu
+        $('#brand').change(function () {
+            var selectedBrand = $(this).val();
+
+            // Hide both series select elements
+            $('#omron').hide();
+            $('#mitsubishi').hide();
+
+            // Show the respective series select based on the selected brand
+            if (selectedBrand === 'Mitsubishi') {
+                $('#mitsubishi_new').show();
+                $('#mitsubishi').hide();
+                $('#omron').hide();
+                $('#omron_new').hide();
+                $('#Asem').hide();
+                $('#Cumark').hide();
+                $('#GMT').hide();
+                $('#Vector').hide();
+
+
+            } else if (selectedBrand === 'Omron') {
+                $('#omron_new').show();
+                $('#omron').hide();
+                $('#mitsubishi_new').hide();
+                $('#mitsubishi').hide();
+                $('#Asem').hide();
+                $('#Cumark').hide();
+                $('#GMT').hide();
+                $('#Vector').hide();
+            }
+
+            
+            else if (selectedBrand === 'Asem') {
+                $('#omron').hide();
+                $('#mitsubishi_new').hide();
+                $('#mitsubishi').hide();
+                $('#omron_new').hide();
+                $('#Asem').show();
+                $('#Cumark').hide();
+                $('#GMT').hide();
+                $('#Vector').hide();
+            }
+
+            else if (selectedBrand === 'Cumark') {
+                $('#omron').hide();
+                $('#mitsubishi_new').hide();
+                $('#mitsubishi').hide();
+                $('#omron_new').hide();
+                $('#Cumark').show();
+                $('#Asem').hide();
+                $('#GMT').hide();
+                $('#Vector').hide();
+            }
+
+            else if (selectedBrand === 'GMT') {
+                $('#omron').hide();
+                $('#mitsubishi_new').hide();
+                $('#mitsubishi').hide();
+                $('#omron_new').hide();
+                $('#GMT').show();
+                $('#Cumark').hide();
+                $('#Asem').hide();
+                $('#Vector').hide();
+            }
+
+            else if (selectedBrand === 'Vector') {
+                $('#omron').hide();
+                $('#mitsubishi_new').hide();
+                $('#mitsubishi').hide();
+                $('#omron_new').hide();
+                $('#Vector').show();
+                $('#Cumark').hide();
+                $('#GMT').hide();
+                $('#Asem').hide();
+            }
+
+
+        }); */
+     // Function to toggle between showing existing image and upload input field
+     function toggleImageOption() {
+        var option = document.querySelector('input[name="image_option"]:checked').value;
+        var imageControls = document.getElementById('image_controls');
+        
+        if (option === 'existing') {
+            // If user selects to use existing image, hide the upload input field and show the existing image
+            document.getElementById('product_image').style.display = 'none';
+        } else {
+            // If user selects to upload a new image, hide the existing image and show the upload input field
+            imageControls.innerHTML = '<input type="file" name="product_image" id="product_image" accept="image/*" required>';
+        }
+    }
+
+    // Add event listener to radio buttons for image options
+    var imageOptionRadios = document.querySelectorAll('input[name="image_option"]');
+    imageOptionRadios.forEach(function(radio) {
+        radio.addEventListener('change', toggleImageOption);
+    });
+
+    // Trigger the toggle function initially to reflect the default selection
+    toggleImageOption();
+</script>
+</body>
+</html>

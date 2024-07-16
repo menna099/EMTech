@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    {% include 'head.html' %}
+    <title>Create New Supplier</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+
+
+        #supplierDetails {
+            margin-bottom: 20px;
+        }
+
+
+        #addcontactButton {
+            background: url("static/add.png") no-repeat;
+            background-size: contain;
+            width: 30px;
+            height: 30px;
+            border: none;
+            cursor: pointer;
+        }
+
+
+        #supplierDetails label {
+            display: block;
+        }
+
+
+        #totalPriceLabel {
+            font-weight: bold;
+        }
+
+
+        /* Add styles for the search input fields */
+        #searchCategory,
+        #searchModel {
+            margin-bottom: 10px;
+        }
+        .table th, td{
+            text-align: center !important;
+        }
+    </style>
+</head>
+
+
+<body>
+    <main class="container mt-3">
+        <h2>Supplier Information</h2>
+        
+        <div class="row">
+            <div class="col-md-1">
+                <div class="form-group">
+                    <label for="supplier_id">ID:</label>
+                    <span id="supplier_id" class="form-control">ID</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="supplier_name">Supplier Name:</label>
+                    <input type="text" id="supplier_name" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="hastin_vat">TIN/VAT ID</label>
+                    <input type="checkbox" id="hastin_vat" onclick="toggletin_vat_input()">
+                    <input type="number" id="tin_vat" class="form-control" disabled>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    <br> <button id="savesupplierButton" class="btn btn-primary" onclick="savesupplier()"> <img src="static/save.png" alt="Save"></button>
+                </div>
+            </div>
+        </div>
+        <!-- Partition 4: Contacts Table -->
+        <div class="row bordered-section">
+            <div class="col-md-12">
+                <table id="contactTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>Contact</th>
+                            <th>Job</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contact_table_Body">
+                        <!-- Hidden template row for adding new contacts -->
+                        <tr class="hidden" id="templateRowContact">
+                            <td><input id="contact_name" type="text" placeholder="Contact" class="form-control"></td>
+                            <td><input id="contact_job" type="text" placeholder="Job" class="form-control"></td>
+                            <td><input id="contact_phone" type="number" placeholder="Phone" class="form-control"></td>
+                            <td><input id="contact_email" type="text" placeholder="Email" class="form-control"></td>
+                            <td>
+                                <button onclick="cancelAddContact(this)" class="btn btn-danger">
+                                    <img src="static/delete.png" alt="cancel" style="width: 20px; height: 20px;">
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button id="addContactButton" onclick="addContact()" class="btn btn-primary"><img src="static/add_white.png">
+                    <i class="bi bi-plus"></i>
+                </button>
+          
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function addContact() {
+            var templateRow = document.getElementById("templateRowContact");
+            var newRow = templateRow.cloneNode(true);
+            newRow.classList.remove("hidden");
+            document.getElementById("contact_table_Body").appendChild(newRow);
+        }
+
+
+        function cancelAddContact(button) {
+            var row = button.parentNode.parentNode;
+            row.remove();
+        }
+
+
+        function savesupplier() {
+            var supplier_id = document.getElementById("supplier_id").value;
+            var supplier_name = document.getElementById("supplier_name").value;
+            var tin_vat_input = document.getElementById("tin_vat");
+            //var tin_vat = tin_vat_input.disabled ? null : tin_vat_input.value;
+            var tin_vat = tin_vat_input.value;
+           
+
+
+            if (!supplier_name) {
+                alert("Please enter a supplier name.");
+                return;
+            }
+
+
+            var contacts = [];
+            var contactsRows = document.getElementById("contact_table_Body").getElementsByTagName("tr");
+
+
+   
+            for (var i = 0; i < contactsRows.length; i++) {
+                if(!contactsRows[i].classList.contains("hidden")){
+
+
+                    var contactCells = contactsRows[i].getElementsByTagName("input");
+
+
+                    var contact = {
+                        contact_name: contactCells[0].value,
+                        contact_job: contactCells[1].value,
+                        contact_phone: parseInt(contactCells[2].value),
+                        contact_email: contactCells[3].value
+                    };
+                   
+                    if (!contactCells[0].value) {
+                        alert("Please add contact name.");
+                        return;
+                    }
+                    contacts.push(contact);
+                }
+            }
+
+
+            if (contacts.length == 0) {
+                alert("Please add at least one contact.");
+                return;
+            }
+
+
+            var supplier = {
+                supplier_id: supplier_id,
+                supplier_name: supplier_name,
+                tin_vat: tin_vat,
+                contacts: contacts
+            };
+
+
+            console.log(supplier);
+
+
+            $.ajax({
+                type: "POST",
+                url: "/add_supplier",
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(supplier),
+                success: function(response) {
+                    alert("supplier saved successfully!");
+                    // Optionally, you can redirect or perform other actions after saving
+                    window.location.href = "/view_suppliers";
+                },
+                error: function(error) {
+                    alert("Error saving supplier: " + error.responseText);
+                }
+            });
+        }
+       
+
+
+        function toggletin_vat_input() {
+            var tin_vat_input = document.getElementById("tin_vat");
+            tin_vat_input.disabled = !document.getElementById("hastin_vat").checked;
+            if (!tin_vat_input.disabled) {
+                tin_vat_input.focus();
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

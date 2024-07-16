@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ product.model }}</title>
+    <link rel="stylesheet" href="static/product_details.css">
+</head>
+<style>
+    .custom-control-label {
+        cursor: pointer;
+    }
+</style>
+
+
+<body>
+    {% include 'head.html' %}
+    <main>
+        <div class="card-body">
+            <div class="data-container">
+                <h4>Technical Information</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="model">Model: </label>
+                        <span id="model">{{ product.model }}</span> <br>
+                    
+                        <label for="brand">Brand:</label>
+                        <span id="brand">{{ product.brand }}</span> <br>
+                        
+                        <label for="series">Series:</label>
+                        <span id="series">{{ product.series }}</span> <br>
+                        
+                        <label for="description">Description:</label>
+                        <span id="description">{{ product.description }}</span> <br>
+
+                        <label for="origin">Origin:</label>
+                        <span id="origin">{{ product.origin }}</span> <br>
+                        
+                        <label for="digitalinput">Digital Input:</label>
+                        <span id="digitalinput">{{ product.digitalinput }}</span> <br>
+                        
+                        <label for="analoginput">Analog Input:</label>
+                        <span id="analoginput">{{ product.analoginput }}</span>   <br>                     
+                        
+                        <label for="digitaloutput">Digital Output:</label>
+                        <span id="digitaloutput">{{ product.digitaloutput }}</span> <br>
+
+                        <label for="analogoutput">Analog Output:</label>
+                        <span id="analogoutput">{{ product.analogoutput }}</span> <br>
+                        
+                        <label for="inputvoltage">Input Voltage:</label>
+                        <span id="inputvoltage">{{ product.inputvoltage }}</span> <br>
+                        
+                        <label for="communication">Communication:</label>
+                        <span id="communication">{{ product.communication }}</span> <br>
+                        
+
+                         <br>
+                        
+                        {% if 'Information' in current_user.authority %}
+                        <h4>Financial Information</h4>
+                            {% if 'Cost Information' in current_user.authority %}
+                                <label for="purchase_price">Purchase Price:</label>
+                                <span id="purchase_price">{{ product.purchase_price }}</span><br><br>
+                                <span id="currency" style="display: none;">EGP</span>
+
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="toggleCurrencySwitch" onclick="toggleCurrency()">
+                                    <label class="custom-control-label" for="toggleCurrencySwitch" id="currencyLabel">EGP</label>
+                                  </div>
+                                  
+                                  
+                                  
+                                                          
+                            {% endif %} 
+                        {% endif %}     
+
+                        <div class="row">
+
+                            <div class="col-md-4" style="border-right: 1px solid #ccc;  border-radius: 5px;">
+                                {% if '(EG)' in current_user.authority %} <h5>Egypt</h5> {% endif %}
+
+                                {% if 'Balance Information (EG)' in current_user.authority %}
+                                    <label for="quantity_egypt">Balance:</label>
+                                    <span id="quantity_egypt">{{ product.quantity_egypt }}</span><br>
+                                {% endif %}
+
+                                {% if 'Cost Information (EG)' in current_user.authority %}
+                                    <label for="cost_factor">Cost Factor:</label>
+                                    <span id="cost_factor">{{ product.cost_factor }}</span><br>
+                                    
+                                    <label for="cost_price">Cost Price (EGP):</label>
+                                    <span id="cost_price" data-original-cost-price="{{ product.cost_price }}" data-original-cost-price-foreign="{{ product.cost_price_foreign }}">{{ product.cost_price }}</span><br>
+                                {% endif %}
+
+                                {% if 'Sales Information (EG)' in current_user.authority %}                               
+                                    <label for="distributor_sales_price">Distributor Price:</label>
+                                    <span id="distributor_sales_price" data-original-distributor-price="{{ product.distributor_sales_price }}" data-original-distributor-price-foreign="{{ product.distributor_sales_price_foreign }}">{{ product.distributor_sales_price }}</span><br>
+        
+                                    <label for="end_user_sales_price">End-User Price:</label>
+                                    <span id="end_user_sales_price" data-original-end-user-price="{{ product.end_user_sales_price }}" data-original-end-user-price-foreign="{{ product.end_user_sales_price_foreign }}">{{ product.end_user_sales_price }}</span>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-4" style="border-right: 1px solid #ccc; border-radius: 5px;">
+                                {% if '(UAE)' in current_user.authority %} <h5>UAE</h5> {% endif %}
+                                    {% if 'Balance Information (UAE)' in current_user.authority %}
+                                        <label for="quantity_uae"> Balance:</label>
+                                        <span id="quantity_uae">{{ product.quantity_uae }}</span><br>
+                                    {% endif %}
+                                    {% if 'Cost Information (UAE)' in current_user.authority %}
+                                        <label for="cost_factor_uae">Cost Factor:</label>
+                                        <span id="cost_factor_uae">{{ product.cost_factor_uae }}</span><br>
+                                        <label for="cost_price_uae">Cost Price ({{ product.currency }}):</label>
+                                        <span id="cost_price_uae" data-original-cost-price="{{ product.cost_price_uae }}" data-original-cost-price-foreign="{{ product.cost_price_foreign }}">{{ product.cost_price_uae }}</span><br>
+                                    {% endif %}
+                                    {% if 'Sales Information (UAE)' in current_user.authority %}
+                                        <label for="distributor_sales_price_uae">Distributor Price:</label>
+                                        <span id="distributor_sales_price_uae" data-original-distributor-price="{{ product.distributor_sales_price_uae }}" data-original-distributor-price-foreign="{{ product.distributor_sales_price_foreign }}">{{ product.distributor_sales_price_uae }}</span><br>
+                                        <label for="end_user_sales_price_uae">End-User Price:</label>
+                                        <span id="end_user_sales_price_uae" data-original-end-user-price="{{ product.end_user_sales_price_uae }}" data-original-end-user-price-foreign="{{ product.end_user_sales_price_foreign }}">{{ product.end_user_sales_price_uae }}</span>
+                                    {% endif %}
+                                <br>
+                            </div>
+
+                            <div class="col-md-4">
+                                
+                                {% if '(TR)' in current_user.authority %} <h5>Türkiye</h5> {% endif %}
+                                    {% if 'Balance Information (TR)' in current_user.authority %}
+                                        <label for="quantity_tr"> Balance:</label>
+                                        <span id="quantity_tr">{{ product.quantity_tr }}</span><br>
+                                    {% endif %}
+                                    {% if 'Cost Information (TR)' in current_user.authority %}
+                                        <label for="cost_factor_tr">Cost Factor:</label>
+                                        <span id="cost_factor_tr">{{ product.cost_factor_tr }}</span><br>
+                                        <label for="cost_price_tr">Cost Price ({{ product.currency }}):</label>
+                                        <span id="cost_price_tr" data-original-cost-price="{{ product.cost_price_tr }}" data-original-cost-price-foreign="{{ product.cost_price_foreign }}">{{ product.cost_price_tr }}</span><br>
+                                    {% endif %}
+                                    {% if 'Sales Information (TR)' in current_user.authority %}
+                                        <label for="distributor_sales_price_tr">Distributor Price:</label>
+                                        <span id="distributor_sales_price_tr" data-original-distributor-price="{{ product.distributor_sales_price_tr }}" data-original-distributor-price-foreign="{{ product.distributor_sales_price_foreign }}">{{ product.distributor_sales_price_tr }}</span><br>
+                                        <label for="end_user_sales_price_tr">End-User Price:</label>
+                                        <span id="end_user_sales_price_tr" data-original-end-user-price="{{ product.end_user_sales_price_tr }}" data-original-end-user-price-foreign="{{ product.end_user_sales_price_foreign }}">{{ product.end_user_sales_price_tr }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    <div class="col-md-6">
+                        <span id="product_image"><img src="{{ url_for('static', filename='uploads/' + product.product_image) }}" class="product-image" alt="Product Image"></span><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if current_user.role == 'Admin' %}
+        <div class="row">
+            <div class="col-md-3">
+                <a href="/plc_edit?product_id={{ product.id }}" class="btn btn-primary">
+                    <img src="{{ url_for('static', filename='edit.png') }}" alt="Save">
+                </a>
+                <form method="POST" action="/delete_plc" class="d-inline" style="padding: 10px;">
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <button type="submit" class="btn btn-danger"><img src="{{ url_for('static', filename='delete.png') }}" alt="delete"></button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        <br><br>
+    </main>
+
+    
+    <script>
+        function toggleCurrency() {
+            var costPrices = document.querySelectorAll('[id^="cost_price_"]');
+            var distributorPrices = document.querySelectorAll('[id^="distributor_sales_price_"]');
+            var endUserPrices = document.querySelectorAll('[id^="end_user_sales_price_"]');
+            var switchButton = document.getElementById('toggleCurrencySwitch');
+            var currencyLabel = document.getElementById('currencyLabel');
+            // Access exchange rates passed from backend
+            const exchangeRateUSD = {{ exchange_rate_usd }};
+            const exchangeRateEUR = {{ exchange_rate_eur }};
+            
+            console.log("Switch button checked:", switchButton.checked);
+            console.log("Exchange rates - USD:", exchangeRateUSD, "EUR:", exchangeRateEUR);
+    
+            if (switchButton.checked) {
+                currencyLabel.textContent = 'USD';
+                currencyLabel.style.color = 'green';
+            } else {
+                currencyLabel.textContent = 'EGP';
+                currencyLabel.style.color = 'orange';
+            }
+            
+            var currentCurrency = switchButton.checked ? 'Foreign Currency' : 'EGP';
+            console.log("Current currency:", currentCurrency);
+    
+            for (var i = 0; i < costPrices.length; i++) {
+                var costPrice = costPrices[i];
+                var distributorPrice = distributorPrices[i];
+                var endUserPrice = endUserPrices[i];
+    
+                console.log("Cost price element:", costPrice);
+                console.log("Distributor price element:", distributorPrice);
+                console.log("End user price element:", endUserPrice);
+    
+                if (currentCurrency === 'EGP') {
+                    console.log("Setting prices to original EGP values.");
+                    costPrice.innerText = costPrice.dataset.originalCostPrice;
+                    distributorPrice.innerText = distributorPrice.dataset.originalDistributorPrice;
+                    endUserPrice.innerText = endUserPrice.dataset.originalEndUserPrice;
+                } else {
+                    console.log("Converting prices to EGP using exchange rate for USD.");
+                    costPrice.innerText = (parseFloat(costPrice.dataset.originalCostPriceForeign) * exchangeRateUSD).toFixed(2);
+                    distributorPrice.innerText = (parseFloat(distributorPrice.dataset.originalDistributorPriceForeign) * exchangeRateUSD).toFixed(2);
+                    endUserPrice.innerText = (parseFloat(endUserPrice.dataset.originalEndUserPriceForeign) * exchangeRateUSD).toFixed(2);
+                }
+            }
+        }
+    </script>
+    
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

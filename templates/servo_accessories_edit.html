@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit {{ product.model }}</title>
+    {% include 'head.html' %}
+    <main class="container-fluid" style="margin: 50px;">
+       
+        <form method="POST" action="/servo_accessories_edit?product_id={{ product.id }}" enctype="multipart/form-data">
+            <div class="row">
+             
+                 <!-- First block -->
+
+                 <div class="col-md-3" style="border-right: 1px solid #dfdfdf;">
+                    <h2>Basic Information</h2>
+                    <div class="row">
+                        <div class="col-md-4" >
+                            <label for="category">Category:</label>
+                            <select name="category" id="category" class="form-control">
+                                <option value="Servo Accessory" {% if product.category == 'Servo Accessory' %}selected{% endif %}>Servo Accessory</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4" >
+                            <label for="brand">Brand:</label>
+                            <select name="brand" id="brand" class="form-control">
+                                {% if product.brand == 'Mitsubishi' %}
+
+                                <option value="Mitsubishi" {% if product.brand == 'Mitsubishi' %}selected{% endif %}>Mitsubishi</option>
+                                {% endif %}
+
+                                {% if product.brand == 'Omron' %}
+                                    <option value="Omron" {% if product.brand == 'Omron' %}selected{% endif %}>Omron</option>
+                                {% endif %}
+                                <option value="Others" {% if product.brand == 'Others' %}selected{% endif %}>Others</option>
+
+                            </select>
+                        </div>
+
+                        <div class="col-md-4" >
+                            {% if product.brand == 'Omron' %}
+                            <label>Series:</label>
+
+                            <select name="series" id="omron" class="form-control">
+
+                                <option value="none" {% if product.series == 'none' %}selected{% endif %}>none</option>
+                                <option value="CP" {% if product.series == 'CP' %}selected{% endif %}>CP</option>
+                                <option value="CJ" {% if product.series == 'CJ' %}selected{% endif %}>CJ</option>
+                                <option value="NX" {% if product.series == 'NX' %}selected{% endif %}>NX</option>
+                                <option value="NJ" {% if product.series == 'NJ' %}selected{% endif %}>NJ</option>
+                                <option value="CS" {% if product.series == 'CS' %}selected{% endif %}>CS</option>
+
+                            </select>   
+                            {% endif %}
+                         
+                            {% if product.brand == 'Mitsubishi' %}
+                            <label>Series:</label>
+
+                            <select name="series" id="mitsubishi" class="form-control">
+
+                                <option value="none" {% if product.series == 'none' %}selected{% endif %}>none</option>
+                                <option value="FX5U" {% if product.series == 'FX5U' %}selected{% endif %}>FX5U</option>
+                                <option value="FX3U" {% if product.series == 'FX3U' %}selected{% endif %}>FX3U</option>
+                                <option value="FX3G" {% if product.series == 'FX3G' %}selected{% endif %}>FX3G</option>
+                                <option value="FX3S" {% if product.series == 'FX3S' %}selected{% endif %}>FX3S</option>
+                                <option value="Q" {% if product.series == 'Q' %}selected{% endif %}>Q</option>
+
+                            </select>
+                            {% endif %}
+
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="model">Model:</label>
+                        <input type="text" name="model" id="model" class="form-control" value="{{ product.model }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea name="description" id="description" class="form-control">{{ product.description }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="model">Origin:</label>
+                        <input type="text" name="origin" id="origin" class="form-control" value="{{ product.origin }}" value="{{ product.origin }}">
+                     </div>
+                    
+                     <div class="form-group">
+                        <label for="product_image">Product Image:</label>
+                        <br>
+                        <input type="radio" name="image_option" value="existing" id="existing_image" checked>
+                        <label for="existing_image">Use Existing Image</label>
+
+                        <br>
+                        <input type="radio" name="image_option" value="upload" id="upload_image">
+                        <label for="upload_image">Upload New Image</label>
+                        <br>
+                        <div id="image_controls">
+                            <!-- This div will contain either the existing image or the upload input based on the user's selection -->
+                            {% if product.product_image %}
+                            {% endif %}
+                            <!-- Input field for uploading new image -->
+                            <input type="file" name="product_image" id="product_image" accept="image/*" style="display: none;" >
+                        </div>
+                    </div>
+                </div>
+                <!-- Second block -->
+                
+                <div class="col-md-4" style="border-right: 1px solid #dfdfdf;">
+                    <h2>Financial Information</h2>
+                    <div class="row">
+                        <div class="col-md-6"> 
+                            <label for="purchase_price">Purchase Price:</label>
+                            <input type="float" step="0.01" name="purchase_price" id="purchase_price" class="form-control" value="{{ product.purchase_price }}" required>
+                          </div>
+                        <div class="col-md-6">
+                            <label for="currency_edit">Currency:</label>
+                            <select name="currency_edit" id="currency_edit" class="form-control" enabled>
+                            <option value="USD" {% if product.currency == 'USD' %}selected{% endif %}>USD</option>
+                            <option value="EUR" {% if product.currency == 'EUR' %}selected{% endif %}>EUR</option>
+                            <option value="EGP" {% if product.currency == 'EGP' %}selected{% endif %}>EGP</option>
+                        </select>
+                        </div>
+                    </div><br>
+                    <h4>Egypt</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="quantity_egypt">Opening Balance:</label>
+                            <input type="number" name="quantity_egypt" id="quantity_egypt" class="form-control"  value="{{ product.quantity_egypt }}" >
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cost_factor_egypt">Cost Factor:</label>
+                            <input type="float" step="0.01" name="cost_factor_egypt" id="cost_factor_egypt" class="form-control"value="{{ product.cost_factor_egypt|round(3) }}" required>
+                        </div>
+                       
+                    </div> 
+                    <br>
+                    <h4>UAE</h4>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="quantity_uae">Opening Balance:</label>
+                            <input type="number" name="quantity_uae" id="quantity_uae" class="form-control"value="{{ product.quantity_uae }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cost_factor_uae">Cost Factor:</label>
+                            <input type="float" step="0.01" name="cost_factor_uae" id="cost_factor_uae" class="form-control" value="{{ product.cost_factor_uae|round(3) }}">
+                        </div>
+                    </div>
+                    <br>
+                    <h4>Türkiye</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="quantity_turkey">Opening Balance:</label>
+                            <input type="number" name="quantity_turkey" id="quantity_turkey" class="form-control"value="{{ product.quantity_turkey }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cost_factor_turkey">Cost Factor:</label>
+                            <input type="float" step="0.01" name="cost_factor_turkey" id="cost_factor_turkey" class="form-control" value="{{ product.cost_factor_turkey|round(3) }}">
+                        </div>
+                    </div> 
+                    <br>
+                    
+
+                </div>
+                <div class="col-md-4">
+                    <h2>Specifications</h2>
+
+                    <div id="servo_accessories_division">                    
+                        <div class="row">
+                            <div class="col-md-6">     
+                                <label for="servo_accessory_type">Accessory Type:</label>
+                                <select name="servo_accessory_type" id="servo_accessory_type" class="form-control">
+                                    <option value="Power Cable" {% if product.servo_accessory_type == 'Power Cable' %}selected{% endif %}>Power Cable</option>
+                                    <option value="Encoder Cable" {% if product.servo_accessory_type == 'Encoder Cable' %}selected{% endif %}>Encoder Cable</option>
+                                    <option value="Power Socket" {% if product.servo_accessory_type == 'Power Socket' %}selected{% endif %}>Power Socket</option>
+                                    <option value="Control Socket" {% if product.servo_accessory_type == 'Control Socket' %}selected{% endif %}>Control Socket</option>
+                                </select> 
+                            </div>
+                            <div class="col-md-6">
+                                <label for="servo_cable_length">Cable Length:</label>
+                                <input type="float" name="servo_cable_length" id="servo_cable_length"value="{{ product.cable_length }}" class="form-control">
+                             </div>
+                        </div>   
+                        <br>   
+                    </div>
+
+
+                     <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>    
+</main>
+<script>
+    function toggleImageOption() {
+    var option = document.querySelector('input[name="image_option"]:checked').value;
+    var imageControls = document.getElementById('image_controls');
+
+    if (option === 'existing') {
+    // If user selects to use existing image, hide the upload input field and show the existing image
+        document.getElementById('product_image').style.display = 'none';
+        } else {
+        // If user selects to upload a new image, hide the existing image and show the upload input field
+        imageControls.innerHTML = '<input type="file" name="product_image" id="product_image" accept="image/*" required>';
+        }
+    }
+
+    // Add event listener to radio buttons for image options
+    var imageOptionRadios = document.querySelectorAll('input[name="image_option"]');
+        imageOptionRadios.forEach(function(radio) {
+        radio.addEventListener('change', toggleImageOption);
+    });
+
+    // Trigger the toggle function initially to reflect the default selection
+    toggleImageOption();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'head.html' %}
+
+    <title>Create New Solution</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+        .section {
+            margin-bottom: 10px;    
+        }
+
+        #solutionDetails {
+            margin-bottom: 20px;
+        }
+
+        #addProductButton {
+            background: url("static/add.png") no-repeat;
+            background-size: contain;
+            width: 30px;
+            height: 30px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #solutionDetails label {
+            display: block;
+        }
+
+        #totalPriceLabel {
+            font-weight: bold;
+        }
+
+        /* Add styles for the search input fields */
+        
+        .table th, td{
+            text-align: center !important;
+        }
+    </style>
+
+    <main class="container mt-3">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="solutionName">Solution Name:</label>
+                    <input type="text" id="solutionName" class="form-control">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <input type="text" id="description" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-4">
+            <div class="form-group">
+                <label for="totalPrice">Total Price:</label>
+                <span id="totalPriceLabel" class="form-control">0.00</span>
+            </div>
+            </div>
+        </div>
+
+        <!-- Search input fields -->
+        <!--
+        <div>
+            <label for="searchCategory">Category:</label>
+            <input type="text" id="searchCategory" class="form-control">
+        </div>
+        -->
+        <div >
+            <div class="col-md-4 section" style="padding: 0%;">
+                <label for="searchModel">Model:</label>
+                <div class="input-group">
+                    <input type="text" id="searchModel" class="form-control">
+                    <div class="input-group-append pb-0">
+                        <button class="btn btn-primary" type="button" onclick="searchProducts()">
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <!-- Search results table -->
+         <div class="table-responsive">
+        <table id="searchResultsTable" class="table">
+            <thead id="searchResultsTableHead">
+                
+            </thead>
+            <tbody id="searchResultsTableBody"></tbody>
+        </table>
+    </div>
+
+      
+
+        <div class="table-responsive">
+        <table id="solutionTable" class="table">
+            <thead id="solutionTableHead">
+            </thead>
+            <tbody id="solutionTableBody"></tbody>
+        </table>
+        </div>
+      
+         <!-- Partition 4: Fees Table -->
+        <div class="row bordered-section">
+            <div class="col-md-12">
+                <h2>Additional Fees</h2>
+                <table id="feeTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>Fee</th>
+                            <th>Total Fees: <span id="totalFeesLabel">0.00</span> L.E</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fee_table_Body">
+                        <!-- Hidden template row for adding new fees -->
+                        <tr class="hidden" id="templateRowFee">
+                            <td><input type="text" placeholder="Fee" class="form-control"></td>
+                            <td><input type="number" placeholder="Amount" class="form-control" oninput="saveFee(this)"></td>
+                            <td>
+                                <button onclick="cancelAddFee(this)" class="btn btn-danger">
+                                    <img src="static/delete.png" alt="cancel" style="width: 20px; height: 20px;">
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button id="addFeeButton" onclick="addFee()" class="btn btn-primary" ><img src="static/add_white.png">
+                    <i class="bi bi-plus"></i>
+                </button>
+                <br><br>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center gap-3">
+    
+            <div class="mb-4">
+              <button id="saveSolutionButton" class="btn btn-primary px-5" onclick="saveSolution()">Save</button>
+            </div>
+      
+    </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function searchProducts() {
+            //var searchCategory = document.getElementById("searchCategory").value;
+            var searchModel = document.getElementById("searchModel").value;
+            $("#searchResultsTable").toggle();
+            $.ajax({
+                type: "POST",
+                url: "/searchProducts",
+                //data: { searchCategory: searchCategory, searchModel: searchModel },
+                data: { searchModel: searchModel },
+                success: function (response) {
+                    displaySearchResults(response);
+                },
+                error: function (error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        }
+
+        function displaySearchResults(products) {
+            var tableBody = document.getElementById("searchResultsTableBody");
+            var tableHead = document.getElementById("searchResultsTableHead");
+            tableHead.innerHTML = "";
+            tableBody.innerHTML = "";
+            var rowHead = tableHead.insertRow();
+                var cellModelHead = rowHead.insertCell(0);
+                var cellDescriptionHead = rowHead.insertCell(1);
+                var cellActionHead = rowHead.insertCell(2);
+                cellModelHead.textContent = "Model";
+                cellModelHead.style.fontWeight = "bold"
+                cellDescriptionHead.textContent = "Description";
+                cellDescriptionHead.style.fontWeight = "bold"
+                cellActionHead.textContent = "Action";
+                cellActionHead.style.fontWeight = "bold"
+// table solution
+            var tableHead = document.getElementById("solutionTableHead");
+            tableHead.innerHTML = "";
+            var rowHead = tableHead.insertRow();
+            var cellModelHead = rowHead.insertCell(0);
+            var cellDescriptionHead = rowHead.insertCell(1);
+            var cellQuantityHead = rowHead.insertCell(2);
+            var cellPriceHead = rowHead.insertCell(3);
+            var cellDiscountHead = rowHead.insertCell(4);
+            var cellTotalHead = rowHead.insertCell(5);
+            var cellActionHead = rowHead.insertCell(6);
+            cellModelHead.textContent = "Model";
+            cellModelHead.style.fontWeight = "bold"
+            cellDescriptionHead.textContent = "Description";
+            cellDescriptionHead.style.fontWeight = "bold";
+            cellQuantityHead.textContent = "Quantity";
+            cellQuantityHead.style.fontWeight = "bold";
+            cellPriceHead.textContent = "Price";
+            cellPriceHead.style.fontWeight = "bold";
+            cellDiscountHead.textContent = "Discount";
+            cellDiscountHead.style.fontWeight = "bold";
+            cellTotalHead.textContent = "Total";
+            cellTotalHead.style.fontWeight = "bold";
+            cellActionHead.textContent = "Action";
+            cellActionHead.style.fontWeight = "bold"
+            ////////////////////////////////////////////
+            products.forEach(function (product) {
+                var row = tableBody.insertRow();
+                //var cellId = row.insertCell(0);
+                var cellModel = row.insertCell(0);
+                //var cellPrice = row.insertCell(2);
+                var cellDescription = row.insertCell(1);
+                var cellAction = row.insertCell(2);
+
+                //cellId.textContent = product.id;
+                cellModel.textContent = product.model;
+                //cellPrice.textContent = product.end_user_sales_price;
+                cellDescription.textContent = product.description;
+
+                var addButton = document.createElement("button");
+                addButton.textContent = "Add";
+                addButton.className = "btn btn-success";
+                addButton.onclick = function () {
+                    addProductToSolution(product);
+                };
+
+                cellAction.appendChild(addButton);
+            });
+        }
+
+        function addProductToSolution(product) {
+            var tableBody = document.getElementById("solutionTableBody");
+            var row = tableBody.insertRow();
+            
+            // Add your logic to populate the row based on the product data
+            // Example: Dummy data
+            row.insertCell(0).textContent = product.model;
+            row.insertCell(1).textContent = product.description;
+            row.insertCell(2).innerHTML = '<input type="number" placeholder="Quantity" class="form-control" oninput="saveProduct(this)">';
+            row.insertCell(3).innerHTML = product.end_user_sales_price_egypt;
+            //row.insertCell(4).innerHTML = '<input type="number" placeholder="Margin" class="form-control">';
+            //row.insertCell(5).innerHTML = '<input type="number" placeholder="Engineering Fees" class="form-control">';
+            row.insertCell(4).innerHTML = '<input type="number" placeholder="Discount" class="form-control" oninput="saveProduct(this)">';
+            row.insertCell(5).textContent = '';  // Total cell
+            row.insertCell(6).innerHTML = '<button onclick="cancelAddProduct(this)" class="btn btn-danger"><img src="static/delete.png" alt="Save" style="width: 20px; height: 20px;"></button>';
+
+            // Your existing logic to update the total price
+            updateTotalPrice();
+        }
+
+        function cancelAddProduct(button) {
+            var row = button.parentNode.parentNode;
+            row.remove();
+            updateTotalPrice();
+
+        }
+
+        function saveProduct(inputField) {
+            var row = inputField.closest("tr");
+            var cells = row.getElementsByTagName("td");
+
+            var quantity = parseInt(cells[2].getElementsByTagName("input")[0].value);
+            var price = parseFloat(cells[3].textContent);             //var margin = parseFloat(cells[4].getElementsByTagName("input")[0].value);
+            //var engineeringFees = parseFloat(cells[5].getElementsByTagName("input")[0].value);
+            var discount = 1- parseFloat(cells[4].getElementsByTagName("input")[0].value)/100;
+
+            // Calculate total with the new columns
+            var total = quantity * price * discount;
+
+            if (cells[5]) {
+                cells[5].textContent = total.toFixed(2);
+            }
+
+            updateTotalPrice();
+        }
+
+
+        function addFee() {
+            var templateRow = document.getElementById("templateRowFee");
+            var newRow = templateRow.cloneNode(true);
+            newRow.classList.remove("hidden");
+            newRow.classList.add("editable-mode");
+
+            // Clear input fields in the new row
+            var inputFields = newRow.querySelectorAll('input');
+            inputFields.forEach(function (input) {
+                input.value = '';
+            });
+
+            document.getElementById("fee_table_Body").appendChild(newRow);
+        }
+
+        function saveFee(inputField) {
+            //var row = inputField.closest("tr");
+            //var cells = row.getElementsByTagName("td");
+
+            //var feeName = cells[0].getElementsByTagName("input")[0].value;
+            //var amount = parseFloat(cells[1].getElementsByTagName("input")[0].value);
+
+            updateTotalFees();
+            updateTotalPrice();
+        }
+
+        function cancelAddFee(button) {
+            var row = button.parentNode.parentNode;
+            row.remove();
+            // Update total fees
+            updateTotalFees();
+            updateTotalPrice();
+
+        }
+ 
+        function updateTotalFees() {
+        var totalFees = 0;
+        var feeRows = document.getElementById("fee_table_Body").getElementsByTagName("tr");
+
+        for (var i = 0; i < feeRows.length; i++) {
+            if (!feeRows[i].classList.contains("hidden")) {
+                var feeCells = feeRows[i].getElementsByTagName("td");
+                var amount = parseFloat(feeCells[1].getElementsByTagName("input")[0].value);
+
+                if (!isNaN(amount)) {
+                    totalFees += amount;
+                }
+            }
+        }
+
+        document.getElementById("totalFeesLabel").textContent = totalFees.toFixed(2);
+    }
+
+    function updateTotalPrice() {
+        var total = 0;
+        var rows = document.getElementById("solutionTableBody").getElementsByTagName("tr");
+
+        for (var i = 0; i < rows.length; i++) {
+            if (!rows[i].classList.contains("hidden")) {  
+                var cells = rows[i].getElementsByTagName("td");
+                var totalCell = cells[5];
+
+                // Check if totalCell is defined before trying to access its textContent
+                if (totalCell && !isNaN(parseFloat(totalCell.textContent))) {
+                    total += parseFloat(totalCell.textContent);
+                }
+            }
+        }
+
+        // Add total fees to the total price
+        var totalFees = parseFloat(document.getElementById("totalFeesLabel").textContent);
+        total += totalFees;
+
+        document.getElementById("totalPriceLabel").textContent = total.toFixed(2);
+    }
+    
+    function saveSolution() {
+            // Gather solution details
+
+           // var solutionID = document.getElementById("solutionIDLabel").textContent;
+            var solutionName = document.getElementById("solutionName").value;
+            var description = document.getElementById("description").value;
+            var totalPrice = parseFloat(document.getElementById("totalPriceLabel").textContent);
+            var total_fees = parseFloat(document.getElementById("totalFeesLabel").textContent);
+            
+            if (!solutionName) {
+                alert("Please enter a solution name.");
+                return;
+            }
+
+            var products = [];
+            var rows = document.getElementById("solutionTableBody").getElementsByTagName("tr");
+
+            for (var i = 0; i < rows.length; i++) {
+                if (!rows[i].classList.contains("hidden")) {
+                    var cells = rows[i].getElementsByTagName("td");
+                    var productName = cells[0].textContent;
+                    var productDescription = cells[1].textContent;
+                    var quantity = parseInt(cells[2].getElementsByTagName("input")[0].value);
+                    var price = parseFloat(cells[3].textContent);
+                    var discount = parseFloat(cells[4].getElementsByTagName("input")[0].value);
+                    var total = parseFloat(cells[5].textContent);
+
+                    if (!quantity || !discount) {
+                        alert("Please complete all fields for each product.");
+                        return;
+                    }
+
+                    var product = {
+                        productName: productName,
+                        productDescription: productDescription,
+                        quantity: quantity,
+                        price: price,
+                        discount: discount,
+                        total: total
+                    };
+                    products.push(product);
+                }
+            }
+            // Validate at least one product
+            if (products.length === 0) {
+                alert("Please add at least one product.");
+                return;
+            }
+
+            var fees = [];
+            var fees_rows = document.getElementById("fee_table_Body").getElementsByTagName("tr");
+
+            for (var i = 0; i < fees_rows.length; i++) {
+                if (!fees_rows[i].classList.contains("hidden")) {
+                    var fees_cells = fees_rows[i].getElementsByTagName("td");
+
+                    /*
+                    var productName = cells[0].getElementsByTagName("input")[0].value;
+                    var productDescription = cells[1].getElementsByTagName("textarea")[0].value;
+                    var quantity = cells[2].getElementsByTagName("input")[0].value;
+                    var price = cells[3].getElementsByTagName("input")[0].value;
+                    var discount = cells[4].getElementsByTagName("input")[0].value;
+                    var total = cells[5].textContent;
+                    */
+                    var fee_name =fees_cells[0].getElementsByTagName("input")[0].value;
+                    var fee_amount = parseInt(fees_cells[1].getElementsByTagName("input")[0].value);
+
+                    console.log(fee_name);
+                    console.log(fee_amount);
+                    
+                    if (!fee_name || !fee_amount) {
+                        alert("Please complete all fields for each fee.");
+                        return;
+                    }
+
+                    var fee = {
+                        fee_name: fee_name,
+                        fee_amount: fee_amount,
+                    };
+                    fees.push(fee);
+                }
+            }
+            // Validate at least one product
+            /*
+            if (fees.length === 0) {
+                alert("Please add at least one fee.");
+                return;
+            }
+            */
+
+            // Create the solution object
+            var solution = {
+                //solutionID: solutionID,
+                solutionName: solutionName,
+                description: description,
+                totalPrice: totalPrice,
+                total_fees: total_fees,
+                products: products,
+                fees: fees
+            };
+            console.log(solution);
+            // Send the solution data to the Flask backend using AJAX
+            $.ajax({
+                type: "POST",
+                url: "/add_solution",
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(solution),
+                success: function(response) {
+                    alert("Solution saved successfully!");
+                    // Optionally, you can redirect or perform other actions after saving
+                    window.location.href = "/view_solutions";
+                },
+                error: function(error) {
+                    alert("Error saving solution: " + error.responseText);
+                }
+            });
+        } 
+    </script>
+</body>
+</html>

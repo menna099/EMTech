@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://kit.fontawesome.com/92f293de12.js" crossorigin="anonymous"></script>
+
+  <style>
+    .form-check-label {
+      position: relative;
+      margin: 0;
+      padding: 0.5rem 1.5rem;
+      border: 2px solid #eee;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      background-image: linear-gradient(#fff, #f8f8f8);
+      font-weight: normal;
+    }
+    table.table th {
+      font-weight: bold;
+      font-size: 13px;
+            color: #4c5157;
+            font-family: Arial, sans-serif;
+    }
+    
+    .card-body h5 a {
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+    }
+    table.table td , .card-body p,h5{
+      font-size: 14px;
+      color: #4c5157;
+      font-family: Arial, sans-serif;
+    }
+
+    #cardViewWrapper {
+      background-color: rgba(var(--bs-emphasis-color-rgb), 0.05);
+      padding: 20px;
+    }
+
+
+    .card-img-top {
+      width: 50% !important;
+      margin: auto;
+    }
+
+    .table-img-top {
+      margin-left: 25px;
+      width: 50%;
+    }
+
+    #myTable td:nth-child(2) {
+      width: 10%;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 767px) {
+      .form-group label {
+        margin-bottom: 5px;
+      }
+
+      main.container-fluid {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  {% include 'head.html' %}
+  <div class="container">
+    <h1 style="margin-top:20px;max-width: 80rem;font-family:Open Sans , Arial, sans-serif;font-size: 26px;color: #34383c;">Photocell</h1>
+    <button class="btn btn-secondary" onclick="showForm()">Filter by</button>
+
+    <form id="filterForm" style="display: none;">
+      <div class="row">
+        <fieldset style="margin-top: 20px;">
+          <Label>Model</Label>
+          <input type="text" class="form-control form-check-label" id="myInput" onkeyup="filterTable()">
+        </fieldset>
+        <fieldset style="margin-top: 20px;">
+          <Label>Sensing Distance</Label>
+          <input type="text" class="form-control form-check-label">
+        </fieldset>
+        <fieldset style="margin-top: 20px;" class="col-md-2">
+          <Label>Brand</Label><br>
+          <label class="form-check-label" style="justify-content: space-between;" onclick="toggleCheckbox('Mitsubishi')"><span><input type="checkbox"
+                value="Mitsubishi" name="filterStatus" onchange="filterTable()" class="form-check-input">
+              Mitsubishi</span><span
+              style="color:gray">0</span></label>
+          <label class="form-check-label" onclick="toggleCheckbox('Omron')" style="border-top:0;justify-content: space-between;"><span><input
+                type="checkbox" value="Omron" name="filterStatus" onchange="filterTable()" class="form-check-input">
+              Omron</span><span
+              style="color:gray">23</span></label>
+          <label class="form-check-label" onclick="toggleCheckbox('Asem')" style="border-top:0;justify-content: space-between;"><span><input
+                type="checkbox" value="Asem" name="filterStatus" onchange="filterTable()" class="form-check-input">
+              Asem</span><span
+              style="color:gray">0</span></label>
+          <label class="form-check-label" onclick="toggleCheckbox('GMT')" style="border-top:0;justify-content: space-between;"><span><input
+                type="checkbox" value="GMT" name="filterStatus" onchange="filterTable()" class="form-check-input">
+              GMT</span><span
+              style="color:gray">0</span></label><br>
+        </fieldset>
+        <fieldset style="margin-top: 20px;" class="col-md-2">
+          <Label>Type</Label>
+          <label class="form-check-label" style="justify-content: space-between;" onclick="toggleCheckbox('Diffuse')"><input type="checkbox" value="Diffuse"
+              class="form-check-input"> Diffuse<span
+              style="color:gray">13</span></label>
+          <label style="border-top:0;justify-content: space-between;" class="form-check-label" onclick="toggleCheckbox('Retro Reflective')"><input
+              type="checkbox" value="Retro Reflective" class="form-check-input"> Retro Reflective<span
+              style="color:gray">5</span></label>
+          <label style="border-top:0;justify-content: space-between;" class="form-check-label" onclick="toggleCheckbox('Through Beam')"><input
+              type="checkbox" value="Through Beam" class="form-check-input"> Through Beam<span
+              style="color:gray">5</span></label><br>
+          <br>
+        </fieldset>
+        <fieldset style="margin-top: 20px;" class="col-md-2">
+          <Label>Input Voltage</Label>
+          <label class="form-check-label" style="justify-content: space-between;" onclick="toggleCheckbox('24VDC')"><span><input type="checkbox"
+                class="form-check-input" value="24VDC"> 24VDC</span><span
+                style="color:gray">3</span></label>
+          <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('110VAC/DC')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="110VAC/DC"> 110VAC/DC</span><span
+                style="color:gray">0</span></label>
+          <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('220VAC/DC')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="220VAC/DC"> 220VAC/DC</span><span
+                style="color:gray">1</span></label><br>
+        </fieldset>
+        <fieldset style="margin-top: 20px;" class="col-md-2">
+          <Label>Output Type</Label>
+          <label class="form-check-label" style="justify-content: space-between;" onclick="toggleCheckbox('PNP')"><span><input type="checkbox"
+                class="form-check-input" value="PNP"> PNP</span><span
+                style="color:gray">10</span></label>
+          <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('NPN')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="NPN"> NPN</span><span
+                style="color:gray">12</span></label>
+          <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('Relay Output')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="Relay Output"> Relay Output</span><span
+                style="color:gray">1</span></label><br>
+        </fieldset>
+        <fieldset style="margin-top: 20px;" class="col-md-2">
+          <Label>Shape</Label>
+          <label class="form-check-label" style="justify-content: space-between;" onclick="toggleCheckbox('Cylindrical')"><span><input type="checkbox"
+                class="form-check-input" value="Cylindrical"> Cylindrical</span><span
+                style="color:gray">12</span></label>
+          <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('Rectangular')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="Rectangular"> Rectangular</span><span
+                style="color:gray">5</span></label>
+          <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('U-Shape')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="U-Shape"> U-Shape</span><span
+                style="color:gray">6</span></label><br>
+        </fieldset>
+        <fieldset style="margin-top: 20px;" class="col-md-2">
+          <Label>Connection</Label>
+          <label class="form-check-label" style="justify-content: space-between;" onclick="toggleCheckbox('Cable')"><span><input type="checkbox"
+                class="form-check-input" value="Cable"> Cable</span><span
+                style="color:gray">14</span></label>
+          <label style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('Socket')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="Socket"> Socket</span><span
+                style="color:gray">9</span></label><br>
+        </fieldset>
+      </div>
+    </form>
+
+    <div class="row" style="margin-top: 10px;">
+      <div class="col-md-12">
+        <div class="btn-group" role="group" aria-label="Display options">
+          <button type="button" class="btn btn-primary" onclick="showCards()"><i class="fa-solid fa-grip"></i></button>
+          <button type="button" class="btn btn-secondary" onclick="showList()"><i class="fa-solid fa-list"></i></button>
+          
+        </div>
+      </div>
+    </div>
+    <br>
+
+    <div id="listView" class="hidden">
+    <table class="table table-striped" id="myTable">
+      <thead>
+        <tr>
+          <th scope="col">Brand</th>
+          <th scope="col">Image</th>
+          <th scope="col">Model</th>
+          <th scope="col">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.brand }}</td>
+            <td><img src="{{ url_for('static', filename='uploads/' + product.product_image ) }}" class="table-img-top">
+            </td>
+            <td><a href="/photocell_details?product_id={{ product.id }}">{{ product.model }}</a></td>
+            <td>{{ product.description }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+    </div>
+
+  </div>
+
+  <div id="cardViewWrapper">
+  <div class="container" id="cardView">
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-100">
+              <img src="{{ url_for('static', filename='uploads/' + product.product_image ) }}" class="card-img-top"
+                alt="..." width="50%">
+              <div class="card-body">
+                <h5 class="card-title"><a href="/photocell_details?product_id={{ product.id }}">{{ product.model }}</a></h5>
+                <p class="card-text">{{ product.description }}</p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+
+    </div>
+  </div>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
+  <script>
+    function showList() {
+      $('#cardViewWrapper').addClass('hidden').hide();
+      $('#listView').removeClass('hidden').show();
+    }
+
+    function showCards() {
+      $('#listView').addClass('hidden').hide();
+      $('#cardViewWrapper').removeClass('hidden').show();
+    }
+
+    function showForm(){
+      $('#filterForm').toggle();
+    }
+
+    $(document).ready(function () {
+      $('img').on('error', function () {
+        $(this).attr('src', 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg');
+      });
+    })
+
+    function toggleCheckbox(value) {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"][value="' + value + '"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = !checkbox.checked;
+      });
+      filterTable();
+    }
+    function filterTable() {
+      var inputModel = document.getElementById("myInput").value.toUpperCase();
+      var checkboxesBrand = document.querySelectorAll('input[name="filterStatus"][value="Mitsubishi"], input[name="filterStatus"][value="Omron"], input[name="filterStatus"][value="GMT"], input[name="filterStatus"][value="Asem"]');
+
+      var table = document.getElementById("myTable");
+      var tr = table.getElementsByTagName("tr");
+
+      for (var i = 1; i < tr.length; i++) {
+        var tdModel = tr[i].getElementsByTagName("td")[1];
+        var tdBrand = tr[i].getElementsByTagName("td")[0];
+        if (tdModel && tdBrand) {
+          var modelValue = tdModel.textContent || tdModel.innerText;
+          var brandValue = tdBrand.textContent || tdBrand.innerText;
+          var brandChecked = Array.from(checkboxesBrand).filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
+
+          if ((modelValue.toUpperCase().indexOf(inputModel) > -1 || inputModel === "") &&
+            (brandChecked.length === 0 || brandChecked.includes(brandValue))) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

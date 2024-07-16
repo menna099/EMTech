@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>EMTech</title>
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="static/assets/images/logo.png">
+    <script defer src="static/assets/fontawesome/js/all.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <link rel="stylesheet" href="static/assets/plugins/bootstrap/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link id="theme-style" rel="stylesheet" href="static/assets/css/styles.css">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+    <style>
+        /* Add this style to hide the login form initially */
+        #login-form {
+            display: none;
+            z-index: 100;
+            position: absolute;
+            top: 70px;
+            right: 40px;
+            /* Adjust this value to position the form */
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+
+        }
+
+        .facebook-page {
+            justify-content: space-between;
+            max-width: 200px;
+            width: 100%;
+
+        }
+
+
+        .facebook-page h1 {
+            color: #1877f2;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+                0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+
+        form input {
+            height: 40px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            padding: 0 14px;
+        }
+
+        form input:focus {
+            outline: none;
+            border-color: #1877f2;
+
+        }
+
+        ::placeholder {
+            color: #C8CACB;
+            font-size: small;
+
+        }
+
+        .link {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .link .login {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            background: #1877f2;
+            border-radius: 6px;
+            color: #fff;
+            transition: 0.2s ease;
+            padding: 5px;
+        }
+
+        .link .login:hover {
+            background: #0d65d9;
+        }
+
+        form a {
+            text-decoration: none;
+        }
+
+        .link .forgot {
+            color: #1877f2;
+            font-size: small;
+        }
+
+        .link .forgot:hover {
+            text-decoration: underline;
+        }
+
+
+
+        .button {
+            margin-top: 25px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button a {
+            padding: 15px 20px;
+            background: #42b72a;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 100;
+            transition: 0.2s ease;
+        }
+
+        .button a:hover {
+            background: #3ba626;
+        }
+
+        @media (max-width: 900px) {
+            .facebook-page {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .facebook-page .text {
+                margin-bottom: 0px;
+            }
+        }
+
+        @media (max-width: 460px) {
+            .facebook-page h1 {
+                font-size: 1.5rem;
+            }
+
+            .facebook-page p {
+                font-size: 1rem;
+            }
+        }
+
+
+        .dropend .dropdown-toggle {
+            color: black;
+            margin-left: 1em;
+        }
+
+        .dropdown-toggle::after {
+            content: none;
+            background-image: none;
+        }
+
+        .dropdown .dropdown-menu {
+            display: none;
+        }
+
+        .dropdown:hover>.dropdown-menu,
+        .dropend:hover>.dropdown-menu {
+            display: block;
+            margin-left: .125em;
+        }
+
+        @media screen and (min-width:992px) {
+            .dropend:hover>.dropdown-menu {
+                position: absolute;
+                top: 0;
+                left: 100%;
+            }
+
+            .dropend .dropdown-toggle {
+                margin-left: .5em;
+            }
+        }
+
+        .dropdown-menu .dropdown-toggle::after {
+            right: 0;
+            left: unset;
+        }
+
+        .dropdown-item :hover {
+            background-color: #eee;
+        }
+
+        .bold {
+            font-size: 13px;
+            font-weight: normal;
+        }
+        @media (max-width: 767px) {
+            nav .nav-top{
+                justify-content:center !important;
+                flex-direction:column;
+            }
+            #login-form{
+                position: absolute;
+            top: 120px;
+            right: 110px;
+            }
+           }
+    </style>
+</head>
+
+<body>
+
+    <!-- ******HEADER****** -->
+    
+        <!-- White background for logo and login button -->
+        <nav class="py-3">
+            <div class="container">
+            <div class="nav-top d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                    <a class="img" href="/home">
+                        <img src="static/emtech_logo3.jpg" alt="EMTech Logo">
+                    </a>
+                </div>
+                    <a id="login-link" href="#" style="text-decoration:none"><button class="btn" style="background-color:#00B9F1;color:white">Login</button></a> 
+                    <div id="login-form" style="display: none;"> 
+                        <!-- Your login form fields go here --> 
+                        <form id="loginForm" method="POST" action="/"> 
+                            {% with msg = get_flashed_messages(with_categories=True) %} 
+                            {% if msg %} 
+                            {% for category, message in msg %} 
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert"> 
+                                <strong>{{ message }}</strong> 
+                                <button type="button" data-bs-dismiss="alert" aria-label="Close"></button> 
+                            </div> 
+                            {% endfor %} 
+                            {% endif %} 
+                            {% endwith %} 
+                            <div class="container flex"> 
+                                <div class="facebook-page flex"> 
+                                    <p style="margin:-10px;">Welcome to</p> 
+                                    <h1 style="margin:10px 0px 10px 0px; font-family: roboto;"><b>EMTech Dashboard</b> 
+                                    </h1> 
+                                    <input style="font-size:8" type="email" id="email" name="email" 
+                                        placeholder="Email or phone number" required> 
+                                    <input type="password" id="password" name="password" placeholder="Password" 
+                                        required> 
+                                    <div class="link"> 
+                                        <button type="submit" class="login">Login</button> 
+                                        <a href="#" class="forgot">Forgot password?</a> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </form> 
+                    </div>      
+            </div>
+            </div>
+        </nav>
+
+        <!-- Blue background for the rest of the navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark"
+        style="background-color: #007bff;font-family: Arial,sans-serif;">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent1" aria-controls="navbarContent1" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" style="margin-left: 16.6667%;" id="navbarContent1">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0" style="gap: 30px;">
+                    <li class="nav-item">
+                        <a class="nav-link bold active" aria-current="page" href="/home">Home</a>
+                    </li>
+                    <li class="nav-item product dropdown">
+                        <a class="nav-link bold dropdown-toggle" style="color:white" href="products.html">
+                            Products
+                        </a>
+                        <ul class="dropdown-menu menu">
+                            <li class="nav-item dropend">
+                                <a class="nav-link dropdown-toggle" style="color:#7c848d;font-weight: normal"
+                                    href="automation_system.html">
+                                    Automation Systems
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="plc">Programmable Logic
+                                            Controller (PLC)</a></li>
+                                    <li><a class="dropdown-item" href="motion_controllers.html">Motion
+                                            Controllers</a></li>
+                                    <li><a class="dropdown-item" href="hmi">Human Machine Interface
+                                            (HMI)</a></li>
+                                    <li><a class="dropdown-item" href="external.html">External Input/ Output (DI/
+                                            DO)</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropend">
+                                <a class="nav-link dropdown-toggle" style="color:#7c848d;font-weight: normal" href="motionanddrives.html"
+                                    role="button" aria-expanded="false">
+                                    Motion & Drives
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="inverter">Variable Speed Drives</a>
+                                    </li>
+                                    <li class="nav-item dropend">
+                                        <a class="nav-link dropdown-toggle" href="servo_system.html" role="button"
+                                            aria-expanded="false" style="color:#7c848d;font-weight: normal">
+                                            Servo Systems
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="servo_motor">Servo Motors</a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="servo_drive">Servo Drives</a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="servo_accessories">Accessories</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropend">
+                                <a class="nav-link dropdown-toggle" href="sensing.html" role="button"
+                                    aria-expanded="false" style="color:#7c848d;font-weight: normal">
+                                    Sensing
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Photoelectric Sensors</a></li>
+                                    <li><a class="dropdown-item" href="#">Mark and colour sensors</a></li>
+                                    <li><a class="dropdown-item" href="#">Fiber Optic Sensors and amplifiers</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#">Inductive Sensors</a></li>
+                                    <li><a class="dropdown-item" href="#">Rotary Encoders</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropend">
+                                <a class="nav-link dropdown-toggle" href="controlcomponents.html" role="button"
+                                    aria-expanded="false" style="color:#7c848d;font-weight: normal">
+                                    Control Components
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Temperature Controllers </a></li>
+                                    <li><a class="dropdown-item" href="power_supply">Power Supplies</a></li>
+                                    <li><a class="dropdown-item" href="#">Timers</a></li>
+                                    <li><a class="dropdown-item" href="#">Counters</a></li>
+                                    <li><a class="dropdown-item" href="relay">Relay</a></li>
+                                    <li><a class="dropdown-item" href="solid_state_relay.html">Solid State Relay</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="photocell">Photocell</a></li>
+
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link bold" href="#features" style="color:white">Solutions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link bold" href="contact.html" style="color:white">Contact</a>
+                    </li>
+                  
+
+                    {% if 'Admin' in current_user.role %}
+                    <li class="nav-item">
+                        <a class="nav-link bold" href="plc_table.html" style="color:white">My Dashboard</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+   
+
+    <div id="hero" class="hero-section">
+
+        <div id="hero-carousel" class="hero-carousel carousel carousel-fade slide" data-bs-ride="carousel"
+            data-bs-interval="10000">
+
+            <div class="figure-holder-wrapper">
+                <div class="container">
+                    <div class="row justify-content-end">
+                        <div class="figure-holder">
+                            <!--    <img class="figure-image img-fluid" src="static/assets/images/imac.png" alt="image" />r-->
+                        </div>
+                    </div><!--//row-->
+                </div><!--//container-->
+            </div><!--//figure-holder-wrapper-->
+
+            <!-- Indicators -->
+            <div class="carousel-indicators">
+                <button type="button" class="active" data-bs-slide-to="0" data-bs-target="#hero-carousel"
+                    aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-slide-to="1" data-bs-target="#hero-carousel"
+                    aria-label="Slide 2"></button>
+                <button type="button" data-bs-slide-to="2" data-bs-target="#hero-carousel"
+                    aria-label="Slide 3"></button>
+            </div>
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+
+                <div class="carousel-item item-1 active">
+                    <div class="item-content container">
+                        <div class="item-content-inner">
+                            <h2 class="heading" style="  margin-left: 16.6667%;">We design and deliver <br>complete
+                                customized industrial solutions <br>that enable manufacturers to accelerate their
+                                digital transformation.</h2>
+                            <br> <a class="btn btn-primary btn-cta" style="  margin-left: 16.6667%;"
+                                href="https://emtechis.com/solutions/" target="_blank">Latest Solutions</a>
+
+                        </div><!--//item-content-inner-->
+                    </div><!--//item-content-->
+                </div><!--//item-->
+
+                <div class="carousel-item item-2">
+                    <div class="item-content container">
+                        <div class="item-content-inner">
+                            <h2 class="heading" style="  margin-left: 16.6667%;">We provide wide range of <br>Industrial
+                                Robotic Solutions to help improve the performance and increase the efficiency of your
+                                production facility.</h2>
+                            <br> <a class="btn btn-primary btn-cta" style="  margin-left: 16.6667%;"
+                                href="https://emtechis.com/suites/" target="_blank">Find out more</a>
+
+                        </div><!--//item-content-inner-->
+                    </div>
+                </div><!--//item-->
+
+                <div class="carousel-item item-3">
+                    <div class="item-content container">
+                        <div class="item-content-inner">
+
+                            <h2 class="heading" style="  margin-left: 16.6667%;">We design and deliver <br>customized
+                                automated inspection systems that meet the most challenging needs.</h2>
+                            <br> <a class="btn btn-primary btn-cta" style="  margin-left: 16.6667%;"
+                                href="https://emtechis.com/solutions/" target="_blank">Find out more</a>
+
+                        </div><!--//item-content-inner-->
+                    </div>
+                </div><!--//item-->
+            </div><!--//carousel-inner-->
+
+        </div><!--//carousel-->
+    </div><!--//hero-->
+
+    <div id="about" class="about-section">
+        <div class="container text-center">
+            <h2 class="section-title">Make Your Factory Smarter </h2>
+            <!-- <p class="intro">Appkit Landing uses modern front-end technologies and is packed with useful components and widgets to speed up your development</p>
+                <ul class="technologies list-inline">
+                    <li class="list-inline-item"><img src="static/assets/images/logo-html5.svg" alt="HTML5"></li>
+                    <li class="list-inline-item"><img src="static/assets/images/logo-css3.svg" alt="CSS3"></li>
+                    <li class="list-inline-item"><img src="static/assets/images/logo-bootstrap.svg" alt="Bootstrap"></li>
+                    <li class="list-inline-item"><img src="static/assets/images/logo-js.svg" alt="JavaScript"></li>
+                    <li class="list-inline-item"><img src="static/assets/images/logo-sass.svg" alt="Sass"></li>
+                    
+                </ul>
+                -->
+            <div class="items-wrapper row">
+                <div class="item col-md-4 col-12">
+                    <div class="item-inner">
+                        <div class="figure-holder">
+                            <img class="figure-image" src="static/assets/images/figure-1.png" alt="image">
+                        </div><!--//figure-holder-->
+                        <h3 class="item-title">Digital Transformation Solutions</h3>
+                        <div class="item-desc mb-3">
+                            Kojo combine the leading edge computing hardware and easy-to-use software to accelerate
+                            digital transformation and Industry 4.0.
+                        </div><!--//item-desc-->
+                        <a class="btn btn-primary" href="https://emtechis.com/suites/" target="_blank">Find out more</a>
+                    </div><!--//item-inner-->
+                </div><!--//item-->
+                <div class="item col-md-4 col-12">
+                    <div class="item-inner">
+                        <div class="figure-holder">
+                            <img class="figure-image" src="static/assets/images/figure-2.png" alt="image">
+                        </div><!--//figure-holder-->
+                        <h3 class="item-title">Robotic & Automation Solutions</h3>
+                        <div class="item-desc mb-3">
+                            Robotic solutions help manufacturers fulfill the needs of mass customization, and address
+                            issues related to rising labor costs and labor shortages. </div><!--//item-desc-->
+                        <a class="btn btn-primary" href="https://emtechis.com/solutions/" target="_blank">Find out
+                            more</a>
+                    </div><!--//item-inner-->
+                </div><!--//item-->
+                <div class="item col-md-4 col-12">
+                    <div class="item-inner">
+                        <div class="figure-holder">
+                            <img class="figure-image" src="static/assets/images/figure-3.png" alt="image">
+                        </div><!--//figure-holder-->
+                        <h3 class="item-title">Automated Inspection Solutions</h3>
+                        <div class="item-desc mb-3">
+                            We design and deliver automated inspection solutions that solve the most challenging
+                            inspection requirement in the industry. </div><!--//item-desc-->
+                        <a class="btn btn-primary" href="https://emtechis.com/solutions/" target="_blank">Find out
+                            more</a>
+                    </div><!--//item-inner-->
+                </div><!--//item-->
+            </div><!--//items-wrapper-->
+        </div><!--//container-->
+    </div><!--//about-section-->
+
+
+    <div id="features" class="features-section">
+        <div class="container text-center">
+            <h2 class="section-title">Kojo Smart manufacturing Solutions</h2>
+            <p class="intro">Empower Your Digital Transformation Journey </p>
+
+            <div class="tabbed-area row">
+
+                <!-- Nav tabs -->
+                <div class="feature-nav nav nav-pill flex-column col-lg-4 col-md-6 col-12 order-0 order-md-1"
+                    role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active mb-lg-3" href="#feature-1" aria-controls="feature-1" data-bs-toggle="pill"
+                        role="tab" aria-selected="true"><i class="fa-solid fa-cubes me-2"></i>Modular Solution</a>
+                    <a class="nav-link mb-lg-3" href="#feature-2" aria-controls="feature-2" data-bs-toggle="pill"
+                        role="tab" aria-selected="false"><i class="fa-solid fa-magic me-2"></i>Connectivity</a>
+                    <a class="nav-link mb-lg-3" href="#feature-3" aria-controls="feature-3" data-bs-toggle="pill"
+                        role="tab" aria-selected="false"><i class="fa-solid fa-rocket me-2"></i>Web-based Solution</a>
+                    <a class="nav-link mb-lg-3" href="#feature-4" aria-controls="feature-4" data-bs-toggle="pill"
+                        role="tab" aria-selected="false"><i class="fa-solid fa-code me-2"></i>Deployment and
+                        Integration</a>
+                    <a class="nav-link mb-lg-3" href="#feature-5" aria-controls="feature-5" data-bs-toggle="pill"
+                        role="tab" aria-selected="false"><i class="fa-solid fa-chart-bar me-2"></i>Alarms & Reports</a>
+                </div>
+
+                <!-- Tab panes -->
+                <div class="feature-content tab-content col-lg-8 col-md-6 col-12 order-1 order-md-0">
+                    <div role="tabpanel" class="tab-pane fade show active" id="feature-1">
+                        <a href="https://emtechis.com/suites/" target="_blank"><img class="img-fluid"
+                                src="static/assets/images/feature-1.png" alt="screenshot"></a>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="feature-2">
+                        <a href="https://emtechis.com/suites/" target="_blank"><img class="img-fluid"
+                                src="static/assets/images/feature-2.png" alt="screenshot"></a>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="feature-3">
+                        <a href="https://emtechis.com/suites/" target="_blank"><img class="img-fluid"
+                                src="static/assets/images/feature-3.png" alt="screenshot"></a>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="feature-4">
+                        <a href="https://emtechis.com/suites/" target="_blank"><img class="img-fluid"
+                                src="static/assets/images/feature-4.png" alt="screenshot"></a>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="feature-5">
+                        <a href="https://emtechis.com/suites/" target="_blank"><img class="img-fluid"
+                                src="static/assets/images/feature-5.png" alt="screenshot"></a>
+                    </div>
+
+
+                </div><!--//feature-content-->
+
+
+            </div><!--//tabbed-area-->
+
+        </div><!--//container-->
+    </div><!--//features-->
+
+
+
+    <div id="contact" class="contact-section">
+        <div class="container text-center">
+            <h2 class="section-title"><b>Contact Us</b></h2>
+            <div class="contact-content">
+                <p>Connect with us for personalized assistance and swift responses. <br>Your inquiries matter, and we're
+                    here to help!</p>
+
+            </div>
+            <a class="btn btn-cta btn-primary" href="https://emtechis.com/contact/">Get in Touch</a>
+
+        </div><!--//container-->
+    </div><!--//contact-section-->
+
+    <footer class="footer text-center">
+        <div class="container">
+            <!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
+            <small class="copyright">All Rights Reserved EMTech Team ©<span class="sr-only"></span> </a> </small>
+
+
+        </div><!--//container-->
+    </footer>
+
+    <!-- Javascript -->
+    <script src="static/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script src="static/assets/plugins/gumshoe/gumshoe.polyfills.min.js"></script>
+    <script src="static/assets/js/main.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#login-link").click(function () {
+                $("#login-form").toggle();
+            });
+
+            $("#loginForm").submit(function (event) {
+                event.preventDefault();
+
+                // Get the form data
+                var formData = {
+                    email: $("input[name='email']").val(),
+                    password: $("input[name='password']").val(),
+                };
+
+                // Send the form data to the backend using AJAX
+                $.ajax({
+                    type: "POST",
+                    url: "/",  // Replace with the actual URL where you want to send the data
+                    data: formData,
+                    success: function (response) {
+                        // Handle the successful response from the backend
+                        console.log("Form submitted successfully!");
+                        console.log("Response:", response);
+                    },
+                    error: function (error) {
+                        // Handle errors from the backend
+                        console.error("Error submitting form:", error);
+                    },
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#loginForm").submit(function (event) {
+                event.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/",
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            window.location.href = response.redirect;
+                        } else {
+                            // Handle error, show message, etc.
+                            console.log('Login failed:', response.message);
+                        }
+                    },
+                    error: function (error) {
+                        console.log('Error:', error);
+                    }
+                });
+            });
+        });
+        
+
+    $(document).ready(function() {
+        // Add click event for the first navbar toggler
+        $('.navbar-toggler[data-target="#navbarContent1"]').click(function() {
+            $('#navbarContent2').collapse('hide'); // Hide the second navbar
+        });
+
+        // Add click event for the second navbar toggler
+        $('.navbar-toggler[data-target="#navbarContent2"]').click(function() {
+            $('#navbarContent1').collapse('hide'); // Hide the first navbar
+        });
+    });
+
+    </script>
+</body>
+
+</html>

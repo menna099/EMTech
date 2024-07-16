@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Edit User</title>
+    {% include 'head.html' %}
+
+    <main class="container-fluid" style="padding: 0% 16.667% 0% 16.667%;">
+        <br><h2 class="mb-4">Edit User</h2>
+
+        <form method="POST" action="/edit_user?user_id={{ user.id }}">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" value="{{ user.email }}" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" id="username" class="form-control" value="{{ user.username }}" required>
+                    </div>
+                </div> 
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" id="password" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group" required> 
+                        <label for="role">Role:</label>
+                        <select name="role" id="role" class="form-control form-select" onchange="toggleAuthority()">
+                            <option value="Admin">Admin</option>                            
+                            <option value="Viewer">Viewer</option>
+                        </select>   
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-9" id="authoritySection" style="display: none;">
+                    <label for="authority">Authority:</label>
+                    <div class="checkbox-group form-group">
+                        <label><input type="checkbox" name="authority" value=" All" onchange="toggleAll(this)"> All</label>
+                        <label><input type="checkbox" name="authority" value=" Technical Information" onchange="handleCheckboxClick()"> Technical Information</label>
+                        <br>
+                        <label><input type="checkbox" name="authority" value=" Sales Information (EG)" onchange="handleCheckboxClick()"> Sales Information (EG)</label>
+                        <label><input type="checkbox" name="authority" value=" Sales Information (UAE)" onchange="handleCheckboxClick()"> Sales Information (UAE)</label>
+                        <label><input type="checkbox" name="authority" value=" Sales Information (TR)" onchange="handleCheckboxClick()"> Sales Information (TR)</label>
+                        <br>
+                        <label><input type="checkbox" name="authority" value=" Cost Information (EG)" onchange="handleCheckboxClick()"> Cost Information (EG)</label>
+                        <label><input type="checkbox" name="authority" value=" Cost Information (UAE)" onchange="handleCheckboxClick()"> Cost Information (UAE)</label>
+                        <label><input type="checkbox" name="authority" value=" Cost Information (TR)" onchange="handleCheckboxClick()"> Cost Information (TR)</label>
+                        <br>
+                        <label><input type="checkbox" name="authority" value=" Balance Information (EG)" onchange="handleCheckboxClick()"> Balance Information (EG)</label>
+                        <label><input type="checkbox" name="authority" value=" Balance Information (UAE)" onchange="handleCheckboxClick()"> Balance Information (UAE)</label>
+                        <label><input type="checkbox" name="authority" value=" Balance Information (TR)" onchange="handleCheckboxClick()"> Balance Information (TR)</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+    </main>
+
+    <script>
+        function toggleAuthority() {
+            var roleSelect = document.getElementById('role');
+            var authoritySection = document.getElementById('authoritySection');
+
+            if (roleSelect.value === 'Viewer') {
+                authoritySection.style.display = 'block';
+            } else {
+                authoritySection.style.display = 'none';
+            }
+        }
+
+
+        function toggleAll(source) {
+            var checkboxes = document.getElementsByName('authority');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+        
+        function handleCheckboxClick() {
+            var checkboxes = document.getElementsByName('authority');
+            var allCheckbox = document.getElementsByName('authority')[0];
+
+            // If "All" is selected, unselect other checkboxes
+            if (allCheckbox.checked) {
+                for (var i = 1; i < checkboxes.length; i++) {
+                    checkboxes[i].checked = false;
+                }
+            }
+            // If any other checkbox is selected, unselect "All"
+            else {
+                allCheckbox.checked = false;
+            }
+        }
+    </script></body>
+
+</html>

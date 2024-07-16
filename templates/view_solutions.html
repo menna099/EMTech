@@ -1,0 +1,52 @@
+<!-------------------------------------------------------------------------------------->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head> 
+    <title>View Solutions</title>
+    <style>
+        .table th, td{
+            text-align: center !important;
+        }
+    </style>
+    {% include 'head.html' %}
+    <section class="container mt-3">
+        <!---->
+        <div class="row">
+        <!------------------------------------------------ Main content --------------------------------->
+        <main class="container">
+            <h3 class="mb-4" style="font-family:Open Sans , Arial, sans-serif;">View Solutions</h3>
+           <!------------------------------------------------- Table ------------------------------------------------>
+           <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Solution ID</th>
+                        <th>Solution Name</th>
+                        <th>Description</th>
+                        <th>Total Price</th>
+                    </tr>
+                </thead>    
+                <tbody id="solutionTableBody">
+                    {% for solution in solutions %}
+                    <tr>
+                        <td>{{ solution.id }}</td>
+
+                        <td>
+                            <a href="/solution_details?solution_id={{ solution.id }}">
+                                {{ solution.solution_name }}
+                            </a>
+                        </td> 
+                        <td>{{ solution.solution_description }}</td>       
+                        <td>{{ solution.solution_total_price|round(0) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </main>
+    </section>    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+   
+</body>
+</html>

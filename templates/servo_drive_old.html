@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Servo Drive</title>
+    {% include 'head.html' %}
+
+    <section class="container-fluid">
+        <!---->
+        <div class="row">
+            {% include 'side_bar.html' %}
+        <!------------------------------------------------ Main content --------------------------------->
+        <main class="col-md-9 main-content">
+            <h1 class="mb-4">Servo Drive</h1>
+            <form>
+                <div class="row">
+                    <div class="col-md-2">
+                    
+                        <label></label>Brand:</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="Omron"> Omron
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="Mitsubishi"> Mitsubishi
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="Vector"> Vector
+                        </label>
+                      
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="model_search">Model:</label>
+                        <input type="text" id="model_search" name="model_search" class="form-control"> 
+                    </div>
+
+                   
+
+                    <div class="col-md-1">
+                        
+                        <label for="series_search">Series:</label>
+                        <input type="text" id="series_search" name="series_search" class="form-control">
+                    </div>
+
+                    <div class="col-md-1">
+                        <label for="power_search">Power:</label>
+                        <input type="float" id="power_search" name="power_search" class="form-control">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label></label>Input Voltage:</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="input_voltage_search" value="220VAC"> 220VAC
+                            <br>
+                            <input type="checkbox" name="input_voltage_search" value="380VAC"> 380VAC
+                        </label>
+                    </div>
+
+
+                 
+                    <div class="col-md-3">
+                        <label></label>Control Type:</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="control_type_search" value="pulse"> Pulse
+                        </label>
+                        &nbsp;
+                        <label>
+                            <input type="checkbox" name="control_type_search" value="analog"> Analog
+                        </label>
+
+                        <br>    
+                        <label>
+                            <input type="checkbox" name="control_type_search" value="modbus"> Modbus
+
+                        </label>
+                        &nbsp;
+                        <label>
+                            <input type="checkbox" name="control_type_search" value="ethercAT"> EtherCAT
+                        </label>
+
+                        <br>   
+                        <label>
+                            <input type="checkbox" name="control_type_search" value="SSCNET"> SSCNET
+                        </label>
+                        &nbsp;
+                        <label>
+                            <input type="checkbox" name="control_type_search" value="cc_link"> CC-Link IE Field
+                        </label>
+                    </div>
+                </div>
+            </form>
+
+            <!------------------------------------------------- Table ------------------------------------------------>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        {% if 'Information (EG)' in current_user.authority %}
+                            <th>ID</th>
+                        {% endif %}                    
+
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Description</th>
+
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                            <th>Origin</th>
+                            <th>Stock</th>
+                        {% endif %}                    
+
+                        {% if 'Sales Information (EG)' in current_user.authority %}
+                            <th>List Price</th>
+                        {% endif %}                    
+                    </tr>
+                </thead>    
+                <tbody id="productTableBody">
+                    {% for product in products %}
+                    <tr>
+                        {% if 'Information (EG)' in current_user.authority %}
+                            <td>{{ product.id }}</td>
+                        {% endif %} 
+                        <td>{{ product.brand }}</td>
+                        
+                        <td><a href="/servo_drive_details?product_id={{ product.id }}"> {{ product.model }}</a></td>                        
+                        <td>{{ product.description }}</td>
+                        
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                            <td>{{ product.origin }}</td>
+                            <td>{{ product.quantity_egypt}}</td>
+                            {% endif %}                 
+    
+                            {% if 'Sales Information (EG)' in current_user.authority %}
+                                <td>{{ product.end_user_sales_price_egypt|round(3) }}</td>
+                        {% endif %}                 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+    </section>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            // Event listener for checkbox, dropdown, text input, and numeric input change
+            $('input[name="brand_search"], #model_search, #series_search, #power_search, input[name="input_voltage_search"], input[name="control_type_search"]').change(function () {
+                // Get the selected checkbox values
+                var brandsearch= $('input[name="brand_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var inputvoltagesearch = $('input[name="input_voltage_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var controltypesearch = $('input[name="control_type_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                // Get the text input value
+                var modelsearch = $('#model_search').val();
+                var seriessearch = $('#series_search').val();
+
+                // Get the numeric input value
+                var powersearch = $('#power_search').val();
+
+                // Make an asynchronous request to the server (replace with your actual endpoint)
+                $.ajax({
+                    type: 'POST',
+                    url: '/servo_drive',
+                    data: {
+                        'brand_search': brandsearch,
+                        'model_search': modelsearch,
+                        'series_search': seriessearch,
+                        'power_search': powersearch,
+                        'input_voltage_search': inputvoltagesearch,
+                        'control_type_search': controltypesearch
+                    },
+                    success: function (data) {
+                        console.log('brand search:', brandsearch);
+                        console.log('model search:', modelsearch);
+                        console.log('series search:', seriessearch);
+                        console.log('Power search:', powersearch);
+                        console.log('input voltage search:', inputvoltagesearch);
+                        console.log('control search:', controltypesearch);
+                        $('#productTableBody').html($(data).find('#productTableBody').html());
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>    
+</body>
+</html>

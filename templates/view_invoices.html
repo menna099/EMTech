@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">  
+<head>
+    <title>View Invoices</title>
+    <style>
+        .table th, td{
+            text-align: center !important;
+        }
+    </style>
+    {% include 'head.html' %}
+    <section class="container mt-3">
+        <!---->
+        <div class="row">
+        <!------------------------------------------------ Main content --------------------------------->
+        <main class="container">
+            <h3 class="mb-4" style="font-family:Open Sans , Arial, sans-serif;">View Invoices</h3>
+           <!------------------------------------------------- Table ------------------------------------------------>
+           <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Invoice</th>
+                        <th>Description</th>
+                        <th>Total Price</th>
+                        <th>Customer</th>
+                        <th>Contact Person</th>
+                    </tr>
+                </thead>    
+                <tbody id="invoiceTableBody">
+                    {% for invoice in invoices %}
+                    <tr>
+                        <td>
+                            <a href="/invoice_details?invoice_id={{ invoice.id }}">
+                                {{ invoice.invoice_name }}
+                            </a>
+                        </td>
+                        <td>{{ invoice.invoice_description }}</td>      
+                        <td>{{ invoice.invoice_total_price|round(0) }}</td>
+                        <td>{{invoice.customer_name}}</td>
+                        <td>{{ invoice.contact_name }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </main>
+    </section>    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+
+
+   
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

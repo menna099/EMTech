@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Create New customer</title>
+    {% include 'head.html' %}
+
+
+    <style>
+        .hidden {
+            display: none;
+        }
+
+
+        #customerDetails {
+            margin-bottom: 20px;
+        }
+
+
+        #addcontactButton {
+            background: url("static/add.png") no-repeat;
+            background-size: contain;
+            width: 30px;
+            height: 30px;
+            border: none;
+            cursor: pointer;
+        }
+
+
+        #customerDetails label {
+            display: block;
+        }
+
+
+        #totalPriceLabel {
+            font-weight: bold;
+        }
+
+
+        /* Add styles for the search input fields */
+        #searchCategory, #searchModel {
+            margin-bottom: 10px;
+        }
+       
+
+
+
+
+            .button-group {
+                display: flex;
+                align-items: center;
+             
+            }
+
+
+    </style>
+</head>
+<body>
+
+
+    <br><br>
+    <main class="container-fluid" style="padding: 0% 16.667% 0% 16.667%;">
+        <br>
+        <h2>Customer Information</h2>
+        <br>
+        <div class="row">
+            <div class="col-md-1">
+                <div id="customerDetails" class="form-group">
+                    <label for="customerID">ID:</label>
+                    <span id="customerID" class="form-control">{{ customer_info.id }}</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="customer_name">Customer Name:</label>
+                    <input type="text" id="customer_name" class="form-control"value="{{customer_info.customer_name}}">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="hastin_vat">TIN/VAT ID</label>
+                    <input type="checkbox" id="hastin_vat" onclick="toggletin_vat_input()">
+                    <input type="number" id="tin_vat" class="form-control" disabled value="{{customer_info.tin_vat}}">
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    <br> <button id="saveCustomerButton" class="btn btn-primary" onclick="saveCustomer()"> <img src="static/save.png" alt="Save"></button>
+                </div>
+                <form method="POST" action="/delete_customer" class="d-inline">
+                    <input type="hidden" name="customer_id" value="{{ customer_info.id }}">
+                    <button type="submit" class="btn btn-danger"><img src="static/delete.png" alt="delete"style="width: 20px; height: 20px; "></button>
+            </form> 
+            </div>
+        </div>
+        <!-- Partition 4: Contacts Table -->
+        <div class="row bordered-section">
+            <div class="col-md-12">
+                <table id="contactTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Contact</th>
+                            <th>Job</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contact_table_Body">
+                        <!-- Hidden template row for adding new contacts -->
+                        <tr class="hidden" id="templateRowContact">
+                            <td></td>
+                            <td><input id="contact_name" type="text" placeholder="Contact" class="form-control"></td>
+                            <td><input id="contact_job" type="text" placeholder="Job" class="form-control"></td>
+                            <td><input id="contact_phone" type="number" placeholder="Phone" class="form-control"></td>
+                            <td><input id="contact_email" type="text" placeholder="Email" class="form-control"></td>
+                            <td>
+                                <button onclick="cancelAddcontact(this)" class="btn btn-danger">
+                                    <img src="static/delete.png" alt="cancel" style="width: 20px; height: 20px;">
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button id="addContactButton" onclick="addContact()" class="btn btn-primary"><img src="static/add_white.png">
+                    <i class="bi bi-plus"></i>
+                </button>
+                <br><br> <br><br>
+            </div>
+        </div>
+    </main>
+
+
+    <script>
+        //----------------------------- retreiving sql data ---------------------------------------------------------------
+       
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var customercontacts2 = {{ customer_contacts | tojson | safe }};
+            //var customercontacts2 = JSON.parse('{{ customer_contacts | tojson | safe }}');
+            console.log("customer_contacts:",customercontacts2)
+            addcontactTocustomer_sql(customercontacts2)
+            console.log(customercontacts2)
+        });
+
+        function addcontactTocustomer_sql(contacts) {
+            var tableBody = document.getElementById("contact_table_Body");
+
+            contacts.forEach(function (contact) {
+                var row = tableBody.insertRow();
+                row.insertCell(0).textContent = contact.id;
+                row.insertCell(1).innerHTML = '<input type="text" placeholder="Name" class="form-control"  value="' + contact.contact_name + '">';
+                row.insertCell(2).innerHTML = '<input type="text" placeholder="Job" class="form-control"  value="' + contact.contact_job + '">';
+                row.insertCell(3).innerHTML = '<input type="number" placeholder="Phone" class="form-control"  value="' + (contact.contact_phone !== null ? contact.contact_phone : '') + '">';
+                row.insertCell(4).innerHTML = '<input type="text" placeholder="Email" class="form-control"  value="' + contact.contact_email + '">';
+                row.insertCell(5).innerHTML = '<button onclick="cancelAddcontact(this)" class="btn btn-danger"><img src="static/delete.png" alt="cancel" style="width: 20px; height: 20px;"></button>';
+            });
+
+        }
+
+        function addContact() {
+            var templateRow = document.getElementById("templateRowContact");
+            var newRow = templateRow.cloneNode(true);
+            newRow.classList.remove("hidden");
+            document.getElementById("contact_table_Body").appendChild(newRow);
+        }
+
+
+        function cancelAddcontact(button){
+            var row = button.parentNode.parentNode;
+            row.remove();
+        }
+
+        function saveCustomer() {
+            var customerID = parseInt(document.getElementById("customerID").textContent);
+            var customer_name = document.getElementById("customer_name").value;
+            var tin_vat_input = document.getElementById("tin_vat");
+            //var tin_vat = tin_vat_input.disabled ? 0 : tin_vat_input.value;
+            var tin_vat = tin_vat_input.value;
+
+            console.log("tin_vat_input:",tin_vat_input);
+            console.log("tin_vat:",tin_vat)
+
+            if (!customer_name) {
+                alert("Please enter a Customer name.");
+                return;
+            }
+
+
+            var contacts_rows = document.getElementById("contact_table_Body").getElementsByTagName("tr");
+            var contacts = [];
+
+            for (var i = 0; i < contacts_rows.length; i++) {
+                if (!contacts_rows[i].classList.contains("hidden")) {
+                    var contacts_cells = contacts_rows[i].getElementsByTagName("td");
+
+                    //var contact_id = parseInt(contacts_cells[0].textContent); // Assuming contact_id is in the first column
+                    var contact_name = contacts_cells[1].getElementsByTagName("input")[0].value;
+                    var contact_job = contacts_cells[2].getElementsByTagName("input")[0].value;
+                    var contact_phone = parseInt(contacts_cells[3].getElementsByTagName("input")[0].value);
+                    var contact_email = contacts_cells[4].getElementsByTagName("input")[0].value;
+
+                    console.log(contact_name);
+                    console.log(contact_job);
+                    console.log(contact_phone);
+                    console.log(contact_email);
+
+                    var contact = {
+                        contact_name: contact_name,
+                        contact_job: contact_job,
+                        contact_phone: contact_phone,
+                        contact_email: contact_email
+                    };
+                    if (!contact_name) {
+                        alert("Please add contact name.");
+                        return;
+                    }
+                    contacts.push(contact);
+                }
+            }
+
+            if (contacts.length == 0) {
+                alert("Please add at least one contact.");
+                return;
+            }
+
+            var customer = {
+                customerID:customerID,
+                customer_name: customer_name,
+                tin_vat: tin_vat,
+                contacts: contacts
+            };
+
+            console.log(customer);
+
+            // Send the customer data to the Flask backend using AJAX
+            $.ajax({
+                type: "POST",
+                url: "/customer_details",
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(customer),
+                success: function(response) {
+                    alert("Customer saved successfully!");
+                    // Optionally, you can redirect or perform other actions after saving
+                    window.location.href = "/view_customers";
+                },
+                error: function(error) {
+                    alert("Error saving customer: " + error.responseText);
+                }
+            });
+        }
+        
+        function toggletin_vat_input() {
+            
+            var tin_vat_input = document.getElementById("tin_vat");
+            var tin_vat_value = document.getElementById("tin_vat").value;
+            console.log("tin_vat_input:",tin_vat_value)
+            tin_vat_input.disabled = !document.getElementById("hastin_vat").checked;
+
+            
+            if (!tin_vat_input.disabled) {
+                tin_vat_input.focus();
+            }
+            
+        }
+
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,249 @@
+<!-------------------------------------------------------------------------------------->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>PLC Products</title>
+    {% include 'head.html' %}
+    <section class="container-fluid">
+        <!---->
+        <div class="row">
+            {% include 'side_bar.html' %}
+        <!------------------------------------------------ Main content --------------------------------->
+        <main class="col-md-9 main-content">
+            <h1 class="mb-4">PLC Products</h1>
+            <form>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Brand:</label>
+                        <br>
+                        <label><input type="checkbox" name="brand_search" value="Mitsubishi"> Mitsubishi</label>
+                        <br>
+                        <label><input type="checkbox" name="brand_search" value="Omron"> Omron</label>
+                        <br>
+                        <label><input type="checkbox" name="brand_search" value="GMT"> GMT</label>
+                        
+                       
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="model_search">Model:</label>
+                        <input type="text" id="model_search" name="model_search" class="form-control">
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label for="digital_input_search">Digital Input:</label>
+                        <input type="number" id="digital_input_search" name="digital_input_search" class="form-control" >
+                        <br>
+                        <label for="digital_output_search">Digital Output:</label>
+                        <input type="number" id="digital_output_search" name="digital_output_search" class="form-control">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="analog_input_search">Analog Input:</label>
+                        <input type="number" id="analog_input_search" name="analog_input_search" class="form-control">
+                        <br>
+                        <label for="analog_output_search">Analog Output:</label>
+                        <input type="number" id="analog_output_search" name="analog_output_search" class="form-control">
+                    </div>
+
+                    
+                    <div class="col-md-1">
+                        <label></label>Input:</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="input_voltage_search" value="24VDC"> 24VDC
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="input_voltage_search" value="220VAC"> 220VAC
+                        </label>
+                    </div>
+                    <div class="col-md-2">
+                        <label></label>Communication: </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="communication_search" value="Ethernet"> Ethernet
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="communication_search" value="RS232"> RS232
+                        </label>
+                           
+                        <label>
+                            <input type="checkbox" name="communication_search" value="RS422"> RS422
+                        </label>
+                        <br>   
+                        <label>
+                            <input type="checkbox" name="communication_search" value="RS485"> RS485
+                        </label>
+                        
+                        <label>
+                            <input type="checkbox" name="communication_search" value="USB"> USB
+                        </label>
+                       
+                    </div>
+
+                    <div class="col-md-7">
+                        <label>Series:</label>
+                        <div id="omron_series">
+                            <label><input type="checkbox" name="series_search" value="CP2E"> CP2E </label>
+                            <label><input type="checkbox" name="series_search" value="CP1E"> CP1E </label>
+                            <label><input type="checkbox" name="series_search" value="CP1H"> CP1H </label>
+                            <label><input type="checkbox" name="series_search" value="CP1L"> CP1L </label>
+                            <label><input type="checkbox" name="series_search" value="CJ2"> CJ2 </label>                        
+                            <label><input type="checkbox" name="series_search" value="CS1D"> CS1D </label>                        
+                        </div>
+
+                        <div id="mitsubishi_series">
+                            <label><input type="checkbox" name="series_search" value="FX5U"> FX5U </label>
+                            <label><input type="checkbox" name="series_search" value="FX3U"> FX3U </label>
+                            <label><input type="checkbox" name="series_search" value="FX3G"> FX3G </label>
+                            <label><input type="checkbox" name="series_search" value="FX3S"> FX3S </label>
+                            <label><input type="checkbox" name="series_search" value="Q"> Q </label>
+                        </div>
+                    </div>
+
+                    
+                    
+                </div>
+            </form>
+            
+            <!------------------------------------------------- Table ------------------------------------------------>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        {% if 'Information (EG)' in current_user.authority %}
+                            <th>ID</th>
+                        {% endif %}                    
+
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Description</th>
+
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                            <th>Origin</th>
+                            <th>Stock</th>
+                        {% endif %}                    
+
+                        {% if 'Sales Information (EG)' in current_user.authority %}
+                            <th>List Price</th>
+                        {% endif %}                    
+                    </tr>
+                </thead>    
+                <tbody id="productTableBody">
+                    {% for product in products %}
+                    <tr>
+                        {% if 'Information (EG)' in current_user.authority %}
+                            <td>{{ product.id }}</td>
+                        {% endif %} 
+                        <td>{{ product.brand }}</td>
+                        
+                        <td><a href="/plc_details?product_id={{ product.id }}"> {{ product.model }}</a></td>                        
+                        <td>{{ product.description }}</td>
+                        
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                            <td>{{ product.origin }}</td>
+                            <td>{{ product.quantity_egypt}}</td>
+                        {% endif %}                 
+
+                        {% if 'Sales Information (EG)' in current_user.authority %}
+                            <td>{{ product.end_user_sales_price_egypt|round(3) }}</td>
+                        {% endif %}                 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+    </section>
+                    
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Event listener for checkbox, dropdown, text input, and numeric input change
+            $('input[name="brand_search"], input[name="series_search"], #model_search, #digital_input_search, #digital_output_search, #analog_input_search, #analog_output_search, input[name="input_voltage_search"], input[name="communication_search"]').change(function () {
+                // Get the selected checkbox values
+                var brandsearch= $('input[name="brand_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var seriessearch= $('input[name="series_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var inputvoltagesearch = $('input[name="input_voltage_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var communicationsearch = $('input[name="communication_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                // Get the text input value
+                var modelsearch = $('#model_search').val();
+
+                // Get the numeric input value
+                var digitalinputsearch = $('#digital_input_search').val();
+                var digitaloutputsearch = $('#digital_output_search').val();
+                var analoginputsearch = $('#analog_input_search').val();
+                var analogoutputsearch = $('#analog_output_search').val();
+
+                // Make an asynchronous request to the server (replace with your actual endpoint)
+                $.ajax({
+                    type: 'POST',
+                    url: '/plc',
+                    data: {
+                        'brand_search': brandsearch,
+                        'series_search': seriessearch,
+                        'model_search': modelsearch,
+                        'digital_input_search': digitalinputsearch,
+                        'digital_output_search': digitaloutputsearch,
+                        'analog_input_search': analoginputsearch,
+                        'analog_output_search': analogoutputsearch,
+                        'input_voltage_search': inputvoltagesearch,
+                        'communication_search': communicationsearch
+                    },
+                    success: function (data) {
+                        console.log('brand search:', brandsearch);
+                        console.log('series search:', seriessearch);
+                        console.log('model search:', modelsearch);
+                        console.log('DI search:', digitalinputsearch);
+                        console.log('DO search:', digitaloutputsearch);
+                        console.log('AI search:', analoginputsearch);
+                        console.log('AO search:', analogoutputsearch);
+                        console.log('input voltage search:', inputvoltagesearch);
+                        console.log('communication search:', communicationsearch);
+                        $('#productTableBody').html($(data).find('#productTableBody').html());
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+        $(document).ready(function () {
+        // Initially hide both series select elements
+        $('#omron_series').hide();
+        $('#mitsubishi_series').hide();
+
+        // Attach a change event listener to the brand selection menu
+        $('input[name="brand_search"]').change(function () {
+            var selectedBrand = $(this).val();
+
+            // Hide both series select elements
+            $('#omron_series').hide();
+            $('#mitsubishi_series').hide();
+
+            // Show the respective series select based on the selected brand
+            if (selectedBrand === 'Omron') {
+                $('#omron_series').show();
+                $('#mitsubishi_series').hide();
+            } else if (selectedBrand === 'Mitsubishi') {
+                $('#omron_series').hide();
+                $('#mitsubishi_series').show();            }
+            
+        });
+    });
+
+    </script>    
+</body>
+</html>

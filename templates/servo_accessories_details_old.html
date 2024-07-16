@@ -1,0 +1,59 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ product.model }}</title>
+    <link rel="stylesheet" href="static/product_details.css">
+    {% include 'head.html' %}
+    <main>
+        <div class="card-body">
+            <div class="data-container">
+
+                <h4>Technical Information</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="model">Model: </label>
+                        <span id="model">{{ product.model }}</span> <br>
+                    
+                        <label for="brand">Brand:</label>
+                        <span id="brand">{{ product.brand }}</span> <br>
+                        
+                        <label for="series">Series:</label>
+                        <span id="series">{{ product.series }}</span> <br>
+                        
+                        <label for="description">Description:</label>
+                        <span id="description">{{ product.description }}</span> <br>
+
+                        <label for="origin">Origin:</label>
+                        <span id="origin">{{ product.origin }}</span> <br>
+                        
+                        <label for="digitalinput">Accessory Type:</label>
+                        <span id="digitalinput">{{ product.accessory_type }}</span> <br>
+                        
+                        <label for="analoginput">Cable Length:</label>
+                        <span id="analoginput">{{ product.cable_length }}</span>   <br>  
+                        {% include 'details_financial.html' %}
+
+ 
+        {% if current_user.role == 'Admin' %}
+        <div class="row">
+            <div class="col-md-3">
+                <a href="/servo_accessories_edit?product_id={{ product.id }}" class="btn btn-primary">
+                    <img src="static/edit.png" alt="Save">
+                </a>
+                <form method="POST" action="/delete_servo_accessories" class="d-inline" style="padding: 10px;">
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <button type="submit" class="btn btn-danger"><img src="static/delete.png" alt="delete"></button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+        
+
+        <br><br>
+    </main>
+    {% include 'details_script.html' %}

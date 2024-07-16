@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <title>View Suppliers</title>
+    <style>
+        .table th, td{
+            text-align: center !important;
+        }
+    </style>
+    {% include 'head.html' %}
+    <section class="container mt-3">
+        <!---->
+        <div class="row">
+        <!------------------------------------------------ Main content --------------------------------->
+        <main class="container">
+            <h3 class="mb-4" style="font-family:Open Sans , Arial, sans-serif;">View Suppliers</h3>
+           <!------------------------------------------------- Table ------------------------------------------------>
+           <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th>Supplier Name</th>
+                        <th>Country</th>
+                        <th>Email Address</th>
+                        <th>Balance</th>
+                        <th>Active</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>    
+                <tbody id="supplierTableBody">
+                    {% for supplier in suppliers %}
+                    <tr>
+                        <td>{{ supplier.id }}</td>
+                        <td>
+                            <a href="/supplier_details?supplier_id={{ supplier.id }}">
+                                {{ supplier.supplier_name }}
+                            </a>
+                        </td>
+                        <td>{{ supplier.tin_vat }}</td>      
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </main>
+    </section>    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+   
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

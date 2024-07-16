@@ -1,0 +1,221 @@
+<!-------------------------------------------------------------------------------------->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Inverters</title>
+    {% include 'head.html' %}
+    <section class="container-fluid">
+        <!---->
+        <div class="row">
+            {% include 'side_bar.html' %}
+        <!------------------------------------------------ Main content --------------------------------->
+        <main class="col-md-9 main-content">
+            <h1 class="mb-4">Inverters</h1>
+            <form>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label></label>Brand</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="Mitsubishi"> Mitsubishi
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="Omron"> Omron
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="Cumark"> Cumark
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="Vector"> Vector
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search" value="GMT"> GMT
+                        </label>
+                        <br>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="model_search">Model</label>
+                        <input type="text" id="model_search" name="model_search" class="form-control">
+                        
+                        <br>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="out_current_search">Current</label>
+                        <input type="float" id="out_current_search" name="out_current_search" class="form-control">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="out_power_search">Output Power</label>
+                        <input type="float" id="out_power_search" name="out_power_search" class="form-control">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label></label>Input Voltage:</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="input_voltage_search" value="220VAC"> 220VAC
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="input_voltage_search" value="380VAC"> 380VAC
+                        </label>
+                    </div>
+                    <!--
+                    <div class="col-md-2">
+                        <label for="dropdown">Select an option from the dropdown:</label>
+                        <select id="dropdown" name="dropdown">
+                            <option value="220VAC">220VAC</option>
+                            <option value="24VDC">24VDC</option>
+                        </select>
+                        
+                        <br>
+                    </div>
+                    -->
+                    <div class="col-md-2">
+                        <label></label>Communication Port: </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="communication_search" value="Ethernet"> Ethernet
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="communication_search" value="RS232"> RS232
+                        </label>
+                        <br>    
+                        <label>
+                            <input type="checkbox" name="communication_search" value="RS422"> RS422
+                        </label>
+                        <br>   
+                        <label>
+                            <input type="checkbox" name="communication_search" value="RS485"> RS485
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="communication_search" value="USB"> USB
+                        </label>
+                       
+                    </div>
+
+                    
+                    
+                </div>
+            </form>
+            
+            <!------------------------------------------------- Table ------------------------------------------------>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        {% if 'Information (EG)' in current_user.authority %}
+                            <th>ID</th>
+                        {% endif %}                    
+
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Description</th>
+
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                            <th>Origin</th>
+                            <th>Stock</th>
+                        {% endif %}                    
+
+                        {% if 'Sales Information (EG)' in current_user.authority %}
+                            <th>List Price</th>
+                        {% endif %}                    
+                    </tr>
+                </thead>    
+                <tbody id="productTableBody">
+                    {% for product in products %}
+                    <tr>
+                        {% if 'Information (EG)' in current_user.authority %}
+                            <td>{{ product.id }}</td>
+                        {% endif %} 
+                        <td>{{ product.brand }}</td>
+                        
+                        <td><a href="/inverter_details?product_id={{ product.id }}"> {{ product.model }}</a></td>                        
+                        <td>{{ product.description }}</td>
+                        
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                            <td>{{ product.origin }}</td>
+                            <td>{{ product.quantity_egypt}}</td>
+                            {% endif %}                 
+    
+                            {% if 'Sales Information (EG)' in current_user.authority %}
+                                <td>{{ product.end_user_sales_price_egypt|round(3) }}</td>
+                        {% endif %}                 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+    </section>
+                
+    <!-- Bootstrap and other scripts if needed -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+
+         
+        $(document).ready(function () {
+            // Event listener for checkbox, dropdown, text input, and numeric input change
+            $('input[name="brand_search"], #model_search, #out_current_search, #out_power_search, input[name="input_voltage_search"], input[name="communication_search"]').change(function () {
+                // Get the selected checkbox values
+                var brandsearch= $('input[name="brand_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var inputvoltagesearch = $('input[name="input_voltage_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var communicationsearch = $('input[name="communication_search"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                // Get the selected dropdown value
+                
+
+                // Get the text input value
+                var modelsearch = $('#model_search').val();
+
+                // Get the numeric input value
+                var outcurrentsearch = $('#out_current_search').val();
+                var outpowersearch = $('#out_power_search').val();
+                
+
+                // Make an asynchronous request to the server (replace with your actual endpoint)
+                $.ajax({
+                    type: 'POST',
+                    url: '/inverter',
+                    data: {
+                        'brand_search': brandsearch,
+                        'model_search': modelsearch,
+                        'out_current_search': outcurrentsearch,
+                        'out_power_search': outpowersearch,
+                        'input_voltage_search': inputvoltagesearch,
+                        'communication_search': communicationsearch
+                    },
+                    success: function (data) {
+                        console.log('brand search:', brandsearch);
+                        console.log('model search:', modelsearch);
+                        console.log('out_current_search:', outcurrentsearch);
+                        console.log('out_power_search:', outpowersearch);
+                        console.log('input voltage search:', inputvoltagesearch);
+                        console.log('communication search:', communicationsearch);
+                        $('#productTableBody').html($(data).find('#productTableBody').html());
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>     
+</body>
+</html>

@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Pricing</title>
+    {% include 'head.html' %}
+    
+
+    <section class="container my-5">
+        <h1 class="mb-4">Pricing</h1>
+        <form method="POST" action="/settings">
+
+            <div class="row">
+                <!-- First block -->
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label for="exchange_rate_usd">Exchange Rate (USD): </label>
+                        <input type="number" step="0.01" name="exchange_rate_usd" id="exchange_rate_usd" class="form-control" value="{{ exchange_rate_usd }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="exchange_rate_eur">Exchange Rate (EUR):</label>
+                        <input type="number" step="0.01" name="exchange_rate_eur" id="exchange_rate_eur" class="form-control" value="{{ exchange_rate_eur }}" required>
+                    </div>
+                    <!--
+                    <div class="form-group">
+                        <label for="cost_factor_usd">Cost Factor (C.F):</label>
+                        <input type="number" step="0.01" name="cost_factor_usd" id="cost_factor_usd" class="form-control" value="{{ cost_factor_usd }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="profit_rate_usd">Profit Rate (P.P):</label>
+                        <input type="number" step="0.01" name="profit_rate_usd" id="profit_rate_usd" class="form-control" value="{{ profit_rate_usd }}" required>
+                    </div>
+                    -->
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            
+                <!-- Second block -->
+                <div class="col-md-6">
+                    <!-- Copy and paste the same structure for the second block -->
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label for="distributor_profit_rate">Distributors Profit Rate:</label>
+                            <input type="float" step="0.01" name="distributor_profit_rate" id="distributor_profit_rate" class="form-control" value="{{ distributor_profit_rate }}" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="end_user_profit_rate">End-Users Profit Rate:</label>
+                            <input type="float" step="0.01" name="end_user_profit_rate" id="end_user_profit_rate" class="form-control" value="{{ end_user_profit_rate }}" required>
+                        </div>
+                        
+                        <!--
+                        <div class="form-group">
+                            <label for="cost_factor">Cost Factor (C.F):</label>
+                            <input type="number" step="0.01" name="cost_factor" id="cost_factor" class="form-control" value="{{ cost_factor }}" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="profit_rate">Profit Rate (P.P):</label>
+                            <input type="number" step="0.01" name="profit_rate" id="profit_rate" class="form-control" value="{{ profit_rate }}" required>
+                        </div>
+                        -->
+                     </div>
+                </div>
+            
+        </form>
+    </section>
+    
+    <!--
+    <script>
+        // Attach a change event listener to the selection menu
+        $('#currency').change(function() {
+            // Get the selected option value
+            var selectedOption = $(this).val();
+
+            // Make an AJAX request to the Flask route with the selected option
+            $.ajax({
+                url: '/get_data/' + selectedOption,
+                type: 'GET',
+                success: function() {
+                    // Update the result div with the data from the server
+                    
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
+    </script>
+    -->
+</body>
+
+</html>

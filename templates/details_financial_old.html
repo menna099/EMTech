@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/92f293de12.js" crossorigin="anonymous"></script>
+    <style>
+        table.table th {
+              font-weight: bold;
+              font-size: 13px;
+              color: #4c5157;
+              font-family: Arial, sans-serif;
+          }
+  
+          .table-striped tbody tr th:first-child,
+          .table-striped tbody tr td {
+              width: 20%;
+          }
+  
+          .custom-control-label {
+              cursor: pointer;
+          }
+  
+          a {
+              text-decoration: none;
+          }
+  
+     
+          .dashboard-header ul.nav {
+              text-align: center;
+          }
+  
+          .dashboard-header .nav-item {
+              display: inline-block;
+          }
+  
+          .dropdown-toggle {
+              color: #5E626E;
+              padding: 0.5rem 1rem 0.5rem 1.5rem;
+          }
+  
+          .bold {
+              font-size: 13px;
+              font-weight: normal;
+          }
+      </style>
+</head>
+
+<body>
+    <br>
+    {% if 'Information' in current_user.authority %}
+    <h3>Financial Information</h3>
+    {% endif %}
+
+    {% if 'Cost Information' in current_user.authority %}
+    <label for="purchase_price">Purchase Price:</label>
+    <span id="purchase_price">{{ product.purchase_price }}</span><br>
+    <label for="currency">Currency:</label>
+    <span id="currency">{{ product.currency }}</span><br>
+    {% endif %}
+    {% if 'Information' in current_user.authority %}
+
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" id="switchButton" onclick="toggleCurrency(this)">
+        <label class="custom-control-label text-primary" for="switchButton" id="currencyLabel">Local Currency</label>
+    </div>
+
+    {% endif %}
+    <br>
+    <div class="row">
+        {% if '(EG)' in current_user.authority %}
+        <div class="col-md-4" style="border-right: 1px solid #ccc; ">
+            <h5>Egypt</h5>
+            {% if 'Balance Information (EG)' in current_user.authority %}
+            <label for="quantity_egypt">Balance:</label>
+            <span id="quantity_egypt">{{ product.quantity_egypt }}</span><br>
+            {% endif %}
+
+            {% if 'Cost Information (EG)' in current_user.authority %}
+            <label for="cost_factor_egypt">Cost Factor:</label>
+            <span id="cost_factor_egypt">{{ product.cost_factor_egypt }}</span><br>
+
+            <label for="cost_price_egypt_purchase">Cost Price:</label>
+            <span id="cost_price_egypt_purchase"></span><br>
+
+            {% endif %}
+
+            {% if 'Sales Information (EG)' in current_user.authority %}
+
+            <label for="distributor_sales_price_egypt_purchase">Distributor Price:</label>
+            <span id="distributor_sales_price_egypt_purchase"></span><br>
+
+            <label for="end_user_sales_price_egypt_purchase">End-User Price:</label>
+            <span id="end_user_sales_price_egypt_purchase"></span><br>
+            {% endif %}
+        </div>
+        {% endif %}
+
+
+        {% if '(UAE)' in current_user.authority %}
+        <div class="col-md-4" style="border-right: 1px solid #ccc;">
+            <h5>UAE</h5>
+
+            {% if 'Balance Information (UAE)' in current_user.authority %}
+            <label for="quantity_uae"> Balance:</label>
+            <span id="quantity_uae">{{ product.quantity_uae }}</span><br>
+            {% endif %}
+            {% if 'Cost Information (UAE)' in current_user.authority %}
+            <label for="cost_factor_uae">Cost Factor:</label>
+            <span id="cost_factor_uae">{{ product.cost_factor_uae }}</span><br>
+            <label for="cost_price_uae_purchase">Cost Price:</label>
+            <span id="cost_price_uae_purchase"></span><br>
+            {% endif %}
+
+            {% if 'Sales Information (UAE)' in current_user.authority %}
+
+            <label for="distributor_sales_price_uae_purchase">Distributor Price:</label>
+            <span id="distributor_sales_price_uae_purchase"></span><br>
+
+            <label for="end_user_sales_price_uae_purchase">End-User Price:</label>
+            <span id="end_user_sales_price_uae_purchase"></span><br>
+            <br>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if '(TR)' in current_user.authority %}
+        <div class="col-md-4">
+            <h5>Türkiye</h5>
+            {% if 'Balance Information (TR)' in current_user.authority %}
+            <label for="quantity_turkey"> Balance:</label>
+            <span id="quantity_turkey">{{ product.quantity_turkey }}</span><br>
+            {% endif %}
+            {% if 'Cost Information (TR)' in current_user.authority %}
+            <label for="cost_factor_turkey">Cost Factor:</label>
+            <span id="cost_factor_turkey">{{ product.cost_factor_turkey }}</span><br>
+            <label for="cost_price_turkey_purchase">Cost Price:</label>
+            <span id="cost_price_turkey_purchase"></span><br>
+            {% endif %}
+
+            {% if 'Sales Information (TR)' in current_user.authority %}
+
+            <label for="distributor_sales_price_turkey_purchase">Distributor Price:</label>
+            <span id="distributor_sales_price_turkey_purchase"></span><br>
+
+            <label for="end_user_sales_price_turkey_purchase">End-User Price:</label>
+            <span id="end_user_sales_price_turkey_purchase"></span><br>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>

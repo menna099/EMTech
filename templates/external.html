@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://kit.fontawesome.com/92f293de12.js" crossorigin="anonymous"></script>
+  <style>
+    .form-check-label {
+      position: relative;
+      margin: 0;
+      padding: 0.5rem 1.5rem;
+      border: 2px solid #eee;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      background-image: linear-gradient(#fff, #f8f8f8);
+      font-weight: normal;
+    }
+
+    table.table th {
+      font-weight: bold;
+      font-size: 13px;
+      color: #4c5157;
+      font-family: Arial, sans-serif;
+    }
+
+    .card-body h5 a {
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+    }
+    table.table td , .card-body p,h5{
+      font-size: 14px;
+      color: #4c5157;
+      font-family: Arial, sans-serif;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #cardViewWrapper {
+      background-color: rgba(var(--bs-emphasis-color-rgb), 0.05);
+      padding: 20px;
+    }
+
+
+    .card-img-top {
+      width: 50% !important;
+      margin: auto;
+    }
+
+    .table-img-top {
+      margin-left: 25px;
+      width: 50%;
+    }
+
+    #myTable td:nth-child(2) {
+      width: 10%;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 767px) {
+      .form-group label {
+        margin-bottom: 5px;
+      }
+
+      main.container-fluid {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  {% include 'head.html' %}
+  <div class="container">
+    <h1
+      style="margin-top:20px;max-width: 80rem;font-family:Open Sans , Arial, sans-serif;font-size:34px;color: #34383c;">
+      PLC Extension Modules</h1>
+      <button class="btn btn-secondary" onclick="showForm()">Filter by</button>
+
+    <form id="filterForm" style="display: none;">
+      <div class="row">
+        <fieldset style="margin-top: 20px;">
+          <Label>Model</Label>
+          <input type="text" class="form-control form-check-label" id="myInput" onkeyup="filterTable()">
+        </fieldset>
+        <fieldset style="margin-top: 20px;" class="col-md-3">
+          <Label>Brand</Label><br>
+          <label class="form-check-label" onclick="toggleCheckbox('Mitsubishi')"
+            style="justify-content:space-between"><span><input type="checkbox" onchange="filterTable()"
+                value="Mitsubishi" name="filterStatus" class="form-check-input"> Mitsubishi</span><span
+              style="color:gray">0</span></label>
+          <label class="form-check-label" onclick="toggleCheckbox('Omron')"
+            style="border-top:0;justify-content:space-between"><span><input type="checkbox" onchange="filterTable()"
+                value="Omron" name="filterStatus" class="form-check-input"> Omron</span><span
+              style="color:gray">10</span></label>
+          <label class="form-check-label" onclick="toggleCheckbox('GMT')"
+            style="border-top:0;justify-content:space-between"><span><input type="checkbox" onchange="filterTable()"
+                value="GMT" name="filterStatus" class="form-check-input"> GMT</span><span
+              style="color:gray">0</span></label><br>
+        </fieldset>
+
+        <fieldset style="margin-top: 20px;" class="col-md-3">
+          <label>DI<input type="number" class="form-control form-check-label"></label><br>
+          <label>DO<input type="number" class="form-control form-check-label"> </label><br>
+        </fieldset>
+        <fieldset style="margin-top: 20px;" class="col-md-3">
+          <label>AI<input type="number" class="form-control form-check-label"></label><br>
+          <label>AO<input type="number" class="form-control form-check-label"> </label><br>
+        </fieldset>
+        <fieldset style="margin-top: 20px;" class="col-md-3">
+          <Label>Special Functions</Label>
+          <label style="justify-content: space-between;" class="form-check-label" onclick="toggleCheckbox('PT 100 Input')"><span><input type="checkbox"
+                class="form-check-input" value="PT 100 Input"> PT 100 Input</span><span
+                style="color:gray">1</span></label>
+          <label for="" style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('TC Input')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="TC Input"> TC Input</span><span
+                style="color:gray">0</span></label>
+          <label for="" style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('Ethernet')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="Ethernet"> Ethernet</span><span
+                style="color:gray">4</span></label>
+          <label for="" style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('RS232')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="RS232"> RS232</span><span
+                style="color:gray">0</span></label>
+          <label for="" style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('RS422')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="RS422"> RS422</span><span
+                style="color:gray">0</span></label>
+          <label for="" style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('RS485')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="RS485"> RS485</span><span
+                style="color:gray">0</span></label>
+          <label for="" style="border-top:0;justify-content: space-between;" onclick="toggleCheckbox('USB')" class="form-check-label"><span><input
+                type="checkbox" class="form-check-input" value="USB"> USB</span><span
+                style="color:gray">0</span></label><br>
+        </fieldset>
+      </div>
+    </form>
+
+    <div class="row" style="margin-top: 10px;">
+      <div class="col-md-12">
+        <div class="btn-group" role="group" aria-label="Display options">
+          <button type="button" class="btn btn-primary" onclick="showCards()"><i class="fa-solid fa-grip"></i></button>
+          <button type="button" class="btn btn-secondary" onclick="showList()"><i class="fa-solid fa-list"></i></button>
+          
+        </div>
+      </div>
+    </div>
+    <br>
+
+    <div id="listView" class="hidden">
+    <table class="table table-striped" id="myTable">
+      <thead>
+        <tr>
+        
+          <th scope="col">Brand</th>
+          <th scope="col">Image</th>
+          <th scope="col">Model</th>
+          <th scope="col">Description</th>
+          
+      </thead>
+      <tbody>
+        <tr>
+          <td>Omron</td>
+          <td><img src="https://emtech-eg" class="table-img-top"></td>
+          <td><a href="CP1W-20EDR1.html">CP1W-20EDR1</a></td>
+          <td>I/O expansion unit, 12 x 24 VDC inputs, 8 x relay outputs 2 A</td>
+        </tr>
+        <tr>
+          <td>Omron</td>
+          <td><img src="https://emtech-eg" class="table-img-top"></td>
+          <td><a href="CP1W-20EDT1.html">CP1W-20EDT1</a></td>
+          <td>I/O expansion unit, 12 x 24 VDC inputs, 8 x PNP outputs 0.3 A</td>
+        </tr>
+        <tr>
+          <td>Omron</td>
+          <td><img src="https://emtech-eg" class="table-img-top"></td>
+          <td><a href="CP1W-TS003.html">CP1W-TS003</a></td>
+          <td>I/O expansion unit, 4 x thermocouple inputs type J, K or 2 x type J, K and 2 x analog inputs</td>
+        </tr>
+        <tr>
+          <td>Omron</td>
+          <td><img src="https://emtech-eg" class="table-img-top"></td>
+          <td><a href="CP1W-40EDR.html">CP1W-40EDR</a></td>
+          <td>I/O expansion unit, 24 x 24 VDC inputs, 16 x relay outputs 2 A</td>
+        </tr>
+        <tr>
+          <td>Omron</td>
+          <td><img src="https://emtech-eg" class="table-img-top"></td>
+          <td><a href="CP1W-40EDT1.html">CP1W-40EDT1</a></td>
+          <td>I/O expansion unit, 24 x 24 VDC inputs, 16 x PNP outputs 0.3 A</td>
+        </tr>
+        <tr>
+          <td>Omron</td>
+          <td><img src="https://emtech-eg" class="table-img-top"></td>
+          <td><a href="CP1W-8ED.html">CP1W-8ED</a></td>
+          <td>I/O expansion unit, 8 x 24 VDC inputs</td>
+        </tr>
+        <tr>
+          <td>Omron</td>
+          <td><img src="https://emtech-eg" class="table-img-top"></td>
+          <td><a href="CP1W-8ER.html">CP1W-8ER</a></td>
+          <td>I/O expansion unit, 8 x relay outputs 2 A</td>
+        </tr>
+        <tr>
+          <td>Omron</td>
+          <td><img src="https://emtech-eg" class="table-img-top"></td>
+          <td><a href="CP1W-8ET1.html">CP1W-8ET1</a></td>
+          <td>I/O expansion unit, 8 x PNP outputs 0.3 A</td>
+        </tr>
+        <tr>
+          <td>Omron</td>
+          <td><img src="https://emtech-eg" class="table-img-top"></td>
+          <td><a href="CP1W-DA042.html">CP1W-DA042</a></td>
+          <td>I/O expansion unit, 4 x analog outputs 1 to 5 V, 0 to 10 V, -10 to 10 V, 0 to 20 mA, 4 to 20 mA</td>
+        </tr>
+        <tr>
+          <td>Omron</td>
+          <td><img src="https://emtech-eg" class="table-img-top"></td>
+          <td><a href="CP1W-AD042.html">CP1W-AD042</a></td>
+          <td>I/O expansion unit, 4 x analog inputs 0 to 5 V, 1 to 5 V, 0 to 10 V, -10 to 10 V, 0 to 20 mA, 4 to 20 mA
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+  </div>
+
+  <div id="cardViewWrapper">
+  <div class="container" id="cardView">
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://emtech-eg" class="card-img-top" alt="CP1W-20EDR1">
+          <div class="card-body">
+            <h5 class="card-title"><a href="CP1W-20EDR1.html">CP1W-20EDR1</a></h5>
+            <p class="card-text">I/O expansion unit, 12 x 24 VDC inputs, 8 x relay outputs 2 A</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://emtech-eg" class="card-img-top" alt="CP1W-20EDT1">
+          <div class="card-body">
+            <h5 class="card-title"><a href="CP1W-20EDT1.html">CP1W-20EDT1</a></h5>
+            <p class="card-text">I/O expansion unit, 12 x 24 VDC inputs, 8 x PNP outputs 0.3 A</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://emtech-eg" class="card-img-top" alt="CP1W-TS003">
+          <div class="card-body">
+            <h5 class="card-title"><a href="CP1W-TS003.html">CP1W-TS003</a></h5>
+            <p class="card-text">I/O expansion unit, 4 x thermocouple inputs type J, K or 2 x type J, K and 2 x analog inputs</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://emtech-eg" class="card-img-top" alt="CP1W-40EDR">
+          <div class="card-body">
+            <h5 class="card-title"><a href="CP1W-40EDR.html">CP1W-40EDR</a></h5>
+            <p class="card-text">I/O expansion unit, 24 x 24 VDC inputs, 16 x relay outputs 2 A</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://emtech-eg" class="card-img-top" alt="CP1W-40EDT1">
+          <div class="card-body">
+            <h5 class="card-title"><a href="CP1W-40EDT1.html">CP1W-40EDT1</a></h5>
+            <p class="card-text">I/O expansion unit, 24 x 24 VDC inputs, 16 x PNP outputs 0.3 A</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://emtech-eg" class="card-img-top" alt="CP1W-8ED">
+          <div class="card-body">
+            <h5 class="card-title"><a href="CP1W-8ED.html">CP1W-8ED</a></h5>
+            <p class="card-text">I/O expansion unit, 8 x 24 VDC inputs</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://emtech-eg" class="card-img-top" alt="CP1W-8ER">
+          <div class="card-body">
+            <h5 class="card-title"><a href="CP1W-8ER.html">CP1W-8ER</a></h5>
+            <p class="card-text">I/O expansion unit, 8 x relay outputs 2 A</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://emtech-eg" class="card-img-top" alt="CP1W-8ET1">
+          <div class="card-body">
+            <h5 class="card-title"><a href="CP1W-8ET1.html">CP1W-8ET1</a></h5>
+            <p class="card-text">I/O expansion unit, 8 x PNP outputs 0.3 A</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://emtech-eg" class="card-img-top" alt="CP1W-DA042">
+          <div class="card-body">
+            <h5 class="card-title"><a href="CP1W-DA042.html">CP1W-DA042</a></h5>
+            <p class="card-text">I/O expansion unit, 4 x analog outputs 1 to 5 V, 0 to 10 V, -10 to 10 V, 0 to 20 mA, 4 to 20 mA</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://emtech-eg" class="card-img-top" alt="CP1W-AD042">
+          <div class="card-body">
+            <h5 class="card-title"><a href="CP1W-AD042.html">CP1W-AD042</a></h5>
+            <p class="card-text">I/O expansion unit, 4 x analog inputs 0 to 5 V, 1 to 5 V, 0 to 10 V, -10 to 10 V, 0 to 20 mA, 4 to 20 mA</p>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
+  <script>
+    function showList() {
+      $('#cardViewWrapper').addClass('hidden').hide();
+      $('#listView').removeClass('hidden').show();
+    }
+
+    function showCards() {
+      $('#listView').addClass('hidden').hide();
+      $('#cardViewWrapper').removeClass('hidden').show();
+    }
+
+    function showForm(){
+      $('#filterForm').toggle();
+    }
+
+    $(document).ready(function () {
+      $('img').on('error', function () {
+        $(this).attr('src', 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg');
+      });
+    })
+
+    function toggleCheckbox(value) {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"][value="' + value + '"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = !checkbox.checked;
+      });
+      filterTable();
+    }
+    function filterTable() {
+      var inputModel = document.getElementById("myInput").value.toUpperCase();
+      var checkboxesBrand = document.querySelectorAll('input[name="filterStatus"][value="Mitsubishi"], input[name="filterStatus"][value="Omron"], input[name="filterStatus"][value="GMT"]');
+
+      var table = document.getElementById("myTable");
+      var tr = table.getElementsByTagName("tr");
+
+      for (var i = 1; i < tr.length; i++) {
+        var tdModel = tr[i].getElementsByTagName("td")[1];
+        var tdBrand = tr[i].getElementsByTagName("td")[0];
+        if (tdModel && tdBrand) {
+          var modelValue = tdModel.textContent || tdModel.innerText;
+          var brandValue = tdBrand.textContent || tdBrand.innerText;
+          var brandChecked = Array.from(checkboxesBrand).filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
+
+          if ((modelValue.toUpperCase().indexOf(inputModel) > -1 || inputModel === "") &&
+            (brandChecked.length === 0 || brandChecked.includes(brandValue))) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

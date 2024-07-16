@@ -1,0 +1,246 @@
+<!-------------------------------------------------------------------------------------->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>  
+    <title>HMI</title>
+    {% include 'head.html' %}
+
+
+    <section class="container-fluid">
+        <!---->
+        <div class="row">
+            {% include 'side_bar.html' %}
+        <!------------------------------------------------ Main content --------------------------------->
+        <main class="col-md-9 main-content">
+            <h1 class="mb-4">HMI</h1>
+            <form>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label></label>Brand</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search_hmi" value="Mitsubishi"> Mitsubishi
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search_hmi" value="Omron"> Omron
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search_hmi" value="Asem"> Asem
+                        </label>
+                        
+                        <br>
+                        <label>
+                            <input type="checkbox" name="brand_search_hmi" value="GMT"> GMT
+                        </label>
+                        <br>
+                    </div>
+
+                    <div class="col-md-2">
+                        <!--<label for="model_search_hmi">Model</label>-->
+                        <label></label>Model</label>
+                        <input type="text" id="model_search_hmi" name="model_search_hmi" class="form-control">
+
+                    </div>
+
+                    
+                    <div class="col-md-2">
+                        <label></label>Size</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="size_search_hmi" value="7"> 7"
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="size_search_hmi" value="10"> 10"
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="size_search_hmi" value="12"> 12"
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="size_search_hmi" value="15"> 15"
+                        </label>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label></label>Input Voltage</label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="input_voltage_search_hmi" value="24VDC"> 24VDC
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="input_voltage_search_hmi" value="220VAC"> 220VAC
+                        </label>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label></label>Communication </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="communication_search_hmi" value="Ethernet"> Ethernet
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="communication_search_hmi" value="RS232"> RS232
+                        </label>
+                        <br>    
+                        <label>
+                            <input type="checkbox" name="communication_search_hmi" value="RS422"> RS422
+                        </label>
+                        <br>   
+                        <label>
+                            <input type="checkbox" name="communication_search_hmi" value="RS485"> RS485
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" name="communication_search_hmi" value="USB"> USB
+                        </label>
+                       
+                    </div>
+
+                    
+                    
+                </div>
+            </form>
+            
+            <!------------------------------------------------- Table ------------------------------------------------>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        {% if 'Information (EG)' in current_user.authority %}
+                            <th>ID</th>
+                        {% endif %}                    
+
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Description</th>
+
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                            <th>Origin</th>
+                            <th>Stock</th>
+                        {% endif %}                    
+
+                        {% if 'Sales Information (EG)' in current_user.authority %}
+                            <th>List Price</th>
+                        {% endif %}                    
+                    </tr>
+                </thead>    
+                <tbody id="productTableBody">
+                    {% for product in products %}
+                    <tr>
+                        {% if 'Information (EG)' in current_user.authority %}
+                            <td>{{ product.id }}</td>
+                        {% endif %} 
+                        <td>{{ product.brand }}</td>
+                        
+                        <td><a href="/hmi_details?product_id={{ product.id }}"> {{ product.model }}</a></td>                        
+                        <td>{{ product.description }}</td>
+                        
+                        {% if 'Balance Information (EG)' in current_user.authority %}
+                            <td>{{ product.origin }}</td>
+                            <td>{{ product.quantity_egypt}}</td>
+                            {% endif %}                 
+    
+                            {% if 'Sales Information (EG)' in current_user.authority %}
+                                <td>{{ product.end_user_sales_price_egypt|round(3) }}</td>
+                        {% endif %}                 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+        
+    </section>
+                
+    <!-- Bootstrap and other scripts if needed -->
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            // Event listener for checkbox, dropdown, text input, and numeric input change
+            $('input[name="brand_search_hmi"], input[name="size_search_hmi"], input[name="input_voltage_search_hmi"], input[name="communication_search_hmi"]').change(function () {
+                performSearch();
+            });
+
+            /*
+            // Event listener for the "Enter" key press in the model search input
+            $('#model_search_hmi').keydown(function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Prevent the default form submission
+                    performSearch();
+                }
+            });
+            */
+           /*
+            $('#model_search_hmi').keydown(function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Prevent the default form submission
+                    performSearch();
+                }
+            });
+            */
+
+            $('#model_search_hmi').keydown(function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // Prevent the default form submission
+                    performSearch();
+                }
+            });
+            
+            $('#model_search_hmi').on('input', function () {
+                performSearch();
+            });
+
+            
+
+            // Function to perform the search
+            function performSearch() {
+                var brandsearch = $('input[name="brand_search_hmi"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var inputvoltagesearch = $('input[name="input_voltage_search_hmi"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var communicationsearch = $('input[name="communication_search_hmi"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var sizesearch = $('input[name="size_search_hmi"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var modelsearch = $('#model_search_hmi').val();
+
+                // Make an asynchronous request to the server (replace with your actual endpoint)
+                $.ajax({
+                    type: 'POST',
+                    url: '/hmi',
+                    data: {
+                        'brand_search_hmi': brandsearch,
+                        'model_search_hmi': modelsearch,
+                        'input_voltage_search_hmi': inputvoltagesearch,
+                        'communication_search_hmi': communicationsearch,
+                        'size_search_hmi': sizesearch
+                    },
+                    success: function (data) {
+                        console.log('brand search:', brandsearch);
+                        console.log('model search:', modelsearch);
+                        console.log('size search:', sizesearch);
+                        console.log('input voltage search:', inputvoltagesearch);
+                        console.log('communication search:', communicationsearch);
+                        $('#productTableBody').html($(data).find('#productTableBody').html());
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        });
+    </script>      
+</body>
+</html>

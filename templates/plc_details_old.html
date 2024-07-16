@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ product.model }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='product_details.css') }}">
+   
+    {% include 'head.html' %}
+    <body  onload="toggleCurrency(document.getElementById('switchButton'))">    
+    <main>
+        <div class="card-body" >
+            <div class="data-container">
+                <h4>Technical Information</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="model">Model: </label>
+                        <span id="model">{{ product.model }}</span> <br>
+                    
+                        <label for="brand">Brand:</label>
+                        <span id="brand">{{ product.brand }}</span> <br>
+                        
+                        <label for="series">Series:</label>
+                        <span id="series">{{ product.series }}</span> <br>
+                        
+                        <label for="description">Description:</label>
+                        <span id="description">{{ product.description }}</span> <br>
+
+                        <label for="origin">Origin:</label>
+                        <span id="origin">{{ product.origin }}</span> <br>
+                        
+                        <label for="digitalinput">Digital Input:</label>
+                        <span id="digitalinput">{{ product.digitalinput }}</span> <br>
+                        
+                        <label for="analoginput">Analog Input:</label>
+                        <span id="analoginput">{{ product.analoginput }}</span>   <br>                     
+                        
+                        <label for="digitaloutput">Digital Output:</label>
+                        <span id="digitaloutput">{{ product.digitaloutput }}</span> <br>
+
+                        <label for="analogoutput">Analog Output:</label>
+                        <span id="analogoutput">{{ product.analogoutput }}</span> <br>
+                        
+                        <label for="inputvoltage">Input Voltage:</label>
+                        <span id="inputvoltage">{{ product.inputvoltage }}</span> <br>
+                        
+                        <label for="communication">Communication:</label>
+                        <span id="communication">{{ product.communication }}</span> <br>
+                        {% include 'details_financial.html' %}
+
+        {% if current_user.role == 'Admin' %}
+            <div class="row">
+                <div class="col-md-3">
+                    <a href="/plc_edit?product_id={{ product.id }}" class="btn btn-primary">
+                        <img src="{{ url_for('static', filename='edit.png') }}" alt="Save">
+                    </a>
+                    <form method="POST" action="/delete_plc" class="d-inline" style="padding: 10px;">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <button type="submit" class="btn btn-danger"><img src="{{ url_for('static', filename='delete.png') }}" alt="delete"></button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+        <br><br>
+    </main>
+    {% include 'details_script.html' %}

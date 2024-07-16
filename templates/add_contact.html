@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/styles.css"> 
+    <title>Contacts</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    {% include 'head.html' %}
+
+    {% with msg = get_flashed_messages(with_categories=True) %}
+    {% if msg %}
+    {% for category, message in msg %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            <strong>{{ message }}</strong>
+            <button type="button"  data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <section class=" container-fluid">
+        <br> <h2>Contact Information</h2> <br>
+
+        <form method="POST" action="/add_contact">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="contact_name">* Name:</label>
+                        <input type="text" name="contact_name" id="contact_name" placeholder=" Add full name" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="company_name">Company:</label>
+                        <input type="text" name="company_name" id="company_name"placeholder=" Add registered company name"  class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="contact_address">Address:</label>
+                        <input type="text" name="contact_address" id="contact_address" placeholder="Where to find the contact" class="form-control">
+                    </div>
+                </div>
+               
+                <div class="col-md-3">
+                    <div class="form-group">
+                    <label for="contact_phone">* Phone:</label>
+                    <input type="number" id="contact_phone" placeholder="Work Phone" class="form-control">
+                    </div>
+                </div>
+ 
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="contact_email">Email:</label>
+                        <input type="text" name="contact_email" id="contact_email" placeholder="Company e-mail" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                    <label for="contact_job">Job:</label>
+                    <input type="text" id="contact_job" placeholder="Engineer, Purchasing Specialist..." class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="seniority">Seniority:</label>
+                        <div class="checkbox-group form-group">
+                            <label><input type="checkbox" name="role" value="Junior"> Junior</label> &nbsp;
+                            <label><input type="checkbox" name="role" value="Mid"> Mid</label> &nbsp;
+                            <label><input type="checkbox" name="role" value="Senior"> Senior</label> &nbsp;
+                            <label><input type="checkbox" name="role" value="Department head"> Department head</label> &nbsp;
+                            <label><input type="checkbox" name="role" value="CEO"> CEO</label> &nbsp;
+                            <label><input type="checkbox" name="role" value="Owner"> Owner</label> &nbsp;
+                        </div> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="another_contact_phone">Another Phone:</label>
+                        <input type="tel" id="another_contact_phone"placeholder="Optional"  class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="linkedin">LinkedIn:</label>
+                        <input type="text" id="linkedin" placeholder="Optional" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="facebook">Facebook:</label>
+                        <input type="text" id="facebook"placeholder="Optional"  class="form-control">
+                    </div>
+                </div>
+            </div>
+
+
+<!--
+            cur.execute("IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='"+contacts_table+"' AND xtype='U') CREATE TABLE 
+            contacts (id int IDENTITY(1, 1) PRIMARY KEY, contact_name TEXT NOT NULL, contact_phone TEL, 
+            contact_email UNIQUE EMAIL, contact_job TEXT, contact_seniority TEXT, another_contact_phone TEL, linkedin TEXT, facebook TEXT)")
+
+-->
+
+
+           
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+
+            
+        <h2 class="my-4">Contacts List</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Contact</th>
+
+                    <th>Phone</th>
+                    <th>Company</th>
+                    <th>E-mail</th>
+                    <th>Job</th>
+                    <th>Seniority</th>
+                    <th>Address</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for contact in contacts %}
+                <tr>
+                    <td>{{ contact.contact_name }}</td>
+                    <td>{{ contact.company_name}}</td>
+                    <td>{{ contact.contact_phone }}</td>
+                    <td>{{ contact.contact_email }}</td>
+                    <td>{{ contact.contact_Job}}</td>
+                    <td>{{ contact.seniority}}</td>
+                    <td>{{ contact.contact_address}}</td>
+
+
+                    <td>
+                        <a href="/edit_contact?contact_id={{ contact.id }}" class="btn btn-primary btn-sm">Edit</a>
+                        <form method="POST" action="/delete_contact" class="d-inline">
+                            <input type="hidden" name="contact_id" value="{{ contact.id }}">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+    </section>
+</body>
+
+</html>

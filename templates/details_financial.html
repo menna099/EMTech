@@ -1,0 +1,113 @@
+                    
+{% if 'Information' in current_user.authority %}
+    <h4>Financial Information</h4>
+{% endif %} 
+
+{% if 'Cost Information' in current_user.authority %}
+    <label for="purchase_price">Purchase Price:</label>
+    <span id="purchase_price">{{ product.purchase_price }}</span><br>
+    <label for="currency">Currency:</label>
+    <span id="currency">{{ product.currency }}</span><br>
+{% endif %}   
+{% if 'Information' in current_user.authority %}
+
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" id="switchButton" onclick="toggleCurrency(this)">
+        <label class="custom-control-label" for="switchButton" id="currencyLabel">Local Currency</label>
+    </div>
+    
+{% endif %}      
+<br>
+<div class="row">
+    {% if '(EG)' in current_user.authority %}
+        <div class="col-md-4" style="border-right: 1px solid #ccc;">
+            <h5>Egypt</h5>
+            {% if 'Balance Information (EG)' in current_user.authority %}
+                <label for="quantity_egypt">Balance:</label>
+                <span id="quantity_egypt">{{ product.quantity_egypt }}</span><br>
+            {% endif %}
+
+            {% if 'Cost Information (EG)' in current_user.authority %}
+                <label for="cost_factor_egypt">Cost Factor:</label>
+                <span id="cost_factor_egypt">{{ product.cost_factor_egypt|round(3) }}</span><br>
+                
+                <label for="cost_price_egypt_purchase">Cost Price:</label>
+                <span id="cost_price_egypt_purchase"></span><br>
+
+            {% endif %}
+
+            {% if 'Sales Information (EG)' in current_user.authority %} 
+
+                <label for="distributor_sales_price_egypt_purchase">Distributor Price:</label>
+                <span id="distributor_sales_price_egypt_purchase"></span><br>
+
+                <label for="end_user_sales_price_egypt_purchase">End-User Price:</label>
+                <span id="end_user_sales_price_egypt_purchase"></span><br> 
+            {% endif %}
+        </div>  
+    {% endif %}
+
+
+    {% if '(UAE)' in current_user.authority %} 
+        <div class="col-md-4" style="border-right: 1px solid #ccc;">
+            <h5>UAE</h5>
+
+            {% if 'Balance Information (UAE)' in current_user.authority %}
+                <label for="quantity_uae"> Balance:</label>
+                <span id="quantity_uae">{{ product.quantity_uae|round(3) }}</span><br>
+            {% endif %}
+            {% if 'Cost Information (UAE)' in current_user.authority %}
+                <label for="cost_factor_uae">Cost Factor:</label>
+                <span id="cost_factor_uae">{{ product.cost_factor_uae|round(3) }}</span><br>
+                <label for="cost_price_uae_purchase">Cost Price:</label>
+                <span id="cost_price_uae_purchase"></span><br>
+            {% endif %}
+
+            {% if 'Sales Information (UAE)' in current_user.authority %} 
+
+                <label for="distributor_sales_price_uae_purchase">Distributor Price:</label>
+                <span id="distributor_sales_price_uae_purchase"></span><br>
+
+                <label for="end_user_sales_price_uae_purchase">End-User Price:</label>
+                <span id="end_user_sales_price_uae_purchase"></span><br> 
+                <br>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if '(TR)' in current_user.authority %} 
+        <div class="col-md-4">
+            <h5>Türkiye</h5> 
+            {% if 'Balance Information (TR)' in current_user.authority %}
+                <label for="quantity_turkey"> Balance:</label>
+                <span id="quantity_turkey">{{ product.quantity_turkey|round(3) }}</span><br>
+            {% endif %}
+            {% if 'Cost Information (TR)' in current_user.authority %}
+                <label for="cost_factor_turkey">Cost Factor:</label>
+                <span id="cost_factor_turkey">{{ product.cost_factor_turkey|round(3) }}</span><br>
+                <label for="cost_price_turkey_purchase">Cost Price:</label>
+                <span id="cost_price_turkey_purchase"></span><br>
+            {% endif %}
+
+            {% if 'Sales Information (TR)' in current_user.authority %} 
+
+                <label for="distributor_sales_price_turkey_purchase">Distributor Price:</label>
+                <span id="distributor_sales_price_turkey_purchase"></span><br>
+
+                <label for="end_user_sales_price_turkey_purchase">End-User Price:</label>
+                <span id="end_user_sales_price_turkey_purchase"></span><br> 
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
+</div>
+
+</div>
+</div>
+</div>
+<style>
+    .custom-control-label {
+        cursor: pointer;
+    }
+</style>

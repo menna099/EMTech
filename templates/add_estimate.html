@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'head.html' %}
+
+    <title>Create New Estimate</title>
+    <style>
+        /* Add your styles here */
+        .section {
+            margin-bottom: 10px;    
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .hidden {
+            display: none;
+        }
+
+
+        #estimateDetails {
+            margin-bottom: 20px;
+        }
+
+
+        #addProductButton {
+            background: url("static/add.png") no-repeat;
+            background-size: contain;
+            width: 30px;
+            height: 30px;
+            border: none;
+            cursor: pointer;
+        }
+
+
+        #estimateDetails label {
+            display: block;
+        }
+
+
+        #totalPriceLabel {
+            font-weight: bold;
+        }
+
+        .table th, td{
+            text-align: center !important;
+        }
+
+        
+    </style>
+</head>
+<body>
+        <main class="container mt-3">
+            <div class="row">
+                <!-- customer Section -->
+                <div class="col-md-6 section">
+                    <h2>Customer</h2>
+                    <div class="form-group">
+                        <label for="searchcustomer">Search with Customer Name:</label>
+                        <div class="input-group">
+                            <input type="text" id="searchcustomer" class="form-control">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" onclick="searchcustomer()">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <table id="searchcustomersTable" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="searchcustomersTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+    
+                <!-- Contact Section -->
+                <div class="col-md-6 section">
+                    <h2>Contact</h2>
+                    <div class="form-group">
+                        <label for="searchContact">Search with Contact Name:</label>
+                        <div class="input-group">
+                            <input type="text" id="searchContact" class="form-control">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" onclick="searchContact()">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <table id="searchContactsTable" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Contact Name</th>
+                                    <th>Job</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="searchContactsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <h2>Estimate Details</h2>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="customer_name">Customer Name:</label>
+                        <input type="text" id="customer_name" class="form-control">
+                    </div>
+                </div>
+    
+    
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="contact_name">Contact Name:</label>
+                        <input type="text" id="contact_name" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="contact_job">Job:</label>
+                        <input type="text" id="contact_job" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="contact_phone">Phone:</label>
+                        <input type="text" id="contact_phone" class="form-control">
+                    </div>
+                </div><div class="col-md-2">
+                    <div class="form-group">
+                        <label for="contact_email">E-Mail:</label>
+                        <input type="text" id="contact_email" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1" style="display: none;">
+                    <div id="estimateDetails" class="form-group">
+                        <label for="estimateID">ID:</label>
+                        <span id="estimateIDLabel" class="form-control">Generated ID</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="estimateName">Estimate Name:</label>
+                        <input type="text" id="estimateName" class="form-control">
+                    </div>
+                </div>
+    
+    
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <input type="text" id="description" class="form-control">
+                    </div>
+                </div>
+    
+    
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="totalPrice">Total Price:</label>
+                        <div class="input-group">
+                            <span id="totalPriceLabel" class="form-control">0.00</span>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div >
+                    <div class="col-md-4 section" style="padding: 0%;">
+                        <label for="searchModel">Model:</label>
+                        <div class="input-group">
+                            <input type="text" id="searchModel" class="form-control">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" onclick="searchProducts()">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+    
+               
+                <div class="table-responsive">
+                    <table id="searchResultsTable" class="table">
+                        <thead id="searchResultsTableHead">
+                        </thead>
+                        <tbody id="searchResultsTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="estimateTable" class="table">
+                        <thead id="solutionTableHead">
+                        </thead>
+                        <tbody id="estimateTableBody"></tbody>
+                    </table>
+                </div>
+                
+                <div class="row bordered-section"> 
+                    <div class="col-md-12">
+                        <br><h2>Additional Fees</h2>
+
+                        <table id="feeTable" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Fee</th>
+                                    <th>Total Fees: <span id="totalFeesLabel">0.00</span> L.E</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fee_table_Body">
+                                <!-- Hidden template row for adding new fees -->
+                                <tr class="hidden" id="templateRowFee">
+                                    <td><input type="text" placeholder="Fee" class="form-control"></td>
+                                    <td><input type="number" placeholder="Amount" class="form-control" oninput="saveFee(this)"></td>
+                                    <td>
+                                        <button onclick="cancelAdd(this)" class="btn btn-danger">
+                                            <img src="static/delete.png" alt="cancel" style="width: 20px; height: 20px;">
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button id="addFeeButton" onclick="addFee()" class="btn btn-primary" >
+                            <img src="static/add_white.png"class="bi bi-plus">
+                            
+                        </button>
+                        <br><br>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-3">
+                    <div class="mb-4">
+                      <button id="saveSolutionButton" class="btn btn-primary px-5" onclick="saveestimate()">Save</button>
+                    </div>
+            </div>
+        </main>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script>
+            function searchcustomer() {
+                var customerName = document.getElementById("searchcustomer").value;
+                $.ajax({
+                    type: "POST",
+                    url: "/search_customers",
+                    data: { search_customer: customerName },
+                    success: function (response) {
+                        displaycustomers(response);
+                    },
+                    error: function (error) {
+                        console.error("Error searching customer data:", error);
+                    }
+                });
+            }
+        
+            function displaycustomers(customers) {
+                var tableBody = document.getElementById("searchcustomersTableBody");
+                tableBody.innerHTML = "";
+        
+                customers.forEach(function (customer) {
+                    var row = tableBody.insertRow();
+                    var cellName = row.insertCell(0);
+                    var cellAction = row.insertCell(1);
+                    cellName.textContent = customer.customer_name;
+                    var addButton = document.createElement("button");
+                    addButton.textContent = "Select";
+                    addButton.className = "btn btn-success";
+                    addButton.onclick = function () {
+                        addcustomerToEstimate(customer);
+                    };
+                    cellAction.appendChild(addButton);
+                });
+            }
+        
+            function addcustomerToEstimate(customer) {
+                var tableBody = document.getElementById("customer_name");
+                var row = tableBody.insertRow();
+                row.insertCell(0).textContent = "Customer: " + customer.customer_name;
+                row.insertCell(1).innerHTML = '<input type="hidden" name="customer_name" value="' + customer.customer_name + '">';
+                row.insertCell(2).textContent = "";
+            }
+        
+            function addContactToEstimate(contact) {
+                var tableBody = document.getElementById("contact_name");
+                var row = tableBody.insertRow();
+                row.insertCell(0).textContent = "Contact: " + contact.contact_name;
+                row.insertCell(1).textContent = "Job: " + contact.contact_job;
+                row.insertCell(2).innerHTML = '<input type="hidden" name="contact_name" value="' + contact.contact_name + '">' +
+                                              '<input type="hidden" name="contact_job" value="' + contact.contact_job + '">';
+                row.insertCell(3).textContent = "";
+            }
+        
+            function searchProducts() {
+                var searchModel = document.getElementById("searchModel").value;
+                $("#searchResultsTable").toggle();
+                $.ajax({
+                    type: "POST",
+                    url: "/searchProducts",
+                    data: { searchModel: searchModel },
+                    success: function (response) {
+                        displaySearchResults(response);
+                    },
+                    error: function (error) {
+                        console.error("Error fetching data:", error);
+                    }
+                });
+            }
+        
+            function displaySearchResults(products) {
+                var tableBody = document.getElementById("searchResultsTableBody");
+                var tableHead = document.getElementById("searchResultsTableHead");
+                tableHead.innerHTML = "";
+                tableBody.innerHTML = "";
+                var rowHead = tableHead.insertRow();
+                    var cellModelHead = rowHead.insertCell(0);
+                    var cellDescriptionHead = rowHead.insertCell(1);
+                    var cellActionHead = rowHead.insertCell(2);
+                    cellModelHead.textContent = "Model";
+                    cellModelHead.style.fontWeight = "bold"
+                    cellDescriptionHead.textContent = "Description";
+                    cellDescriptionHead.style.fontWeight = "bold"
+                    cellActionHead.textContent = "Action";
+                    cellActionHead.style.fontWeight = "bold"
+    // table solution
+                var tableHead = document.getElementById("solutionTableHead");
+                tableHead.innerHTML = "";
+                var rowHead = tableHead.insertRow();
+                var cellModelHead = rowHead.insertCell(0);
+                var cellDescriptionHead = rowHead.insertCell(1);
+                var cellQuantityHead = rowHead.insertCell(2);
+                var cellPriceHead = rowHead.insertCell(3);
+                var cellDiscountHead = rowHead.insertCell(4);
+                var cellTotalHead = rowHead.insertCell(5);
+                var cellActionHead = rowHead.insertCell(6);
+                cellModelHead.textContent = "Model";
+                cellModelHead.style.fontWeight = "bold"
+                cellDescriptionHead.textContent = "Description";
+                cellDescriptionHead.style.fontWeight = "bold";
+                cellQuantityHead.textContent = "Quantity";
+                cellQuantityHead.style.fontWeight = "bold";
+                cellPriceHead.textContent = "Price";
+                cellPriceHead.style.fontWeight = "bold";
+                cellDiscountHead.textContent = "Discount";
+                cellDiscountHead.style.fontWeight = "bold";
+                cellTotalHead.textContent = "Total";
+                cellTotalHead.style.fontWeight = "bold";
+                cellActionHead.textContent = "Action";
+                cellActionHead.style.fontWeight = "bold"
+                ////////////////////////////////////////////
+        
+                products.forEach(function (product) {
+                    var row = tableBody.insertRow();
+                    var cellModel = row.insertCell(0);
+                    var cellDescription = row.insertCell(1);
+                    var cellAction = row.insertCell(2);
+                    cellModel.textContent = product.model;
+                    cellDescription.textContent = product.description;
+                    var addButton = document.createElement("button");
+                    addButton.textContent = "Add";
+                    addButton.className = "btn btn-success";
+                    addButton.onclick = function () {
+                        addProductToestimate(product);
+                    };
+                    cellAction.appendChild(addButton);
+                });
+            }
+        
+            function addProductToestimate(product) {
+                var tableBody = document.getElementById("estimateTableBody");
+                var row = tableBody.insertRow();
+                row.insertCell(0).textContent = product.model;
+                row.insertCell(1).textContent = product.description;
+                row.insertCell(2).innerHTML = '<input type="number" placeholder="Quantity" class="form-control" oninput="saveProduct(this)">';
+                row.insertCell(3).innerHTML = product.end_user_sales_price_egypt;
+                row.insertCell(4).innerHTML = '<input type="number" placeholder="Discount" class="form-control" oninput="saveProduct(this)">';
+                row.insertCell(5).textContent = '';
+                row.insertCell(6).innerHTML = '<button onclick="cancelAdd(this)" class="btn btn-danger"><img src="static/delete.png" alt="Save" style="width: 20px; height: 20px;"></button>';
+                updateTotalPrice();
+            }
+        
+            function cancelAdd(button) {
+                var row = button.parentNode.parentNode;
+                row.remove();            
+                updateTotalFees();
+                updateTotalPrice();
+            }
+        
+            function saveProduct(inputField) {
+                var row = inputField.closest("tr");
+                var cells = row.getElementsByTagName("td");
+                var quantity = parseInt(cells[2].getElementsByTagName("input")[0].value);
+                var price = parseFloat(cells[3].textContent);           
+                var discount = 1 - parseFloat(cells[4].getElementsByTagName("input")[0].value) / 100;
+                var total = quantity * price * discount;
+                
+                // Define products array if not already defined
+                var products = [];
+
+                if (cells[5]) {
+                    cells[5].textContent = total.toFixed(2);
+                }
+                
+                // Add product to products array
+                var product = {
+                    quantity: quantity,
+                    price: price,
+                    discount: discount
+                };
+                products.push(product);
+
+                // Update total price
+                updateTotalPrice();
+            }
+
+            function saveFee(inputField) {
+                var row = inputField.closest("tr");
+                var cells = row.getElementsByTagName("td");
+                var fees = [];
+
+                var fee = {
+                    fee_name: cells[0].getElementsByTagName("input")[0].value,
+                    fee_amount: parseFloat(cells[1].getElementsByTagName("input")[0].value)
+                };
+                fees.push(fee); // Add the fee to the fees array
+                updateTotalFees();
+                updateTotalPrice();
+            }
+
+/*
+
+            function saveProduct(inputField) {
+                var row = inputField.closest("tr");
+                var cells = row.getElementsByTagName("td");
+                var quantity = parseInt(cells[2].getElementsByTagName("input")[0].value);
+                var price = parseFloat(cells[3].textContent);           
+                var discount = 1 - parseFloat(cells[4].getElementsByTagName("input")[0].value) / 100;
+                var total = quantity * price * discount;
+                if (cells[5]) {
+                    cells[5].textContent = total.toFixed(2);
+                }
+                updateTotalPrice();
+            }
+        */
+            function searchContact() {
+                var contactName = document.getElementById("searchContact").value;
+                $.ajax({
+                    type: "POST",
+                    url: "/search_contacts",
+                    data: { search_contact: contactName },
+                    success: function (response) {
+                        displayContacts(response);
+                    },
+                    error: function (error) {
+                        console.error("Error searching contact data:", error);
+                    }
+                });
+            }
+
+            // Function to display search results for contacts
+            function displayContacts(contacts) {
+                var tableBody = document.getElementById("searchContactsTableBody");
+                tableBody.innerHTML = "";
+
+                contacts.forEach(function (contact) {
+                    var row = tableBody.insertRow();
+                    var cellName = row.insertCell(0);
+                    var cellJob = row.insertCell(1);
+                    var cellAction = row.insertCell(2);
+                    cellName.textContent = contact.contact_name;
+                    cellJob.textContent = contact.contact_job;
+                    var addButton = document.createElement("button");
+                    addButton.textContent = "Select";
+                    addButton.className = "btn btn-success";
+                    addButton.onclick = function () {
+                        addContactToEstimate(contact);
+                    };
+                    cellAction.appendChild(addButton);
+                });
+            }
+
+            function addcustomerToEstimate(customer) {
+                document.getElementById("customer_name").value = customer.customer_name;
+                console.log("customer_name:", document.getElementById('customer_name'));
+
+            }
+            function addContactToEstimate(contact) {
+                document.getElementById("contact_name").value = contact.contact_name;
+                console.log("contact_name:", document.getElementById('contact_name'));
+
+                document.getElementById("contact_job").value = contact.contact_job;
+                console.log("contact_job:", document.getElementById('contact_job'));
+
+                document.getElementById("contact_phone").value = contact.contact_phone; 
+                console.log("contact_phone:", document.getElementById('contact_phone'));
+
+                document.getElementById("contact_email").value = contact.contact_email; 
+                console.log("contact_email:", document.getElementById('contact_email'));
+
+            }
+
+            function addFee() {
+                var templateRow = document.getElementById("templateRowFee");
+                var newRow = templateRow.cloneNode(true);
+                newRow.classList.remove("hidden");
+                newRow.classList.add("editable-mode");
+
+                // Clear input fields in the new row
+                var inputFields = newRow.querySelectorAll('input');
+                inputFields.forEach(function (input) {
+                    input.value = '';
+                });
+
+                document.getElementById("fee_table_Body").appendChild(newRow);
+            }
+
+
+            // Function to update the total price of the estimate
+            function updateTotalPrice() {
+                var total = 0;
+                var rows = document.getElementById("estimateTableBody").getElementsByTagName("tr");
+
+                for (var i = 0; i < rows.length; i++) {
+                    if (!rows[i].classList.contains("hidden")) {  
+                        var cells = rows[i].getElementsByTagName("td");
+                        var totalCell = cells[5];
+
+                        // Check if totalCell is defined before trying to access its textContent
+                        if (totalCell && !isNaN(parseFloat(totalCell.textContent))) {
+                            total += parseFloat(totalCell.textContent);
+                        }
+                    }
+                }
+
+                // Add total fees to the total price
+                var totalFees = parseFloat(document.getElementById("totalFeesLabel").textContent);
+                total += totalFees;
+
+                document.getElementById("totalPriceLabel").textContent = total.toFixed(2);
+            }
+
+            function updateTotalFees() {
+                var totalFees = 0;
+                var feeRows = document.getElementById("fee_table_Body").getElementsByTagName("tr");
+
+                for (var i = 0; i < feeRows.length; i++) {
+                    if (!feeRows[i].classList.contains("hidden")) {
+                        var feeCells = feeRows[i].getElementsByTagName("td");
+                        var amount = parseFloat(feeCells[1].getElementsByTagName("input")[0].value);
+
+                        if (!isNaN(amount)) {
+                            totalFees += amount;
+                        }
+                    }
+                }
+
+                document.getElementById("totalFeesLabel").textContent = totalFees.toFixed(2);
+            }
+
+            
+            // Function to toggle TIN/VAT input field
+            function toggleTinVatInput() {
+                var tinVatInput = document.getElementById("tin_vat");
+                tinVatInput.disabled = !document.getElementById("hasTinVat").checked;
+                if (!tinVatInput.disabled) {
+                    tinVatInput.focus();
+                }
+            }
+
+
+
+        function saveestimate() {
+            // Gather estimate details
+
+            var estimateID = document.getElementById("estimateIDLabel").textContent;
+            var estimateName = document.getElementById("estimateName").value;
+            var description = document.getElementById("description").value;
+            var totalPrice = parseFloat(document.getElementById("totalPriceLabel").textContent);
+            var total_fees = parseFloat(document.getElementById("totalFeesLabel").textContent);
+
+            var customer_name = document.getElementById('customer_name').value;
+            console.log("customer_name:", customer_name);
+
+            var contact_name = document.getElementById('contact_name').value;
+            console.log("contact_name:", contact_name);
+
+            var contact_job = document.getElementById('contact_job').value;
+            console.log("contact_job:", contact_job);
+
+            var contact_phone = document.getElementById('contact_phone').value;
+            console.log("contact_phone:", contact_phone);
+
+            var contact_email = document.getElementById('contact_email').value;
+            console.log("contact_email:", contact_email);
+            
+            if (!estimateName) {
+                alert("Please enter a Estimate name.");
+                return;
+            }
+
+            var products = [];
+            var rows = document.getElementById("estimateTableBody").getElementsByTagName("tr");
+
+            for (var i = 0; i < rows.length; i++) {
+                if (!rows[i].classList.contains("hidden")) {
+                    var cells = rows[i].getElementsByTagName("td");
+                    var productName = cells[0].textContent;
+                    var productDescription = cells[1].textContent;
+                    var quantity = parseInt(cells[2].getElementsByTagName("input")[0].value);
+                    var price = parseFloat(cells[3].textContent);
+                    var discount = parseFloat(cells[4].getElementsByTagName("input")[0].value);
+                    var total = parseFloat(cells[5].textContent);
+
+                    if (!quantity || !discount) {
+                        alert("Please complete all fields for each product.");
+                        return;
+                    }
+
+                    var product = {
+                        productName: productName,
+                        productDescription: productDescription,
+                        quantity: quantity,
+                        price: price,
+                        discount: discount,
+                        total: total
+                    };
+                    products.push(product);
+                }
+            }
+            // Validate at least one product
+            if (products.length === 0) {
+                alert("Please add at least one product.");
+                return;
+            }
+
+            var fees = [];
+            var fees_rows = document.getElementById("fee_table_Body").getElementsByTagName("tr");
+
+            for (var i = 0; i < fees_rows.length; i++) {
+                if (!fees_rows[i].classList.contains("hidden")) {
+                    var fees_cells = fees_rows[i].getElementsByTagName("td");
+
+                    /*
+                    var productName = cells[0].getElementsByTagName("input")[0].value;
+                    var productDescription = cells[1].getElementsByTagName("textarea")[0].value;
+                    var quantity = cells[2].getElementsByTagName("input")[0].value;
+                    var price = cells[3].getElementsByTagName("input")[0].value;
+                    var discount = cells[4].getElementsByTagName("input")[0].value;
+                    var total = cells[5].textContent;
+                    */
+                    var fee_name =fees_cells[0].getElementsByTagName("input")[0].value;
+                    var fee_amount = parseInt(fees_cells[1].getElementsByTagName("input")[0].value);
+
+                    console.log(fee_name);
+                    console.log(fee_amount);
+                    
+                    if (!fee_name || !fee_amount) {
+                        alert("Please complete all fields for each fee.");
+                        return;
+                    }
+
+                    var fee = {
+                        fee_name: fee_name,
+                        fee_amount: fee_amount,
+                    };
+                    fees.push(fee);
+                }
+            }
+            // Validate at least one product
+            /*
+            if (fees.length === 0) {
+                alert("Please add at least one fee.");
+                return;
+            }
+            */
+
+            // Create the estimate object
+          
+            var estimate = {
+                estimateID: estimateID,
+                estimateName: estimateName,
+                description: description,
+                totalPrice: totalPrice,
+                total_fees: total_fees,
+                products: products,
+                fees: fees,
+                customer_name: customer_name,
+                contact_name: contact_name,
+                contact_job: contact_job,
+                contact_phone: contact_phone,
+                contact_email: contact_email
+
+                // Add other customer and contact details if needed
+            };
+            console.log(estimate);
+            // Send the estimate data to the Flask backend using AJAX
+            $.ajax({
+                type: "POST",
+                url: "/add_estimate",
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(estimate),
+                success: function(response) {
+                    alert("Estimate saved successfully!");
+                    // Optionally, you can redirect or perform other actions after saving
+                    window.location.href = "/view_estimates";
+                },
+                error: function(error) {
+                    alert("Error saving estimate: " + error.responseText);
+                }
+            });
+        } 
+
+
+        </script>
+    </body>
+    </html>
+    
+    
+    
+    
+    
+    

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+    <title>Create New Customer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/92f293de12.js" crossorigin="anonymous"></script>
+    <style>
+      
+        form{
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        a {
+            text-decoration: none;
+        }
+        .fa-asterisk {
+            color: red;
+            font-size: 10px;
+            position: relative;
+            bottom: 5px
+        }
+        .col-form-label{
+            width: 130px;
+        }
+        
+    </style>
+</head>
+
+<body>
+    {% include 'head.html' %}
+    <div class="container mt-3">
+        <form id="supplierForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><i class="fa-solid fa-user mx-1"></i> Basics Information</p>
+                    <hr>
+                    <div style="display:flex;gap:30px">
+                        <label for="activeSuppliers" class="col-form-label">Active Supplier:</label>
+                        <div class="mt-2 ">
+                            <input type="checkbox" class="form-check-input" id="activeSuppliers">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="" style="display: flex;gap:10px;">
+                        <label for="supplierName" class="col-form-label "><i class="fa-solid fa-asterisk"></i> Supplier Name:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="supplierName" required autofocus>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:30px">
+                        <label for="subjectToTIN" class="col-form-label">Is Subject to TIN/VAT:</label>
+                        <div class="mt-2">
+                            <input type="checkbox" class="form-check-input" id="subjectToTIN">
+                        </div>
+                    </div>
+                    <div id="tinField" style="display:none;gap:10px">
+                        <label for="tinID" class="col-form-label">TIN/VAT ID:</label>
+                        <div class="">
+                            <input type="number" class="form-control" id="tinID">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="otherBuyerId" class="col-form-label ">Other Seller Id:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="otherBuyerId">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="openingBalance" class="col-form-label ">Supplier Start Balance:</label>
+                        <div class="">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="openingBalance" placeholder="optional">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="account" class="col-form-label ">Account:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="account">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="street1" class="col-form-label ">Street Address:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="street1">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="street2" class="col-form-label ">Street Address 2:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="street2">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="streetNo" class="col-form-label ">Additional Address No:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="streetNo">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="building" class="col-form-label ">Building No:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="building">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="state" class="col-form-label ">State:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="state">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="city" class="col-form-label ">City:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="city">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="zipcode" class="col-form-label ">Zip Code:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="zipcode">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="country" class="col-form-label ">Country:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="country">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="emailAddress" class="col-form-label ">Email Address:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="emailAddress">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="phoneNumber" class="col-form-label ">Phone Number:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="phoneNumber">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="faxNumber" class="col-form-label ">Fax Number:</label>
+                        <div class="">
+                            <input type="number" class="form-control" id="faxNumber">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="webAddress" class="col-form-label ">Web Address:</label>
+                        <div class="">
+                            <input type="text" class="form-control" id="webAddress">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <p><i class="fa-solid fa-id-card"></i> Contact Information</p>
+                    <hr>
+                    <div style="display:flex;gap:10px">
+                        <label for="contactPerson" class="col-form-label ">Contact Person:</label>
+                        <div class="">
+                            <input type="text" class="form-control" placeholder="optional" id="contactPerson">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="phoneNumber" class="col-form-label ">Phone Number:</label>
+                        <div class="">
+                            <input type="number" class="form-control" id="phoneNumber">
+                        </div>
+                    </div>
+                    
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="mobileNumber" class="col-form-label ">Mobile Number:</label>
+                        <div class="">
+                            <input type="number" class="form-control" id="mobileNumber">
+                        </div>
+                    </div>
+                    <br>
+                    <div style="display:flex;gap:10px">
+                        <label for="emailAddress" class="col-form-label ">Email Address:</label>
+                        <div class="">
+                            <input type="email" class="form-control" id="emailAddress">
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 col-6 mx-5 mb-3 mt-3">
+                        <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const subjectToTINCheckbox = document.getElementById("subjectToTIN");
+            const tinField = document.getElementById("tinField");
+
+            subjectToTINCheckbox.addEventListener("change", () => {
+                if (subjectToTINCheckbox.checked) {
+                    tinField.style.display = "flex";
+                } else {
+                    tinField.style.display = "none";
+                }
+            });
+
+            const customerForm = document.getElementById("supplierForm");
+            const suppliersKey = "suppliersList";
+            const urlParams = new URLSearchParams(window.location.search);
+            const customerIndex = urlParams.get("index");
+
+            if (customerIndex !== null) {
+                const customers = JSON.parse(localStorage.getItem(suppliersKey)) || [];
+                const customer = customers[customerIndex];
+                if (customer) {
+                    document.getElementById("supplierName").value = customer.name;
+                    document.getElementById("emailAddress").value = customer.email;
+                    document.getElementById("country").value = customer.country;
+                    document.getElementById("phoneNumber").value = customer.phone;
+                    document.getElementById("openingBalance").value = customer.balance;
+                    document.getElementById("activeSuppliers").checked = customer.active;
+                    document.getElementById("otherBuyerId").value = customer.buyerid;
+                    document.getElementById("account").value = customer.account;
+                    document.getElementById("contactPerson").value = customer.contactPerson;
+                    document.getElementById("faxNumber").value = customer.faxNumber;
+                    document.getElementById("mobileNumber").value = customer.mobileNumber;
+                    document.getElementById("webAddress").value = customer.webAddress;
+                    document.getElementById("subjectToTIN").checked = customer.subjectToTIN;
+                    if (customer.subjectToTIN) {
+                        tinField.style.display = "flex";
+                        document.getElementById("tinID").value = customer.tinID;
+                    }
+                }
+            }
+
+            customerForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                const updatedCustomer = {
+                    name: document.getElementById("supplierName").value,
+                    email: document.getElementById("emailAddress").value,
+                    country: document.getElementById("country").value,
+                    phone: document.getElementById("phoneNumber").value,
+                    balance: document.getElementById("openingBalance").value || "0",
+                    active: document.getElementById("activeSuppliers").checked,
+                    buyerid: document.getElementById("otherBuyerId").value || "",
+                    account: document.getElementById("account").value || "",
+                    contactPerson: document.getElementById("contactPerson").value || "",
+                    faxNumber: document.getElementById("faxNumber").value,
+                    mobileNumber: document.getElementById("mobileNumber").value,
+                    webAddress: document.getElementById("webAddress").value || "",
+                    subjectToTIN: document.getElementById("subjectToTIN").checked,
+                    tinID: document.getElementById("tinID").value || ""
+                };
+
+                const customers = JSON.parse(localStorage.getItem(suppliersKey)) || [];
+
+                if (customerIndex !== null) {
+                    customers[customerIndex] = updatedCustomer;
+                } else {
+                    customers.push(updatedCustomer);
+                }
+
+                localStorage.setItem(suppliersKey, JSON.stringify(customers));
+                customerForm.reset();
+                window.location.href = "view_suppliers";
+            });
+        });
+    </script>
+    
+</body>
+</html>
+
+
+

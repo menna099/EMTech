@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include 'head.html' %}
+    <title>Create New Customer</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        #customerDetails {
+            margin-bottom: 20px;
+        }
+
+        #addcontactButton {
+            background: url("static/add.png") no-repeat;
+            background-size: contain;
+            width: 30px;
+            height: 30px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #customerDetails label {
+            display: block;
+        }
+
+        #totalPriceLabel {
+            font-weight: bold;
+        }
+
+        /* Add styles for the search input fields */
+        #searchCategory,
+        #searchModel {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container-fluid" style="padding: 0% 16.667% 0% 16.667%;">
+        <br>
+        <h2>Customer Information</h2>
+        <br>
+        <div class="row">
+            <div class="col-md-1">
+                <div class="form-group">
+                    <label for="customerID">ID:</label>
+                    <span id="customerID" class="form-control">ID</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="customer_name">Customer Name:</label>
+                    <input type="text" id="customer_name" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="hastin_vat">TIN/VAT ID</label>
+                    <input type="checkbox" id="hastin_vat" onclick="toggletin_vat_input()">
+                    <input type="number" id="tin_vat" class="form-control" disabled>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    <br> <button id="saveCustomerButton" class="btn btn-primary" onclick="saveCustomer()"> <img src="static/save.png" alt="Save"></button>
+                </div>
+            </div>
+        </div>
+        <!-- Partition 4: Contacts Table -->
+        <div class="row bordered-section">
+            <div class="col-md-12">
+                <table id="contactTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>Contact</th>
+                            <th>Job</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contact_table_Body">
+                        <!-- Hidden template row for adding new contacts -->
+                        <tr class="hidden" id="templateRowContact">
+                            <td><input id="contact_name" type="text" placeholder="Contact" class="form-control"></td>
+                            <td><input id="contact_job" type="text" placeholder="Job" class="form-control"></td>
+                            <td><input id="contact_phone" type="number" placeholder="Phone" class="form-control"></td>
+                            <td><input id="contact_email" type="text" placeholder="Email" class="form-control"></td>
+                            <td>
+                                <button onclick="cancelAddContact(this)" class="btn btn-danger">
+                                    <img src="static/delete.png" alt="cancel" style="width: 20px; height: 20px;">
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button id="addContactButton" onclick="addContact()" class="btn btn-primary"><img src="static/add_white.png">
+                    <i class="bi bi-plus"></i>
+                </button>
+                <br><br> <br><br>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        
+        function addContact() {
+            var templateRow = document.getElementById("templateRowContact");
+            var newRow = templateRow.cloneNode(true);
+            newRow.classList.remove("hidden");
+            document.getElementById("contact_table_Body").appendChild(newRow);
+        }
+
+        function cancelAddContact(button) {
+            var row = button.parentNode.parentNode;
+            row.remove();
+        }
+        function saveCustomer(inputField) {
+            var row = inputField.closest("tr");
+            var cells = row.getElementsByTagName("td");
+
+            var quantity = parseInt(cells[2].getElementsByTagName("input")[0].value);
+            var price = parseFloat(cells[3].textContent);             //var margin = parseFloat(cells[4].getElementsByTagName("input")[0].value);
+            //var engineeringFees = parseFloat(cells[5].getElementsByTagName("input")[0].value);
+            var discount = parseFloat(cells[4].getElementsByTagName("input")[0].value);
+
+            // Calculate total with the new columns
+            var total = quantity * price * discount;
+
+            if (cells[5]) {
+                cells[5].textContent = total.toFixed(2);
+            }
+
+            updateTotalPrice();
+        }
+
+        function saveCustomer() {
+            var customer_id = document.getElementById("customer_id").value;
+            var customer_name = document.getElementById("customer_name").value;
+            var tin_vat_input = document.getElementById("tin_vat");
+            var tin_vat = tin_vat_input.disabled ? null : tin_vat_input.value;
+
+            if (!customer_name) {
+                alert("Please enter a customer name.");
+                return;
+            }
+
+            var contacts = [];
+            var Rows = document.getElementById("contact_table_Body").getElementsByTagName("tr");
+
+            for (var i = 0; i < rows.length; i++) {
+                if (!rows[i].classList.contains("hidden")) {
+                    var cells = rows[i].getElementsByTagName("input");
+                    var contact_name = cells[0].value;
+                    var contact_job= Cells[1].value;
+                    var contact_phone= parseInt(cells[2].value);
+                    var contact_email= cells[3].value
+                    };
+                    contacts.push(contact);
+                }}
+                var contact = {
+                    contact_name: contact_name,
+                    contact_job: contact_job,
+                    contact_phone: contact_phone,
+                    contact_email: contact_email
+                };
+                contacts.push(contact);
+                 // Validate at least one product
+                if (contacts.length === 0) {
+                    alert("Please add at least one contact.");
+                    return;
+                };
+            
+            var customer = {
+                customerID: customerID,
+                customer_name: customer_name,
+                tin_vat: tin_vat,
+                contacts: contacts
+            };
+
+            console.log(customer);
+
+            $.ajax({
+                type: "POST",
+                url: "/add_customer",
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(customer),
+                success: function(response) {
+                    alert("Customer saved successfully!");
+                    // Optionally, you can redirect or perform other actions after saving
+                    window.location.href = "/view_customers";
+                },
+                error: function(error) {
+                    alert("Error saving customer: " + error.responseText);
+                }
+            });
+            function toggletin_vat_input() {
+            var tin_vat_input = document.getElementById("tin_vat");
+            tin_vat_input.disabled = !document.getElementById("hastin_vat").checked;
+            if (!tin_vat_input.disabled) {
+                tin_vat_input.focus();
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+

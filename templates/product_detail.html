@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ product.model }}</title>
+</head>
+   
+    {% include 'head.html' %}
+    <body  onload="toggleCurrency(document.getElementById('switchButton'))">    
+    <main>
+        <div class="card-body" >
+            <div class="data-container">
+                <h4>Technical Information</h4>
+                        <label for="model">Model: </label>
+                        <span id="model">{{ product.model }}</span> <br>
+                    
+                        <label for="brand">Brand:</label>
+                        <span id="brand">{{ product.brand }}</span> <br>
+                        
+                        <label for="series">Series:</label>
+                        <span id="series">{{ product.series }}</span> <br>
+                        
+                        <label for="description">Description:</label>
+                        <span id="description">{{ product.description }}</span> <br>
+
+                        <label for="origin">Origin:</label>
+                        <span id="origin">{{ product.origin }}</span> <br>
+                        
+                        <label for="digitalinput">Digital Input:</label>
+                        <span id="digitalinput">{{ product.digitalinput }}</span> <br>
+                        
+                        <label for="analoginput">Analog Input:</label>
+                        <span id="analoginput">{{ product.analoginput }}</span>   <br>                     
+                        
+                        <label for="digitaloutput">Digital Output:</label>
+                        <span id="digitaloutput">{{ product.digitaloutput }}</span> <br>
+
+                        <label for="analogoutput">Analog Output:</label>
+                        <span id="analogoutput">{{ product.analogoutput }}</span> <br>
+                        
+                        <label for="inputvoltage">Input Voltage:</label>
+                        <span id="inputvoltage">{{ product.inputvoltage }}</span> <br>
+                        
+                        <label for="communication">Communication:</label>
+                        <span id="communication">{{ product.communication }}</span> <br>
+            </div>
+        </div>
+    </body>
+    </html>
